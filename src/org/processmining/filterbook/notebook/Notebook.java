@@ -33,7 +33,7 @@ public class Notebook implements ActionListener {
 	private LogType outputLog;
 
 	private JComponent widget;
-	private boolean initialized = false;
+	private boolean addComputationCell = false;
 
 	private List<Cell> cells;
 	private List<SlickerButton> doButtons;
@@ -51,8 +51,13 @@ public class Notebook implements ActionListener {
 	private final String REM_LABEL = "Remove cell below";
 
 	public Notebook(UIPluginContext context, ProMCanceller canceller, XLog log) {
+		this(context, canceller, log, false);
+	}
+	
+	public Notebook(UIPluginContext context, ProMCanceller canceller, XLog log, boolean addComputationCell) {
 		this.context = context;
 		this.canceller = canceller;
+		this.addComputationCell = addComputationCell;
 		inputLog = new LogType(log, "Input log of notebook");
 		outputLog = new LogType(log, "Output log of notebook");
 		cells = new ArrayList<Cell>();
@@ -80,8 +85,8 @@ public class Notebook implements ActionListener {
 	}
 
 	public JComponent getWidget() {
-		if (!initialized && cells.isEmpty()) {
-			initialized = true;
+		if (addComputationCell) {
+			addComputationCell = false;
 			/*
 			 * Add an initial computation cell to prevent the user form looking at an almost
 			 * blank screen.

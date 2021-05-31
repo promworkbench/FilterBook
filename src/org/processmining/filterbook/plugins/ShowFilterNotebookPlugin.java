@@ -46,7 +46,7 @@ public class ShowFilterNotebookPlugin {
 		//		TextCell textCell = new TextCell(context, "Description 1");
 		//		widget.add(textCell.getWidget(), "0, 2");
 
-		return new Notebook(context, canceller, log).getWidget();
+		return new Notebook(context, canceller, log, true).getWidget();
 	}
 
 	@UITopiaVariant( //
