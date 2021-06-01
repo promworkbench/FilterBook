@@ -37,7 +37,7 @@ public class EventLastEventGlobalAttributeFilter extends EventGlobalAttributeFil
 				switch (getParameters().getOneFromListSelection().getSelected()) {
 					case FILTERIN : {
 						if (match) {
-							if (isLast(trace, event, attribute)) {
+							if (isLast(trace, event, value.getAttribute())) {
 								filteredTrace.add(event);
 							}
 						} else {
@@ -47,7 +47,7 @@ public class EventLastEventGlobalAttributeFilter extends EventGlobalAttributeFil
 					}
 					case FILTEROUT : {
 						if (match) {
-							if (!isLast(trace, event, attribute)) {
+							if (!isLast(trace, event, value.getAttribute())) {
 								filteredTrace.add(event);
 							}
 						}

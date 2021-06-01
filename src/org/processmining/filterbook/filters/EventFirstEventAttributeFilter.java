@@ -35,7 +35,7 @@ public class EventFirstEventAttributeFilter extends EventAttributeFilter {
 				switch (getParameters().getOneFromListSelection().getSelected()) {
 					case FILTERIN : {
 						if (match) {
-							if (isFirst(trace, event, attribute)) {
+							if (isFirst(trace, event, value.getAttribute())) {
 								filteredTrace.add(event);
 							}
 						} else {
@@ -45,7 +45,7 @@ public class EventFirstEventAttributeFilter extends EventAttributeFilter {
 					}
 					case FILTEROUT : {
 						if (match) {
-							if (!isFirst(trace, event, attribute)) {
+							if (!isFirst(trace, event, value.getAttribute())) {
 								filteredTrace.add(event);
 							}
 						}
