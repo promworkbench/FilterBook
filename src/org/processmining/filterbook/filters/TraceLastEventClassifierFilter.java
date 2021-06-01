@@ -47,7 +47,7 @@ public class TraceLastEventClassifierFilter extends EventClassifierFilter {
 		Set<String> selectedValues = new HashSet<String>(getParameters().getMultipleFromListString().getSelected());
 		for (XTrace trace : getLog()) {
 			boolean match = false;
-			if (trace.isEmpty()) {
+			if (!trace.isEmpty()) {
 				String value = classifier.getClassIdentity(trace.get(trace.size() - 1));
 				match = selectedValues.contains(value);
 			}
