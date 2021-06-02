@@ -1002,6 +1002,11 @@ public class ComputationCell extends Cell implements ListSelectionListener, Acti
 	 * @param selectedFilter The selected filter
 	 */
 	public void add(Filter selectedFilter) {
+		// If we have an output log, it will be the input log for the new filter, 
+		// as the new filter will be added at the end.
+		if (outputLog.getLog() != null) {
+			selectedFilter.setLog(outputLog.getLog());
+		}
 		// Update filter parameters.
 		selectedFilter.updateParameters();
 		// Add the filter just before the last filter (which is always the "New filter" filter).
