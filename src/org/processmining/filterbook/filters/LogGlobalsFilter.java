@@ -43,12 +43,7 @@ public class LogGlobalsFilter extends Filter {
 		if (getLog() == null) {
 			return false;
 		}
-		for (XTrace trace : getLog()) {
-			if (!trace.isEmpty()) {
-				return true;
-			}
-		}
-		return false;
+		return hasEvents();
 	}
 	
 	/**

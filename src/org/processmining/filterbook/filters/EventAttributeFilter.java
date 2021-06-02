@@ -37,12 +37,7 @@ public class EventAttributeFilter extends EventGlobalAttributeFilter {
 		if (getLog() == null) {
 			return false;
 		}
-		for (XTrace trace : getLog()) {
-			if (!trace.isEmpty()) {
-				return true;
-			}
-		}
-		return false;
+		return hasEvents();
 	}
 	
 	/**

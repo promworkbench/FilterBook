@@ -2,10 +2,14 @@ package org.processmining.filterbook.filters;
 
 import javax.swing.JComponent;
 
+import org.deckfour.xes.extension.std.XConceptExtension;
+import org.deckfour.xes.extension.std.XTimeExtension;
 import org.deckfour.xes.factory.XFactory;
 import org.deckfour.xes.factory.XFactoryRegistry;
+import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XLog;
+import org.deckfour.xes.model.XTrace;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.parameters.Parameter;
 import org.processmining.filterbook.parameters.Parameters;
@@ -213,4 +217,61 @@ public abstract class Filter implements Comparable<Filter> {
 	public abstract FilterTemplate getTemplate();
 	
 	public abstract void setTemplate(ParametersTemplate parameters);
+
+	public boolean hasGlobalEventAttributes() {
+		return !getLog().getGlobalEventAttributes().isEmpty();
+	}
+	
+	public boolean hasGlobalTraceAttributes() {
+		return !getLog().getGlobalTraceAttributes().isEmpty();
+	}
+	
+	public boolean hasClassifiers() {
+		return !getLog().getClassifiers().isEmpty();
+	}
+	
+	public boolean hasEvents( ) {
+		for (XTrace trace : getLog()) {
+			if (!trace.isEmpty()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean hasTraces( ) {
+		return !getLog().isEmpty();
+	}
+	
+	public boolean hasTraceAttributes() {
+		for (XTrace trace : getLog()) {
+			if (!trace.getAttributes().isEmpty()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean hasTimeExtension() {
+		return getLog().getExtensions().contains(XTimeExtension.instance());
+	}
+	
+	public boolean hasGlobalTimestamp() {
+		for (XAttribute attribute : getLog().getGlobalEventAttributes()) {
+			if (attribute.getKey().equals(XTimeExtension.KEY_TIMESTAMP)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean hasGlobalConceptName(XLog log) {
+		for (XAttribute attribute : log.getGlobalEventAttributes()) {
+			if (attribute.getKey().equals(XConceptExtension.KEY_NAME)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

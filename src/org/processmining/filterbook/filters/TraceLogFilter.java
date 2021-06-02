@@ -34,16 +34,7 @@ public class TraceLogFilter extends Filter {
 		setLog(log);
 	}
 
-	public boolean isSuitable() {
-		if (getLog() == null) {
-			return false;
-		}
-		if (getCell().getInputLog().getLog() == null) {
-			return false;
-		}
-		if (getCell().getInputLog().getLog().isEmpty()) {
-			return false;
-		}
+	private boolean hasMatchingUniqueConceptNames() {
 		Set<String> conceptNames = new HashSet<String>();
 		for (XTrace trace : getCell().getInputLog().getLog()) {
 			String conceptName = XConceptExtension.instance().extractName(trace);
@@ -59,6 +50,19 @@ public class TraceLogFilter extends Filter {
 			}
 		}
 		return true;
+	}
+	
+	public boolean isSuitable() {
+		if (getLog() == null) {
+			return false;
+		}
+		if (getCell().getInputLog().getLog() == null) {
+			return false;
+		}
+		if (getCell().getInputLog().getLog().isEmpty()) {
+			return false;
+		}
+		return hasGlobalConceptName(getLog()) && hasGlobalConceptName(getCell().getInputLog().getLog()) && hasMatchingUniqueConceptNames(); 
 	}
 
 	public XLog filter() {

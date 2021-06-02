@@ -69,10 +69,7 @@ public class TraceGlobalAttributeFilter extends Filter {
 		if (getLog() == null) {
 			return false;
 		}
-		if (!getLog().isEmpty() && !getLog().getGlobalTraceAttributes().isEmpty()) {
-			return true;
-		}
-		return false;
+		return hasTraces() && hasGlobalTraceAttributes();
 	}
 
 	/**

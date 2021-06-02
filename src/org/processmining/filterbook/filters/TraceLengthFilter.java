@@ -53,7 +53,7 @@ public class TraceLengthFilter extends Filter {
 		if (getLog() == null) {
 			return false;
 		}
-		return !getLog().isEmpty();
+		return hasTraces();
 	}
 
 	/**

@@ -33,15 +33,7 @@ public class TraceAttributeFilter extends TraceGlobalAttributeFilter {
 		if (getLog() == null) {
 			return false;
 		}
-		if (getLog().isEmpty()) {
-			return false;
-		}
-		for (XTrace trace : getLog()) {
-			if (!trace.getAttributes().isEmpty()) {
-				return true;
-			}
-		}
-		return false;
+		return hasTraces() && hasTraceAttributes();
 	}
 
 	void setAttributes(boolean doReset) {

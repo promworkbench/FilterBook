@@ -8,7 +8,6 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.deckfour.xes.extension.std.XTimeExtension;
-import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
@@ -139,15 +138,7 @@ public class TraceDateFilter extends Filter {
 		if (getLog() == null) {
 			return false;
 		}
-		if (!getLog().getExtensions().contains(XTimeExtension.instance())) {
-			return false;
-		}
-		for (XAttribute attribute : getLog().getGlobalEventAttributes()) {
-			if (attribute.getKey().equals(XTimeExtension.KEY_TIMESTAMP)) {
-				return true;
-			}
-		}
-		return false;
+		return hasTimeExtension() && hasGlobalTimestamp() && hasEvents();
 	}
 
 	private void setMayStartEarly(boolean doReset) {

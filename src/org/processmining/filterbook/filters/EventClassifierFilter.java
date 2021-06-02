@@ -60,15 +60,7 @@ public class EventClassifierFilter extends Filter {
 		if (getLog() == null) {
 			return false;
 		}
-		if (getLog().getClassifiers().isEmpty()) {
-			return false;
-		}
-		for (XTrace trace : getLog()) {
-			if (!trace.isEmpty()) {
-				return true;
-			}
-		}
-		return false;
+		return hasClassifiers() && hasEvents();
 	}
 
 	/**
