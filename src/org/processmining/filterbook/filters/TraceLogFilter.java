@@ -51,7 +51,7 @@ public class TraceLogFilter extends Filter {
 		}
 		return true;
 	}
-	
+
 	public boolean isSuitable() {
 		if (getLog() == null) {
 			return false;
@@ -62,7 +62,9 @@ public class TraceLogFilter extends Filter {
 		if (getCell().getInputLog().getLog().isEmpty()) {
 			return false;
 		}
-		return hasGlobalConceptName(getLog()) && hasGlobalConceptName(getCell().getInputLog().getLog()) && hasMatchingUniqueConceptNames(); 
+		return hasConceptExtension(getLog()) && hasConceptExtension(getCell().getInputLog().getLog())
+				&& hasGlobalConceptName(getLog()) && hasGlobalConceptName(getCell().getInputLog().getLog())
+				&& hasMatchingUniqueConceptNames();
 	}
 
 	public XLog filter() {
@@ -91,7 +93,7 @@ public class TraceLogFilter extends Filter {
 		}
 		return filteredLog;
 	}
-	
+
 	public void constructWidget() {
 		JComponent widget = new JPanel();
 		double size[][] = { { TableLayoutConstants.FILL, TableLayoutConstants.FILL },
@@ -104,7 +106,7 @@ public class TraceLogFilter extends Filter {
 	public void updated(Parameter parameter) {
 		getCell().updated();
 	}
-	
+
 	void setSelectionType(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListSelection() != null) {
 			return;

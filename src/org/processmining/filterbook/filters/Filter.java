@@ -265,6 +265,10 @@ public abstract class Filter implements Comparable<Filter> {
 		return false;
 	}
 
+	public boolean hasConceptExtension(XLog log) {
+		return getLog().getExtensions().contains(XConceptExtension.instance());
+	}
+	
 	public boolean hasGlobalConceptName(XLog log) {
 		for (XAttribute attribute : log.getGlobalEventAttributes()) {
 			if (attribute.getKey().equals(XConceptExtension.KEY_NAME)) {
