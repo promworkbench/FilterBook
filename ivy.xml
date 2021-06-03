@@ -25,6 +25,5 @@
     	<!-- dependency conf="lib->default" org="org.reflections" name="reflections" rev="0.9.10" /-->
     	<!-- Third party library downloaded from ProM library. -->
     	<!-- dependency conf="lib->default" org="prom-libs" name="opencsv" rev="2.4-patched" transitive="false" /--> 
-       <dependency conf="lib->default" org="com.toedter" name="jcalendar" rev="1.4" />
      </dependencies>
 </ivy-module>
