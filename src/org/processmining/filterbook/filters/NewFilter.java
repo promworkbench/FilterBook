@@ -62,12 +62,14 @@ public class NewFilter extends Filter {
 		filters.add(new EventFirstLastEventClassifierFilter(getLog(), new Parameters(), getCell()));
 		
 		filters.add(new TraceLogFilter(getLog(), new Parameters(), getCell()));
+		filters.add(new TraceUniqueNameFilter(getLog(), new Parameters(), getCell()));
 
 		filters.add(new TraceFirstLastEventFilter(getLog(), new Parameters(), getCell()));
 
 		filters.add(new TraceDateFilter(getLog(), new Parameters(), getCell()));
 		filters.add(new EventDateFilter(getLog(), new Parameters(), getCell()));
 
+	
 		List<Filter> suitableFilters = new ArrayList<Filter>();
 		for (Filter filter : filters) {
 			if (filter.isSuitable()) {

@@ -1,5 +1,7 @@
 package org.processmining.filterbook.filters;
 
+import java.util.Collection;
+
 import javax.swing.JComponent;
 
 import org.deckfour.xes.extension.std.XConceptExtension;
@@ -269,9 +271,9 @@ public abstract class Filter implements Comparable<Filter> {
 		return getLog().getExtensions().contains(XConceptExtension.instance());
 	}
 	
-	public boolean hasGlobalConceptName(XLog log) {
-		for (XAttribute attribute : log.getGlobalEventAttributes()) {
-			if (attribute.getKey().equals(XConceptExtension.KEY_NAME)) {
+	public boolean hasGlobalConceptName(Collection<XAttribute> globalAttributes) {
+		for (XAttribute globalAttribute : globalAttributes) {
+			if (globalAttribute.getKey().equals(XConceptExtension.KEY_NAME)) {
 				return true;
 			}
 		}
