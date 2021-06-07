@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.deckfour.xes.extension.std.XConceptExtension;
@@ -99,7 +100,7 @@ public class TraceUniqueNameFilter extends Filter {
 				/*
 				 * Append the counter to the name.
 				 * The first empty name gets the name "1", the second "2", etc.
-				 * The first second X gets the name "X 2", the third "X 3", etc.
+				 * The second X gets the name "X 2", the third "X 3", etc.
 				 */
 				if (caseName == "") {
 					caseName = "" + conceptNames.get(caseName);
@@ -121,6 +122,9 @@ public class TraceUniqueNameFilter extends Filter {
 		JComponent widget = new JPanel();
 		double size[][] = { { TableLayoutConstants.FILL }, { TableLayoutConstants.FILL } };
 		widget.setLayout(new TableLayout(size));
+		JLabel label = new JLabel("<html><h2>This filter has no configuration options</h2></html>");
+		label.setHorizontalAlignment(JLabel.CENTER);
+		widget.add(label, "0, 0");
 		setWidget(widget);
 	}
 
