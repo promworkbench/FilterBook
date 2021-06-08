@@ -691,7 +691,7 @@ public class ComputationCell extends Cell implements ListSelectionListener, Acti
 					widget.remove(mainWidget);
 				}
 				// Set temporary text in main widget.
-				JLabel label = new JLabel("<html><h3>Sanning log, please be patient...</h3></html>");
+				JLabel label = new JLabel("<html><h3>Scanning log, please be patient...</h3></html>");
 				label.setHorizontalAlignment(JLabel.CENTER);
 				mainWidget = label;
 				widget.add(mainWidget,

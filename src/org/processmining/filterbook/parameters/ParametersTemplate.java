@@ -48,6 +48,10 @@ public class ParametersTemplate implements HTMLToString {
 	 * For the second date option.
 	 */
 	private Date dateB;
+	/*
+	 * For the first number option.
+	 */
+	private Integer numberA;
 
 	/*
 	 * Getters and setters.
@@ -148,6 +152,9 @@ public class ParametersTemplate implements HTMLToString {
 		if (dateB != null) {
 			buf.append("<li>DateB: " + StringEscapeUtils.escapeHtml4(dateB.toString()) + "</li>");
 		}
+		if (numberA != null) {
+			buf.append("<li>NumberA: " + StringEscapeUtils.escapeHtml4(numberA.toString()) + "</li>");
+		}
 		if (includeHTMLTags) {
 			buf.append("</html>");
 		}
@@ -202,6 +209,11 @@ public class ParametersTemplate implements HTMLToString {
 			dateBElement.appendChild(document.createTextNode(xsDateTimeConversion.format(dateB)));
 			filterElement.appendChild(dateBElement);
 		}
+		if (numberA != null) {
+			Element numberAElement = document.createElement("numberA");
+			numberAElement.appendChild(document.createTextNode(numberA.toString()));
+			filterElement.appendChild(numberAElement);
+		}
 	}
 
 	/**
@@ -245,5 +257,17 @@ public class ParametersTemplate implements HTMLToString {
 		if (nodes.getLength() >= 1) {
 			setDateB(xsDateTimeConversion.parseXsDateTime(nodes.item(0).getTextContent()));
 		}
+		nodes = filterElement.getElementsByTagName("numberA");
+		if (nodes.getLength() >= 1) {
+			setNumberA(new Integer(nodes.item(0).getTextContent()));
+		}
+	}
+
+	public Integer getNumberA() {
+		return numberA;
+	}
+
+	public void setNumberA(Integer numberA) {
+		this.numberA = numberA;
 	}
 }

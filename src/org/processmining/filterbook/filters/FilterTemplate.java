@@ -149,6 +149,11 @@ public class FilterTemplate implements HTMLToString {
 			filter.setTemplate(parameters);
 			return filter;
 		}
+		if (name.equals(TraceSampleFilter.class.getName())) {
+			TraceSampleFilter filter = new TraceSampleFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
 		if (name.equals(TraceDateFilter.class.getName())) {
 			TraceDateFilter filter = new TraceDateFilter(log, new Parameters(), cell);
 			filter.setTemplate(parameters);

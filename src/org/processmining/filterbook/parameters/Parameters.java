@@ -54,6 +54,10 @@ public class Parameters {
 	 * Second Data option
 	 */
 	private DateParameter dateB;
+	/*
+	 * First number option
+	 */
+	private NumberParameter numberA;
 	
 	/*
 	 * Getters and setters for all parameters.
@@ -138,6 +142,14 @@ public class Parameters {
 
 	public void setDateB(DateParameter dateB) {
 		this.dateB = dateB;
+	}
+
+	public NumberParameter getNumberA() {
+		return numberA;
+	}
+
+	public void setNumberA(NumberParameter numberA) {
+		this.numberA = numberA;
 	}
 
 }

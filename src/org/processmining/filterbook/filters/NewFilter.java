@@ -65,6 +65,8 @@ public class NewFilter extends Filter {
 		filters.add(new TraceUniqueNameFilter(getLog(), new Parameters(), getCell()));
 
 		filters.add(new TraceFirstLastEventFilter(getLog(), new Parameters(), getCell()));
+		
+		filters.add(new TraceSampleFilter(getLog(), new Parameters(), getCell()));
 
 		filters.add(new TraceDateFilter(getLog(), new Parameters(), getCell()));
 		filters.add(new EventDateFilter(getLog(), new Parameters(), getCell()));
