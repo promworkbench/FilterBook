@@ -11,6 +11,7 @@ import org.processmining.filterbook.parameters.NumberParameter;
 import org.processmining.filterbook.parameters.Parameter;
 import org.processmining.filterbook.parameters.Parameters;
 import org.processmining.filterbook.parameters.ParametersTemplate;
+import org.processmining.filterbook.parameters.YesNoParameter;
 
 import info.clearthought.layout.TableLayout;
 import info.clearthought.layout.TableLayoutConstants;
@@ -19,34 +20,52 @@ public class TraceSampleFilter extends Filter {
 
 	public static final String NAME = "Select sample";
 
+	/*
+	 * Cache the last input, the last sample size used, and the last output.
+	 */
+	private XLog inputLog;
+	private Integer sampleSize;
+	private XLog outputLog;
+
 	public TraceSampleFilter(XLog log, Parameters parameters, ComputationCell cell) {
-		super(NAME, parameters, cell);
-		setLog(log);
+		this(NAME, log, parameters, cell);
 	}
 
 	public TraceSampleFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
 		super(name, parameters, cell);
 		setLog(log);
+		inputLog = null;
+		sampleSize = -1;
+		outputLog = null;
 	}
 
 	public XLog filter() {
-		XLog filteredLog = initializeLog(getLog());
-		filteredLog.addAll(getLog());
-		int filteredSize = filteredLog.size();
-		Random r = new Random();
-		while (filteredSize > getParameters().getNumberA().getNumber()) {
-			int t = r.nextInt(filteredSize);
-			filteredLog.remove(t);
-			filteredSize--;
+		if (!getParameters().getYesNoA().getSelected() || getLog() != inputLog
+				|| !sampleSize.equals(getParameters().getNumberA().getNumber()) || outputLog == null) {
+			/*
+			 * outputLog is not current. make it current by applying the filter again.
+			 */
+			inputLog = getLog();
+			sampleSize = getParameters().getNumberA().getNumber();
+			outputLog = initializeLog(inputLog);
+			outputLog.addAll(inputLog);
+			int filteredSize = outputLog.size();
+			Random r = new Random();
+			while (filteredSize > sampleSize) {
+				int t = r.nextInt(filteredSize);
+				outputLog.remove(t);
+				filteredSize--;
+			}
 		}
-		return filteredLog;
+		return outputLog;
 	}
 
 	public void constructWidget() {
 		JComponent widget = new JPanel();
-		double size[][] = { { TableLayoutConstants.FILL }, { 80, TableLayoutConstants.FILL } };
+		double size[][] = { { TableLayoutConstants.FILL }, { 80, 30, TableLayoutConstants.FILL } };
 		widget.setLayout(new TableLayout(size));
 		widget.add(getParameters().getNumberA().getWidget(), "0, 0");
+		widget.add(getParameters().getYesNoA().getWidget(), "0, 1");
 		setWidget(widget);
 	}
 
@@ -72,14 +91,27 @@ public class TraceSampleFilter extends Filter {
 		getParameters().setNumberA(new NumberParameter("Select a sample size", this, number, 0, getLog().size()));
 	}
 
+	void setUseCache(boolean doReset) {
+		if (!doReset && getParameters().getYesNoA() != null) {
+			return;
+		}
+		boolean selected = true;
+		if (getParameters().getYesNoA() != null) {
+			selected = getParameters().getYesNoA().getSelected();
+		}
+		getParameters().setYesNoA(new YesNoParameter("Use previous sample if still valid?", this, selected));
+	}
+
 	public void updateParameters() {
 		setSampleSize(true);
+		setUseCache(true);
 	}
 
 	public FilterTemplate getTemplate() {
 		FilterTemplate filterTemplate = new FilterTemplate();
 		filterTemplate.setName(getClass().getName());
 		filterTemplate.setParameters(new ParametersTemplate());
+		filterTemplate.getParameters().setYesNoA(getParameters().getYesNoA().getSelected());
 		filterTemplate.getParameters().setNumberA(getParameters().getNumberA().getNumber());
 		return filterTemplate;
 	}
@@ -87,6 +119,8 @@ public class TraceSampleFilter extends Filter {
 	public void setTemplate(ParametersTemplate parameters) {
 		setSampleSize(true);
 		getParameters().getNumberA().setNumber(parameters.getNumberA());
+		setUseCache(true);
+		getParameters().getYesNoA().setSelected(parameters.isYesNoA());
 	}
 
 }
