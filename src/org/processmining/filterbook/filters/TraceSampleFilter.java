@@ -40,7 +40,7 @@ public class TraceSampleFilter extends Filter {
 	}
 
 	public XLog filter() {
-		if (!getParameters().getYesNoA().getSelected() || getLog() != inputLog
+		if (!getParameters().getYesNoA().getSelected() || !getLog().equals(inputLog)
 				|| !sampleSize.equals(getParameters().getNumberA().getNumber()) || outputLog == null) {
 			/*
 			 * outputLog is not current. make it current by applying the filter again.
