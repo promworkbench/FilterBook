@@ -21,7 +21,7 @@ public class TraceSampleFilter extends Filter {
 	public static final String NAME = "Select sample";
 
 	/*
-	 * Cache the last input, the last sample size used, and the last output.
+	 * If available, the last input, the last sample size used, and the last output.
 	 */
 	private XLog inputLog;
 	private Integer sampleSize;
@@ -34,6 +34,9 @@ public class TraceSampleFilter extends Filter {
 	public TraceSampleFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
 		super(name, parameters, cell);
 		setLog(log);
+		/*
+		 * Nothing avaiable yet.
+		 */
 		inputLog = null;
 		sampleSize = -1;
 		outputLog = null;
@@ -48,7 +51,13 @@ public class TraceSampleFilter extends Filter {
 			inputLog = getLog();
 			sampleSize = getParameters().getNumberA().getNumber();
 			outputLog = initializeLog(inputLog);
+			/*
+			 * Copy all traces.
+			 */
 			outputLog.addAll(inputLog);
+			/*
+			 * Now continue to remove a trace at random until the sample size is reached.
+			 */
 			int filteredSize = outputLog.size();
 			Random r = new Random();
 			while (filteredSize > sampleSize) {
@@ -75,6 +84,9 @@ public class TraceSampleFilter extends Filter {
 
 	public boolean isSuitable() {
 		if (getLog() == null) {
+			return false;
+		}
+		if (getLog().isEmpty()) {
 			return false;
 		}
 		return true;
