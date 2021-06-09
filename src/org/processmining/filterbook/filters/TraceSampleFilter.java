@@ -86,10 +86,7 @@ public class TraceSampleFilter extends Filter {
 		if (getLog() == null) {
 			return false;
 		}
-		if (getLog().isEmpty()) {
-			return false;
-		}
-		return true;
+		return hasTraces();
 	}
 
 	void setSampleSize(boolean doReset) {
