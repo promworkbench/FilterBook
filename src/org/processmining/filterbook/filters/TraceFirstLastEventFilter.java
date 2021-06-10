@@ -36,7 +36,7 @@ public class TraceFirstLastEventFilter extends Filter {
 		if (getLog() == null) {
 			return false;
 		}
-		return true;
+		return hasTraces();
 	}
 
 	public XLog filter() {

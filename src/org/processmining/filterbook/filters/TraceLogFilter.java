@@ -65,7 +65,7 @@ public class TraceLogFilter extends Filter {
 		return hasConceptExtension(getLog()) && hasConceptExtension(getCell().getInputLog().getLog())
 				&& hasGlobalConceptName(getLog().getGlobalEventAttributes())
 				&& hasGlobalConceptName(getCell().getInputLog().getLog().getGlobalEventAttributes())
-				&& hasMatchingUniqueConceptNames();
+				&& hasMatchingUniqueConceptNames() && hasTraces();
 	}
 
 	public XLog filter() {
