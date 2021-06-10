@@ -265,7 +265,7 @@ public class ComputationCell extends Cell implements ListSelectionListener, Acti
 		// Prepare the filtered logs.
 		filteredLogs = new ArrayList<XLog>();
 		filteredLogs.add(notebookInputLog.getLog());
-		// Prepare the fitlers.
+		// Prepare the filters.
 		filters = new ArrayList<Filter>();
 		filters.add(new NewFilter(notebookInputLog.getLog(), new Parameters(), this));
 		// Prepare the views.
@@ -420,7 +420,7 @@ public class ComputationCell extends Cell implements ListSelectionListener, Acti
 			return;
 		}
 		// Prepare the list of filtered logs. There should be sufficiently many.
-		while (filteredLogs.size() < filters.size()) {
+		while (filteredLogs.size() <= filters.size()) {
 			filteredLogs.add(null);
 		}
 		// Remove the main widget.
@@ -466,7 +466,7 @@ public class ComputationCell extends Cell implements ListSelectionListener, Acti
 	private void updateOutputLogDoInBackground() {
 		int i;
 		filteredLogs.set(0, inputLog.getLog());
-		for (i = 0; i < filters.size() - 1; i++) {
+		for (i = 0; i < filters.size(); i++) {
 			filters.get(i).setLog(filteredLogs.get(i));
 			filteredLogs.set(i + 1, filters.get(i).filter());
 		}

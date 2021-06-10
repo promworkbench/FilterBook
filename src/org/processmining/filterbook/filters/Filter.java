@@ -140,6 +140,7 @@ public abstract class Filter implements Comparable<Filter> {
 	 * @return The log to be filtered.
 	 */
 	public XLog getLog() {
+//		System.out.println("[Filter] " + name + ": get, " + log.size() + " traces");
 		return log;
 	}
 
@@ -153,6 +154,7 @@ public abstract class Filter implements Comparable<Filter> {
 		if (this.log != log) {
 			widget = null;
 		}
+//		System.out.println("[Filter] " + name + ": set, " + log.size() + " traces");
 		this.log = log;
 	}
 
@@ -163,6 +165,7 @@ public abstract class Filter implements Comparable<Filter> {
 	 */
 	public JComponent getWidget() {
 		if (widget == null) {
+//			System.out.println("[Filter] " + name + ": widget, " + log.size() + " traces");
 			constructWidget();
 		}
 		return widget;
