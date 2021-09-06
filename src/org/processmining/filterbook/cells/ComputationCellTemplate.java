@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.deckfour.uitopia.api.model.ViewType;
 import org.deckfour.xes.model.XLog;
 import org.processmining.contexts.uitopia.UIPluginContext;
+import org.processmining.filterbook.filters.Filter;
 import org.processmining.filterbook.filters.FilterTemplate;
 import org.processmining.filterbook.notebook.Notebook;
 import org.processmining.filterbook.types.LogType;
@@ -102,9 +103,12 @@ public class ComputationCellTemplate extends CellTemplate {
 				cell.setInputLog(logType);
 			}
 		}
-		// Add filters.
+		// Add filters. Provide every filter its proper filtered log as input.
+		XLog filteredLog = log;
 		for (FilterTemplate filterTemplate : filterTemplates) {
-			cell.add(filterTemplate.createFilter(log, cell));
+			Filter filter = filterTemplate.createFilter(filteredLog, cell);
+			cell.add(filter);
+			filteredLog = filter.filter();
 		}
 		cell.updateOutputLog(false);
 		return cell;
