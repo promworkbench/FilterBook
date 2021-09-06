@@ -33,6 +33,7 @@ public class Notebook implements ActionListener {
 	private LogType outputLog;
 
 	private JComponent widget;
+	private JComponent scrollPane;
 	private boolean addComputationCell = false;
 
 	private List<Cell> cells;
@@ -68,6 +69,7 @@ public class Notebook implements ActionListener {
 		swapCellButtons = new ArrayList<SlickerButton>();
 		removeCellButtons = new ArrayList<SlickerButton>();
 		widget = new JPanel();
+		scrollPane = null;
 	}
 
 	public LogType getInputLog() {
@@ -85,9 +87,10 @@ public class Notebook implements ActionListener {
 	}
 
 	public JComponent getWidget() {
-		if (widget != null) {
-			widget = new JPanel();
+		if (scrollPane != null) {
+			return scrollPane;
 		}
+		widget = new JPanel();
 		if (addComputationCell) {
 			addComputationCell = false;
 			/*
@@ -131,7 +134,7 @@ public class Notebook implements ActionListener {
 		widget.add(buttonPanel);
 		int i = 0;
 		for (Cell cell : cells) {
-			widget.add(cell.getWidget(false));
+			widget.add(cell.getWidget(true));
 			buttonPanel = new JPanel();
 			buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
 			button = new SlickerButton(DO_LABEL);
@@ -166,7 +169,8 @@ public class Notebook implements ActionListener {
 			}
 			i++;
 		}
-		return new ProMScrollPane(widget);
+		scrollPane = new ProMScrollPane(widget);
+		return scrollPane;
 	}
 
 	public void updated(Cell cell) {

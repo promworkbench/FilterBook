@@ -615,6 +615,7 @@ public class ComputationCell extends Cell implements ListSelectionListener, Acti
 		}
 
 		widget.setPreferredSize(new Dimension(600, 600));
+		System.err.println("Done");
 		return widget;
 	}
 
