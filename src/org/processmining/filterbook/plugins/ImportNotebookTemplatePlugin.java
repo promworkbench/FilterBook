@@ -17,7 +17,7 @@ import org.w3c.dom.Document;
 
 @Plugin( //
 		name = "Import Notebook template from NBXML file", //
-		level = PluginLevel.Regular, //
+		level = PluginLevel.PeerReviewed, //
 		parameterLabels = { "Filename" }, //
 		returnLabels = { "Notebook template" }, //
 		returnTypes = { NotebookTemplate.class } //
