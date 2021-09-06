@@ -15,7 +15,13 @@ import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginLevel;
 import org.w3c.dom.Document;
 
-@Plugin(name = "Import Notebook template from NBXML file", level = PluginLevel.Regular, parameterLabels = { "Filename" }, returnLabels = { "Notebook template" }, returnTypes = { NotebookTemplate.class })
+@Plugin( //
+		name = "Import Notebook template from NBXML file", //
+		level = PluginLevel.Regular, //
+		parameterLabels = { "Filename" }, //
+		returnLabels = { "Notebook template" }, //
+		returnTypes = { NotebookTemplate.class } //
+) //
 @UIImportPlugin(description = "NBXML Notebook template files", extensions = { "nbxml" })
 public class ImportNotebookTemplatePlugin extends AbstractImportPlugin {
 

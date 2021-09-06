@@ -17,11 +17,18 @@ import org.processmining.contexts.uitopia.annotations.UIExportPlugin;
 import org.processmining.filterbook.notebook.NotebookTemplate;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.framework.plugin.annotations.Plugin;
+import org.processmining.framework.plugin.annotations.PluginLevel;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.w3c.dom.Document;
 
-@Plugin(name = "NBXML export (Notebook template)", returnLabels = {}, returnTypes = {}, parameterLabels = {
-		"Notebook template", "File" }, userAccessible = true)
+@Plugin( //
+		name = "NBXML export (Notebook template)", //
+		returnLabels = {}, //
+		returnTypes = {}, //
+		parameterLabels = {	"Notebook template", "File" }, //
+		level = PluginLevel.PeerReviewed, //
+		userAccessible = true //
+) //
 @UIExportPlugin(description = "Notebook template", extension = "nbxml")
 public class ExportNotebookTemplatePlugin {
 

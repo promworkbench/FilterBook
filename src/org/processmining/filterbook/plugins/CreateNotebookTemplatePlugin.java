@@ -5,6 +5,7 @@ import org.processmining.filterbook.notebook.Notebook;
 import org.processmining.filterbook.notebook.NotebookTemplate;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.framework.plugin.annotations.Plugin;
+import org.processmining.framework.plugin.annotations.PluginLevel;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 
 @Plugin( //
@@ -15,6 +16,7 @@ import org.processmining.framework.plugin.annotations.PluginVariant;
 		userAccessible = true, //
 		icon = "prom_duck.png", //
 		url = "http://www.win.tue.nl/~hverbeek/", //
+		level = PluginLevel.PeerReviewed, //
 		help = "" //
 ) //
 public class CreateNotebookTemplatePlugin {
