@@ -150,6 +150,7 @@ public class TextCell extends Cell implements KeyListener, ActionListener {
 			widget.repaint();
 		} else if (e.getSource() == labelField.getTextField()) {
 			// User has finished editing the name. Restore the button.
+			setName(labelField.getText());
 			labelButton.setText("<html><h1>" + labelField.getText() + "</h1></html>");
 			widget.remove(labelField);
 			widget.add(labelButton, "1, 0");

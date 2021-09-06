@@ -962,6 +962,7 @@ public class ComputationCell extends Cell implements ListSelectionListener, Acti
 			widget.repaint();
 		} else if (e.getSource() == labelField.getTextField()) {
 			// Update the cell name.
+			setName(labelField.getText());
 			labelButton.setText("<html><h1>"
 					+ labelField.getText().replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
 					+ "</h1></html>");
@@ -1212,8 +1213,10 @@ public class ComputationCell extends Cell implements ListSelectionListener, Acti
 	 */
 	public void update() {
 		// Update all filters.
+		XLog filteredLog = inputLog.getLog();
 		for (Filter filter : filters) {
-			filter.setLog(inputLog.getLog());
+			filter.setLog(filteredLog);
+			filteredLog = filter.filter();
 			filter.update();
 		}
 	}

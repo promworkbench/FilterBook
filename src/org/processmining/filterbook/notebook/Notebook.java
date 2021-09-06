@@ -85,6 +85,9 @@ public class Notebook implements ActionListener {
 	}
 
 	public JComponent getWidget() {
+		if (widget != null) {
+			widget = new JPanel();
+		}
 		if (addComputationCell) {
 			addComputationCell = false;
 			/*

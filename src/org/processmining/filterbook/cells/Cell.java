@@ -19,7 +19,7 @@ public abstract class Cell {
 	/*
 	 * The name of this cell.
 	 */
-	private final String name;
+	private String name;
 
 	/**
 	 * Construct a cell with a given context, notebook, and name.
@@ -46,6 +46,14 @@ public abstract class Cell {
 		return name;
 	}
 
+	/**
+	 * Sets the cell's name.
+	 * @param name
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	/**
 	 * Get the cell's context.
 	 * @return The cell's context
