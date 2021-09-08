@@ -24,14 +24,20 @@ public class TraceLogFilter extends Filter {
 
 	public static final String NAME = "Select on log";
 
+	private XLog cachedLog;
+	private SelectionType cachedSelectionType;
+	private XLog cachedFilteredLog;
+	
 	public TraceLogFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, parameters, cell);
 		setLog(log);
+		cachedLog = null;
 	}
 
 	public TraceLogFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
 		super(name, parameters, cell);
 		setLog(log);
+		cachedLog = null;
 	}
 
 	private boolean hasMatchingUniqueConceptNames() {
@@ -69,6 +75,26 @@ public class TraceLogFilter extends Filter {
 	}
 
 	public XLog filter() {
+		/*
+		 * Get the relevant parameters.
+		 */
+		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
+		/*
+		 * Check whether the cache is  valid.
+		 */
+		if (cachedLog == getLog()) {
+			if (cachedSelectionType == selectionType) { 
+				/*
+				 * Yes, it is. Return the cached filtered log.
+				 */
+				System.out.println("[" + NAME + "]: Returning cached filtered log.");
+				return cachedFilteredLog;
+			}
+		}
+		/*
+		 * No, it is not. Filter the log using the relevant parameters.
+		 */
+		System.out.println("[" + NAME + "]: Returning newly filtered log.");
 		XLog filteredLog = initializeLog(getLog());
 		Set<String> conceptNames = new HashSet<String>();
 		for (XTrace trace : getLog()) {
@@ -77,7 +103,7 @@ public class TraceLogFilter extends Filter {
 		for (XTrace trace : getCell().getInputLog().getLog()) {
 			String conceptName = XConceptExtension.instance().extractName(trace);
 			boolean match = conceptNames.contains(conceptName);
-			switch (getParameters().getOneFromListSelection().getSelected()) {
+			switch (selectionType) {
 				case FILTERIN : {
 					if (match) {
 						filteredLog.add(trace);
@@ -92,6 +118,12 @@ public class TraceLogFilter extends Filter {
 				}
 			}
 		}
+		/*
+		 * Update the cache and return the result.
+		 */
+		cachedLog = getLog();
+		cachedSelectionType = selectionType;
+		cachedFilteredLog = filteredLog;
 		return filteredLog;
 	}
 

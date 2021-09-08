@@ -15,6 +15,7 @@ import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.Parameters;
 import org.processmining.filterbook.types.AttributeType;
 import org.processmining.filterbook.types.AttributeValueType;
+import org.processmining.filterbook.types.SelectionType;
 
 public class TraceFirstEventGlobalAttributeFilter extends EventGlobalAttributeFilter {
 
@@ -22,6 +23,12 @@ public class TraceFirstEventGlobalAttributeFilter extends EventGlobalAttributeFi
 	 * The name of this filter.
 	 */
 	public static final String NAME = "Select on first global attribute value";
+
+	private XLog cachedLog;
+	private XAttribute cachedAttribute;
+	private Set<AttributeValueType> cachedSelectedValues;
+	private SelectionType cachedSelectionType;
+	private XLog cachedFilteredLog;
 
 	/**
 	 * Construct a start event filter for the given log and the given parameters. If
@@ -35,26 +42,50 @@ public class TraceFirstEventGlobalAttributeFilter extends EventGlobalAttributeFi
 	 */
 	public TraceFirstEventGlobalAttributeFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);
+		cachedLog = null;
 	}
 
 	public TraceFirstEventGlobalAttributeFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
 		super(name, log, parameters, cell);
+		cachedLog = null;
 	}
 
 	/**
 	 * Filter the set log on the start events using the set parameters.
 	 */
 	public XLog filter() {
-		XLog filteredLog = initializeLog(getLog());
+		/*
+		 * Get the relevant parameters.
+		 */
 		XAttribute attribute = getParameters().getOneFromListAttribute().getSelected().getAttribute();
 		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(getParameters().getMultipleFromListAttributeValue().getSelected());
+		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
+		/*
+		 * Check whether the cache is  valid.
+		 */
+		if (cachedLog == getLog()) {
+			if (cachedAttribute.equals(attribute) &&
+					cachedSelectedValues.equals(selectedValues) &&
+					cachedSelectionType == selectionType) {
+				/*
+				 * Yes, it is. Return the cached filtered log.
+				 */
+				System.out.println("[" + NAME + "]: Returning cached filtered log.");
+				return cachedFilteredLog;
+			}
+		}
+		/*
+		 * No, it is not. Filter the log using the relevant parameters.
+		 */
+		System.out.println("[" + NAME + "]: Returning newly filtered log.");
+		XLog filteredLog = initializeLog(getLog());
 		for (XTrace trace : getLog()) {
 			boolean match = false;
 			if (!trace.isEmpty()) {
 				AttributeValueType value = new AttributeValueType(trace.get(0).getAttributes().get(attribute.getKey()));
 				match = selectedValues.contains(value);
 			}
-			switch (getParameters().getOneFromListSelection().getSelected()) {
+			switch (selectionType) {
 				case FILTERIN : {
 					if (match) {
 						filteredLog.add(trace);
@@ -69,6 +100,14 @@ public class TraceFirstEventGlobalAttributeFilter extends EventGlobalAttributeFi
 				}
 			}
 		}
+		/*
+		 * Update the cache and return the result.
+		 */
+		cachedLog = getLog();
+		cachedAttribute = attribute;
+		cachedSelectedValues = selectedValues;
+		cachedSelectionType = selectionType;
+		cachedFilteredLog = filteredLog;
 		return filteredLog;
 	}
 

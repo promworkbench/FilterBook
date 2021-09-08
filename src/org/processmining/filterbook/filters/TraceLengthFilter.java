@@ -36,14 +36,21 @@ public class TraceLengthFilter extends Filter {
 	private JComponent traceLengthWidget;
 	private JComponent roundUpWidget;
 
+	private XLog cachedLog;
+	private Set<Integer> cachedSelectedLengths;
+	private SelectionType cachedSelectionType;
+	private XLog cachedFilteredLog;
+	
 	public TraceLengthFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, parameters, cell);
 		setLog(log);
+		cachedLog = null;
 	}
 
 	public TraceLengthFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
 		super(name, parameters, cell);
 		setLog(log);
+		cachedLog = null;
 	}
 
 	/**
@@ -60,11 +67,32 @@ public class TraceLengthFilter extends Filter {
 	 * Filter the set log on the start events using the set parameters.
 	 */
 	public XLog filter() {
-		XLog filteredLog = initializeLog(getLog());
+		/*
+		 * Get the relevant parameters.
+		 */
 		Set<Integer> selectedLengths = new HashSet<Integer>(getParameters().getMultipleFromListInteger().getSelected());
+		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
+		/*
+		 * Check whether the cache is  valid.
+		 */
+		if (cachedLog == getLog()) {
+			if (cachedSelectedLengths.equals(selectedLengths) &&
+					cachedSelectionType == selectionType) {
+				/*
+				 * Yes, it is. Return the cached filtered log.
+				 */
+				System.out.println("[" + NAME + "]: Returning cached filtered log.");
+				return cachedFilteredLog;
+			}
+		}
+		/*
+		 * No, it is not. Filter the log using the relevant parameters.
+		 */
+		System.out.println("[" + NAME + "]: Returning newly filtered log.");
+		XLog filteredLog = initializeLog(getLog());
 		for (XTrace trace : getLog()) {
 			boolean match = selectedLengths.contains(trace.size());
-			switch (getParameters().getOneFromListSelection().getSelected()) {
+			switch (selectionType) {
 				case FILTERIN : {
 					if (match) {
 						filteredLog.add(trace);
@@ -79,6 +107,13 @@ public class TraceLengthFilter extends Filter {
 				}
 			}
 		}
+		/*
+		 * Update the cache and return the result.
+		 */
+		cachedLog = getLog();
+		cachedSelectedLengths = selectedLengths;
+		cachedSelectionType = selectionType;
+		cachedFilteredLog = filteredLog;
 		return filteredLog;
 	}
 

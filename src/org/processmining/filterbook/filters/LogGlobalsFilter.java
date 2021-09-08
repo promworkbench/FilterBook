@@ -26,14 +26,21 @@ public class LogGlobalsFilter extends Filter {
 	 */
 	public static final String NAME = "Add global attributes";
 
+	private XLog cachedLog;
+	private boolean cachedYesNoA;
+	private boolean cachedYesNoB;
+	private XLog cachedFilteredLog;
+	
 	public LogGlobalsFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, parameters, cell);
 		setLog(log);
+		cachedLog = null;
 	}
 
 	public LogGlobalsFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
 		super(name, parameters, cell);
 		setLog(log);
+		cachedLog = null;
 	}
 
 	/**
@@ -50,13 +57,36 @@ public class LogGlobalsFilter extends Filter {
 	 * Filter the set log on the start events using the set parameters.
 	 */
 	public XLog filter() {
+		/*
+		 * Get the relevant parameters.
+		 */
+		boolean yesNoA = getParameters().getYesNoA().getSelected();
+		boolean yesNoB = getParameters().getYesNoB().getSelected();
+		/*
+		 * Check whether the cache is  valid.
+		 */
+		if (cachedLog == getLog()) {
+			if (cachedYesNoA == yesNoA &&
+					cachedYesNoB == yesNoB) {
+				/*
+				 * Yes, it is. Return the cached filtered log.
+				 */
+				System.out.println("[" + NAME + "]: Returning cached filtered log.");
+				return cachedFilteredLog;
+				
+			}
+		}
+		/*
+		 * No, it is not. Filter the log using the relevant parameters.
+		 */
+		System.out.println("[" + NAME + "]: Returning newly filtered log.");
 		XLog filteredLog = initializeLog(getLog());
 		Set<String> traceKeys = null;
 		Set<String> eventKeys = null;
 		XTrace firstTrace = null;
 		XEvent firstEvent = null;
 		for (XTrace trace : getLog()) {
-			if (getParameters().getYesNoA().getSelected()) {
+			if (yesNoA) {
 				if (firstTrace == null) {
 					firstTrace = trace;
 				}
@@ -66,7 +96,7 @@ public class LogGlobalsFilter extends Filter {
 					traceKeys.retainAll(trace.getAttributes().keySet());
 				}
 			}
-			if (getParameters().getYesNoB().getSelected()) {
+			if (yesNoB) {
 				for (XEvent event : trace) {
 					if (firstEvent == null) {
 						firstEvent = event;
@@ -80,7 +110,7 @@ public class LogGlobalsFilter extends Filter {
 			}
 			filteredLog.add(trace);
 		}
-		if (getParameters().getYesNoA().getSelected()) {
+		if (yesNoA) {
 			Set<String> globalTraceKeys = new HashSet<String>();
 			for (XAttribute globalTraceAttribute : filteredLog.getGlobalTraceAttributes()) {
 				globalTraceKeys.add(globalTraceAttribute.getKey());
@@ -90,7 +120,7 @@ public class LogGlobalsFilter extends Filter {
 				filteredLog.getGlobalTraceAttributes().add(firstTrace.getAttributes().get(key));
 			}
 		}
-		if (getParameters().getYesNoB().getSelected()) {
+		if (yesNoB) {
 			Set<String> globalEventKeys = new HashSet<String>();
 			for (XAttribute globalEventAttribute : filteredLog.getGlobalEventAttributes()) {
 				globalEventKeys.add(globalEventAttribute.getKey());
@@ -100,6 +130,13 @@ public class LogGlobalsFilter extends Filter {
 				filteredLog.getGlobalEventAttributes().add(firstEvent.getAttributes().get(key));
 			}
 		}
+		/*
+		 * Update the cache and return the result.
+		 */
+		cachedLog = getLog();
+		cachedYesNoA = yesNoA;
+		cachedYesNoB = yesNoB;
+		cachedFilteredLog = filteredLog;
 		return filteredLog;
 	}
 

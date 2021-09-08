@@ -20,12 +20,10 @@ public class TraceSampleFilter extends Filter {
 
 	public static final String NAME = "Select sample";
 
-	/*
-	 * If available, the last input, the last sample size used, and the last output.
-	 */
-	private XLog inputLog;
-	private Integer sampleSize;
-	private XLog outputLog;
+	private XLog cachedLog;
+	private boolean cachedYesNoA;
+	private Integer cachedNumberA;
+	private XLog cachedFilteredLog;
 
 	public TraceSampleFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		this(NAME, log, parameters, cell);
@@ -34,39 +32,54 @@ public class TraceSampleFilter extends Filter {
 	public TraceSampleFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
 		super(name, parameters, cell);
 		setLog(log);
-		/*
-		 * Nothing avaiable yet.
-		 */
-		inputLog = null;
-		sampleSize = -1;
-		outputLog = null;
+		cachedLog = null;
 	}
 
 	public XLog filter() {
-		if (!getParameters().getYesNoA().getSelected() || !getLog().equals(inputLog)
-				|| !sampleSize.equals(getParameters().getNumberA().getNumber()) || outputLog == null) {
-			/*
-			 * outputLog is not current. make it current by applying the filter again.
-			 */
-			inputLog = getLog();
-			sampleSize = getParameters().getNumberA().getNumber();
-			outputLog = initializeLog(inputLog);
-			/*
-			 * Copy all traces.
-			 */
-			outputLog.addAll(inputLog);
-			/*
-			 * Now continue to remove a trace at random until the sample size is reached.
-			 */
-			int filteredSize = outputLog.size();
-			Random r = new Random();
-			while (filteredSize > sampleSize) {
-				int t = r.nextInt(filteredSize);
-				outputLog.remove(t);
-				filteredSize--;
+		/*
+		 * Get the relevant parameters.
+		 */
+		Integer numberA = getParameters().getNumberA().getNumber();
+		boolean yesNoA = getParameters().getYesNoA().getSelected();
+		/*
+		 * Check whether the cache is valid.
+		 */
+		if (cachedLog == getLog() && yesNoA) {
+			if (cachedNumberA == numberA && cachedYesNoA == yesNoA) {
+				/*
+				 * Yes, it is. Return the cached filtered log.
+				 */
+				System.out.println("[" + NAME + "]: Returning cached filtered log.");
+				return cachedFilteredLog;
 			}
 		}
-		return outputLog;
+		/*
+		 * No, it is not. Filter the log using the relevant parameters.
+		 */
+		System.out.println("[" + NAME + "]: Returning newly filtered log.");
+		XLog filteredLog = initializeLog(getLog());
+		/*
+		 * Copy all traces.
+		 */
+		filteredLog.addAll(getLog());
+		/*
+		 * Now continue to remove a trace at random until the sample size is reached.
+		 */
+		int filteredSize = filteredLog.size();
+		Random r = new Random();
+		while (filteredSize > numberA) {
+			int t = r.nextInt(filteredSize);
+			filteredLog.remove(t);
+			filteredSize--;
+		}
+		/*
+		 * Update the cache and return the result.
+		 */
+		cachedLog = getLog();
+		cachedNumberA = numberA;
+		cachedYesNoA = yesNoA;
+		cachedFilteredLog = filteredLog;
+		return filteredLog;
 	}
 
 	public void constructWidget() {

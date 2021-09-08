@@ -12,6 +12,7 @@ import org.deckfour.xes.model.XTrace;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.Parameters;
+import org.processmining.filterbook.types.SelectionType;
 
 public class TraceFirstEventClassifierFilter extends EventClassifierFilter {
 
@@ -19,6 +20,12 @@ public class TraceFirstEventClassifierFilter extends EventClassifierFilter {
 	 * The name of this filter.
 	 */
 	public static final String NAME = "Select on first classifier value";
+
+	private XLog cachedLog;
+	private XEventClassifier cachedClassifier;
+	private Set<String> cachedSelectedValues;
+	private SelectionType cachedSelectionType;
+	private XLog cachedFilteredLog;
 
 	/**
 	 * Construct a start event filter for the given log and the given parameters. If
@@ -32,26 +39,50 @@ public class TraceFirstEventClassifierFilter extends EventClassifierFilter {
 	 */
 	public TraceFirstEventClassifierFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);
+		cachedLog = null;
 	}
 
 	public TraceFirstEventClassifierFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
 		super(name, log, parameters, cell);
+		cachedLog = null;
 	}
 
 	/**
 	 * Filter the set log on the events using the set parameters.
 	 */
 	public XLog filter() {
-		XLog filteredLog = initializeLog(getLog());
+		/*
+		 * Get the relevant parameters.
+		 */
 		XEventClassifier classifier = getParameters().getOneFromListClassifier().getSelected().getClassifier();
 		Set<String> selectedValues = new HashSet<String>(getParameters().getMultipleFromListString().getSelected());
+		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
+		/*
+		 * Check whether the cache is  valid.
+		 */
+		if (cachedLog == getLog()) {
+			if (cachedClassifier.equals(classifier) &&
+					cachedSelectedValues.equals(cachedSelectedValues) &&
+					cachedSelectionType == selectionType) {
+				/*
+				 * Yes, it is. Return the cached filtered log.
+				 */
+				System.out.println("[" + NAME + "]: Returning cached filtered log.");
+				return cachedFilteredLog;
+			}
+		}
+		/*
+		 * No, it is not. Filter the log using the relevant parameters.
+		 */
+		System.out.println("[" + NAME + "]: Returning newly filtered log.");
+		XLog filteredLog = initializeLog(getLog());
 		for (XTrace trace : getLog()) {
 			boolean match = false;
 			if (!trace.isEmpty()) {
 				String value = classifier.getClassIdentity(trace.get(0));
 				match = selectedValues.contains(value);
 			}
-			switch (getParameters().getOneFromListSelection().getSelected()) {
+			switch (selectionType) {
 				case FILTERIN : {
 					if (match) {
 						filteredLog.add(trace);
@@ -66,6 +97,14 @@ public class TraceFirstEventClassifierFilter extends EventClassifierFilter {
 				}
 			}
 		}
+		/*
+		 * Update the cache and return the result.
+		 */
+		cachedLog = getLog();
+		cachedClassifier = classifier;
+		cachedSelectedValues = selectedValues;
+		cachedSelectionType = selectionType;
+		cachedFilteredLog = filteredLog;
 		return filteredLog;
 	}
 	

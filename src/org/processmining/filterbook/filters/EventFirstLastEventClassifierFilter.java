@@ -9,28 +9,59 @@ import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.parameters.Parameters;
+import org.processmining.filterbook.types.SelectionType;
 
 public class EventFirstLastEventClassifierFilter extends EventClassifierFilter {
 	public static final String NAME = "Project on first and last classifier value";
 
+	private XLog cachedLog;
+	private XEventClassifier cachedClassifier;
+	private Set<String> cachedSelectedValues;
+	private SelectionType cachedSelectionType;
+	private XLog cachedFilteredLog;
+
 	public EventFirstLastEventClassifierFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);
+		cachedLog = null;
 	}
 
 	public EventFirstLastEventClassifierFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
 		super(name, log, parameters, cell);
+		cachedLog = null;
 	}
 	
 	public XLog filter() {
-		XLog filteredLog = initializeLog(getLog());
+		/*
+		 * Get the relevant parameters.
+		 */
 		XEventClassifier classifier = getParameters().getOneFromListClassifier().getSelected().getClassifier();
 		Set<String> selectedValues = new TreeSet<String>(getParameters().getMultipleFromListString().getSelected());
+		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
+		/*
+		 * Check whether the cache is  valid.
+		 */
+		if (cachedLog == getLog()) {
+			if (cachedClassifier.equals(classifier) &&
+					cachedSelectedValues.equals(cachedSelectedValues) &&
+					cachedSelectionType == selectionType) {
+				/*
+				 * Yes, it is. Return the cached filtered log.
+				 */
+				System.out.println("[" + NAME + "]: Returning cached filtered log.");
+				return cachedFilteredLog;
+			}
+		}
+		/*
+		 * No, it is not. Filter the log using the relevant parameters.
+		 */
+		System.out.println("[" + NAME + "]: Returning newly filtered log.");
+		XLog filteredLog = initializeLog(getLog());
 		for (XTrace trace : getLog()) {
 			XTrace filteredTrace = getFactory().createTrace(trace.getAttributes());
 			for (XEvent event : trace) {
 				String value = classifier.getClassIdentity(event);
 				boolean match = selectedValues.contains(value);
-				switch (getParameters().getOneFromListSelection().getSelected()) {
+				switch (selectionType) {
 					case FILTERIN : {
 						if (match) {
 							if (isFirst(trace, event, classifier) || isLast(trace, event, classifier)) {
@@ -53,6 +84,14 @@ public class EventFirstLastEventClassifierFilter extends EventClassifierFilter {
 			}
 			filteredLog.add(filteredTrace);
 		}
+		/*
+		 * Update the cache and return the result.
+		 */
+		cachedLog = getLog();
+		cachedClassifier = classifier;
+		cachedSelectedValues = selectedValues;
+		cachedSelectionType = selectionType;
+		cachedFilteredLog = filteredLog;
 		return filteredLog;
 	}
 	

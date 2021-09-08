@@ -24,14 +24,19 @@ public class TraceUniqueNameFilter extends Filter {
 
 	public static final String NAME = "Ensure unique case names";
 
+	private XLog cachedLog;
+	private XLog cachedFilteredLog;
+
 	public TraceUniqueNameFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, parameters, cell);
 		setLog(log);
+		cachedLog = null;
 	}
 
 	public TraceUniqueNameFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
 		super(name, parameters, cell);
 		setLog(log);
+		cachedLog = null;
 	}
 
 	public boolean isSuitable() {
@@ -66,6 +71,22 @@ public class TraceUniqueNameFilter extends Filter {
 	}
 
 	public XLog filter() {
+		/*
+		 * Check whether the cache is valid.
+		 */
+		if (cachedLog == getLog()) {
+			if (true) {
+				/*
+				 * Yes, it is. Return the cached filtered log.
+				 */
+				System.out.println("[" + NAME + "]: Returning cached filtered log.");
+				return cachedFilteredLog;
+			}
+		}
+		/*
+		 * No, it is not. Filter the log using the relevant parameters.
+		 */
+		System.out.println("[" + NAME + "]: Returning newly filtered log.");
 		XLog filteredLog = initializeLog(getLog());
 		/*
 		 * Add the concept extension, if needed.
@@ -115,6 +136,11 @@ public class TraceUniqueNameFilter extends Filter {
 			XConceptExtension.instance().assignName(filteredTrace, caseName);
 			filteredLog.add(filteredTrace);
 		}		
+		/*
+		 * Update the cache and return the result.
+		 */
+		cachedLog = getLog();
+		cachedFilteredLog = filteredLog;
 		return filteredLog;
 	}
 	

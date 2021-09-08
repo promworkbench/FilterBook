@@ -10,29 +10,60 @@ import org.deckfour.xes.model.XTrace;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.parameters.Parameters;
 import org.processmining.filterbook.types.AttributeValueType;
+import org.processmining.filterbook.types.SelectionType;
 
 public class EventFirstLastEventAttributeFilter extends EventAttributeFilter {
 
 	public static final String NAME = "Project on first and last attribute value";
 
+	private XLog cachedLog;
+	private XAttribute cachedAttribute;
+	private Set<AttributeValueType> cachedSelectedValues;
+	private SelectionType cachedSelectionType;
+	private XLog cachedFilteredLog;
+
 	public EventFirstLastEventAttributeFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);
+		cachedLog = null;
 	}
 
 	public EventFirstLastEventAttributeFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
 		super(name, log, parameters, cell);
+		cachedLog = null;
 	}
 	
 	public XLog filter() {
-		XLog filteredLog = initializeLog(getLog());
+		/*
+		 * Get the relevant parameters.
+		 */
 		XAttribute attribute = getParameters().getOneFromListAttribute().getSelected().getAttribute();
 		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(getParameters().getMultipleFromListAttributeValue().getSelected());
+		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
+		/*
+		 * Check whether the cache is  valid.
+		 */
+		if (cachedLog == getLog()) {
+			if (cachedAttribute.equals(attribute) &&
+					cachedSelectedValues.equals(selectedValues) &&
+					cachedSelectionType == selectionType) {
+				/*
+				 * Yes, it is. Return the cached filtered log.
+				 */
+				System.out.println("[" + NAME + "]: Returning cached filtered log.");
+				return cachedFilteredLog;
+			}
+		}
+		/*
+		 * No, it is not. Filter the log using the relevant parameters.
+		 */
+		System.out.println("[" + NAME + "]: Returning newly filtered log.");
+		XLog filteredLog = initializeLog(getLog());
 		for (XTrace trace : getLog()) {
 			XTrace filteredTrace = getFactory().createTrace(trace.getAttributes());
 			for (XEvent event : trace) {
 				AttributeValueType value = new AttributeValueType(event.getAttributes().get(attribute.getKey()));
 				boolean match = selectedValues.contains(value);
-				switch (getParameters().getOneFromListSelection().getSelected()) {
+				switch (selectionType) {
 					case FILTERIN : {
 						if (match) {
 							if (isFirst(trace, event, value.getAttribute()) || isLast(trace, event, value.getAttribute())) {
@@ -55,6 +86,14 @@ public class EventFirstLastEventAttributeFilter extends EventAttributeFilter {
 			}
 			filteredLog.add(filteredTrace);
 		}
+		/*
+		 * Update the cache and return the result.
+		 */
+		cachedLog = getLog();
+		cachedAttribute = attribute;
+		cachedSelectedValues = selectedValues;
+		cachedSelectionType = selectionType;
+		cachedFilteredLog = filteredLog;
 		return filteredLog;
 	}
 	

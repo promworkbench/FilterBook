@@ -22,14 +22,21 @@ public class TraceFirstLastEventFilter extends Filter {
 
 	public static final String NAME = "Add artificial first and/or last";
 
+	private XLog cachedLog;
+	private boolean cachedYesNoA;
+	private boolean cachedYesNoB;
+	private XLog cachedFilteredLog;
+	
 	public TraceFirstLastEventFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, parameters, cell);
 		setLog(log);
+		cachedLog = null;
 	}
 
 	public TraceFirstLastEventFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
 		super(name, parameters, cell);
 		setLog(log);
+		cachedLog = null;
 	}
 
 	public boolean isSuitable() {
@@ -40,10 +47,33 @@ public class TraceFirstLastEventFilter extends Filter {
 	}
 
 	public XLog filter() {
+		/*
+		 * Get the relevant parameters.
+		 */
+		boolean yesNoA = getParameters().getYesNoA().getSelected();
+		boolean yesNoB = getParameters().getYesNoA().getSelected();
+		/*
+		 * Check whether the cache is  valid.
+		 */
+		if (cachedLog == getLog()) {
+			if (cachedYesNoA == yesNoA &&
+					cachedYesNoB == yesNoB) {
+				/*
+				 * Yes, it is. Return the cached filtered log.
+				 */
+				System.out.println("[" + NAME + "]: Returning cached filtered log.");
+				return cachedFilteredLog;
+				
+			}
+		}
+		/*
+		 * No, it is not. Filter the log using the relevant parameters.
+		 */
+		System.out.println("[" + NAME + "]: Returning newly filtered log.");
 		XLog filteredLog = initializeLog(getLog());
 		for (XTrace trace : getLog()) {
 			XTrace filteredTrace = getFactory().createTrace(trace.getAttributes());
-			if (getParameters().getYesNoA().getSelected()) {
+			if (yesNoA) {
 				XEvent firstEvent = getFactory().createEvent();
 				boolean hasTimestamp = false;
 				for (XAttribute globalAttribute : getLog().getGlobalEventAttributes()) {
@@ -61,7 +91,7 @@ public class TraceFirstLastEventFilter extends Filter {
 				filteredTrace.add(firstEvent);
 			}
 			filteredTrace.addAll(trace);
-			if (getParameters().getYesNoB().getSelected()) {
+			if (yesNoB) {
 				XEvent lastEvent = getFactory().createEvent();
 				boolean hasTimestamp = false;
 				for (XAttribute globalAttribute : getLog().getGlobalEventAttributes()) {
@@ -80,6 +110,13 @@ public class TraceFirstLastEventFilter extends Filter {
 			}
 			filteredLog.add(filteredTrace);
 		}
+		/*
+		 * Update the cache and return the result.
+		 */
+		cachedLog = getLog();
+		cachedYesNoA = yesNoA;
+		cachedYesNoB = yesNoB;
+		cachedFilteredLog = filteredLog;
 		return filteredLog;
 	}
 

@@ -33,6 +33,14 @@ public class TraceDateFilter extends Filter {
 	private Date firstLogDate = null;
 	private Date lastLogDate = null;
 
+	private XLog cachedLog;
+	private Date cachedFirstDate;
+	private Date cachedLastDate;
+	private boolean cachedYesNoA;
+	private boolean cachedYesNoB;
+	private SelectionType cachedSelectionType;
+	private XLog cachedFilteredLog;
+	
 	TraceDateFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		this(NAME, log, parameters, cell);
 	}
@@ -54,12 +62,39 @@ public class TraceDateFilter extends Filter {
 				}
 			}
 		}
+		cachedLog = null;
 	}
 
 	public XLog filter() {
-		XLog filteredLog = initializeLog(getLog());
+		/*
+		 * Get the relevant parameters.
+		 */
 		Date firstDate = getParameters().getDateA().getDate();
 		Date lastDate = getParameters().getDateB().getDate();
+		boolean yesNoA = getParameters().getYesNoA().getSelected();
+		boolean yesNoB = getParameters().getYesNoA().getSelected();
+		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
+		/*
+		 * Check whether the cache is  valid.
+		 */
+		if (cachedLog == getLog()) {
+			if (cachedFirstDate.equals(firstDate) &&
+					cachedLastDate.equals(lastDate) &&
+					cachedYesNoA == yesNoA &&
+					cachedYesNoB == yesNoB &&
+					cachedSelectionType == selectionType) {
+				/*
+				 * Yes, it is. Return the cached filtered log.
+				 */
+				System.out.println("[" + NAME + "]: Returning cached filtered log.");
+				return cachedFilteredLog;
+			}
+		}
+		/*
+		 * No, it is not. Filter the log using the relevant parameters.
+		 */
+		System.out.println("[" + NAME + "]: Returning newly filtered log.");
+		XLog filteredLog = initializeLog(getLog());
 		Calendar firstCalendar = Calendar.getInstance();
 		firstCalendar.setTime(firstDate);
 		firstCalendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -93,13 +128,13 @@ public class TraceDateFilter extends Filter {
 				continue;
 			}
 			boolean match = !firstTraceDate.after(lastDate) && !lastTraceDate.before(firstDate);
-			if (!getParameters().getYesNoA().getSelected() && !firstTraceDate.after(firstDate)) {
+			if (!yesNoA && !firstTraceDate.after(firstDate)) {
 				match = false;
 			}
-			if (!getParameters().getYesNoB().getSelected() && !lastTraceDate.before(lastDate)) {
+			if (!yesNoB && !lastTraceDate.before(lastDate)) {
 				match = false;
 			}
-			switch (getParameters().getOneFromListSelection().getSelected()) {
+			switch (selectionType) {
 				case FILTERIN : {
 					if (match) {
 						filteredLog.add(trace);
@@ -114,6 +149,16 @@ public class TraceDateFilter extends Filter {
 				}
 			}
 		}
+		/*
+		 * Update the cache and return the result.
+		 */
+		cachedLog = getLog();
+		cachedFirstDate = firstDate;
+		cachedLastDate = lastDate;
+		cachedYesNoA = yesNoA;
+		cachedYesNoB = yesNoB;
+		cachedSelectionType = selectionType;
+		cachedFilteredLog = filteredLog;
 		return filteredLog;
 	}
 
