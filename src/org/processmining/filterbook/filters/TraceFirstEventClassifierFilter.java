@@ -62,7 +62,7 @@ public class TraceFirstEventClassifierFilter extends EventClassifierFilter {
 		 */
 		if (cachedLog == getLog()) {
 			if (cachedClassifier.equals(classifier) &&
-					cachedSelectedValues.equals(cachedSelectedValues) &&
+					cachedSelectedValues.equals(selectedValues) &&
 					cachedSelectionType == selectionType) {
 				/*
 				 * Yes, it is. Return the cached filtered log.
