@@ -164,6 +164,26 @@ public class FilterTemplate implements HTMLToString {
 			filter.setTemplate(parameters);
 			return filter;
 		}
+		if (name.equals(EventHeadClassifierFilter.class.getName())) {
+			EventHeadClassifierFilter filter = new EventHeadClassifierFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(EventTailClassifierFilter.class.getName())) {
+			EventTailClassifierFilter filter = new EventTailClassifierFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(EventHeadAttributeFilter.class.getName())) {
+			EventHeadAttributeFilter filter = new EventHeadAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(EventTailAttributeFilter.class.getName())) {
+			EventTailAttributeFilter filter = new EventTailAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
 		return null;
 	}
 
