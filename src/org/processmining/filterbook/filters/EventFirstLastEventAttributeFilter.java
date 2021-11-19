@@ -97,7 +97,7 @@ public class EventFirstLastEventAttributeFilter extends EventAttributeFilter {
 		return filteredLog;
 	}
 	
-	private boolean isFirst(XTrace trace, XEvent event, XAttribute attribute) {
+	protected boolean isFirst(XTrace trace, XEvent event, XAttribute attribute) {
 		int i = trace.indexOf(event);
 		if (i == 0) {
 			return true;
@@ -105,7 +105,7 @@ public class EventFirstLastEventAttributeFilter extends EventAttributeFilter {
 		return !attribute.equals(trace.get(i - 1).getAttributes().get(attribute.getKey()));
 	}
 
-	private boolean isLast(XTrace trace, XEvent event, XAttribute attribute) {
+	protected boolean isLast(XTrace trace, XEvent event, XAttribute attribute) {
 		int i = trace.indexOf(event);
 		if (i == trace.size() - 1) {
 			return true;

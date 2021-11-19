@@ -95,7 +95,7 @@ public class EventLastEventClassifierFilter extends EventClassifierFilter {
 		return filteredLog;
 	}
 	
-	private boolean isLast(XTrace trace, XEvent event, XEventClassifier classifier) {
+	protected boolean isLast(XTrace trace, XEvent event, XEventClassifier classifier) {
 		int i = trace.indexOf(event);
 		if (i == trace.size() - 1) {
 			return true;

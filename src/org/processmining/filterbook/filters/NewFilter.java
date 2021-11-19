@@ -52,14 +52,26 @@ public class NewFilter extends Filter {
 		filters.add(new EventFirstEventAttributeFilter(getLog(), new Parameters(), getCell()));
 		filters.add(new EventFirstEventGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
 		filters.add(new EventFirstEventClassifierFilter(getLog(), new Parameters(), getCell()));
+		
+		filters.add(new EventFirstEventAttributeTraceFilter(getLog(), new Parameters(), getCell()));
+		filters.add(new EventFirstEventGlobalAttributeTraceFilter(getLog(), new Parameters(), getCell()));
+		filters.add(new EventFirstEventClassifierTraceFilter(getLog(), new Parameters(), getCell()));
 
 		filters.add(new EventLastEventAttributeFilter(getLog(), new Parameters(), getCell()));
 		filters.add(new EventLastEventGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
 		filters.add(new EventLastEventClassifierFilter(getLog(), new Parameters(), getCell()));
+		
+		filters.add(new EventLastEventAttributeTraceFilter(getLog(), new Parameters(), getCell()));
+		filters.add(new EventLastEventGlobalAttributeTraceFilter(getLog(), new Parameters(), getCell()));
+		filters.add(new EventLastEventClassifierTraceFilter(getLog(), new Parameters(), getCell()));
 
 		filters.add(new EventFirstLastEventAttributeFilter(getLog(), new Parameters(), getCell()));
 		filters.add(new EventFirstLastEventGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
 		filters.add(new EventFirstLastEventClassifierFilter(getLog(), new Parameters(), getCell()));
+		
+		filters.add(new EventFirstLastEventAttributeTraceFilter(getLog(), new Parameters(), getCell()));
+		filters.add(new EventFirstLastEventGlobalAttributeTraceFilter(getLog(), new Parameters(), getCell()));
+		filters.add(new EventFirstLastEventClassifierTraceFilter(getLog(), new Parameters(), getCell()));
 		
 		filters.add(new TraceLogFilter(getLog(), new Parameters(), getCell()));
 		filters.add(new TraceUniqueNameFilter(getLog(), new Parameters(), getCell()));

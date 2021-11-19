@@ -95,7 +95,7 @@ public class EventFirstEventClassifierFilter extends EventClassifierFilter {
 		return filteredLog;
 	}
 	
-	private boolean isFirst(XTrace trace, XEvent event, XEventClassifier classifier) {
+	protected boolean isFirst(XTrace trace, XEvent event, XEventClassifier classifier) {
 		int i = trace.indexOf(event);
 		if (i == 0) {
 			return true;

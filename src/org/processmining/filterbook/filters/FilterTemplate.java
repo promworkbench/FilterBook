@@ -59,8 +59,24 @@ public class FilterTemplate implements HTMLToString {
 			filter.setTemplate(parameters);
 			return filter;
 		}
+		
 		if (name.equals(EventFirstEventAttributeFilter.class.getName())) {
 			EventFirstEventAttributeFilter filter = new EventFirstEventAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(EventFirstEventAttributeTraceFilter.class.getName())) {
+			EventFirstEventAttributeTraceFilter filter = new EventFirstEventAttributeTraceFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(EventFirstEventGlobalAttributeFilter.class.getName())) {
+			EventFirstEventGlobalAttributeFilter filter = new EventFirstEventGlobalAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(EventFirstEventGlobalAttributeTraceFilter.class.getName())) {
+			EventFirstEventGlobalAttributeTraceFilter filter = new EventFirstEventGlobalAttributeTraceFilter(log, new Parameters(), cell);
 			filter.setTemplate(parameters);
 			return filter;
 		}
@@ -69,8 +85,29 @@ public class FilterTemplate implements HTMLToString {
 			filter.setTemplate(parameters);
 			return filter;
 		}
+		if (name.equals(EventFirstEventClassifierTraceFilter.class.getName())) {
+			EventFirstEventClassifierTraceFilter filter = new EventFirstEventClassifierTraceFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		
 		if (name.equals(EventFirstLastEventAttributeFilter.class.getName())) {
 			EventFirstLastEventAttributeFilter filter = new EventFirstLastEventAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(EventFirstLastEventAttributeTraceFilter.class.getName())) {
+			EventFirstLastEventAttributeTraceFilter filter = new EventFirstLastEventAttributeTraceFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(EventFirstLastEventGlobalAttributeFilter.class.getName())) {
+			EventFirstLastEventGlobalAttributeFilter filter = new EventFirstLastEventGlobalAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(EventFirstLastEventGlobalAttributeTraceFilter.class.getName())) {
+			EventFirstLastEventGlobalAttributeTraceFilter filter = new EventFirstLastEventGlobalAttributeTraceFilter(log, new Parameters(), cell);
 			filter.setTemplate(parameters);
 			return filter;
 		}
@@ -79,13 +116,35 @@ public class FilterTemplate implements HTMLToString {
 			filter.setTemplate(parameters);
 			return filter;
 		}
+		if (name.equals(EventFirstLastEventClassifierTraceFilter.class.getName())) {
+			EventFirstLastEventClassifierTraceFilter filter = new EventFirstLastEventClassifierTraceFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		
 		if (name.equals(EventGlobalAttributeFilter.class.getName())) {
 			EventGlobalAttributeFilter filter = new EventGlobalAttributeFilter(log, new Parameters(), cell);
 			filter.setTemplate(parameters);
 			return filter;
 		}
+		
 		if (name.equals(EventLastEventAttributeFilter.class.getName())) {
 			EventLastEventAttributeFilter filter = new EventLastEventAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(EventLastEventAttributeTraceFilter.class.getName())) {
+			EventLastEventAttributeTraceFilter filter = new EventLastEventAttributeTraceFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(EventLastEventGlobalAttributeFilter.class.getName())) {
+			EventLastEventGlobalAttributeFilter filter = new EventLastEventGlobalAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(EventLastEventGlobalAttributeTraceFilter.class.getName())) {
+			EventLastEventGlobalAttributeTraceFilter filter = new EventLastEventGlobalAttributeTraceFilter(log, new Parameters(), cell);
 			filter.setTemplate(parameters);
 			return filter;
 		}
@@ -94,6 +153,12 @@ public class FilterTemplate implements HTMLToString {
 			filter.setTemplate(parameters);
 			return filter;
 		}
+		if (name.equals(EventLastEventClassifierTraceFilter.class.getName())) {
+			EventLastEventClassifierTraceFilter filter = new EventLastEventClassifierTraceFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		
 		if (name.equals(LogGlobalsFilter.class.getName())) {
 			LogGlobalsFilter filter = new LogGlobalsFilter(log, new Parameters(), cell);
 			filter.setTemplate(parameters);

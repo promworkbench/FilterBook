@@ -98,7 +98,7 @@ public class EventLastEventGlobalAttributeFilter extends EventGlobalAttributeFil
 		return filteredLog;
 	}
 
-	private boolean isLast(XTrace trace, XEvent event, XAttribute attribute) {
+	protected boolean isLast(XTrace trace, XEvent event, XAttribute attribute) {
 		int i = trace.indexOf(event);
 		if (i == trace.size() - 1) {
 			return true;

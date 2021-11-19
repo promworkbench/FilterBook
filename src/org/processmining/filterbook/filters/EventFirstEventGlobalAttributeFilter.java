@@ -97,7 +97,7 @@ public class EventFirstEventGlobalAttributeFilter extends EventGlobalAttributeFi
 		return filteredLog;
 	}
 	
-	private boolean isFirst(XTrace trace, XEvent event, XAttribute attribute) {
+	protected boolean isFirst(XTrace trace, XEvent event, XAttribute attribute) {
 		int i = trace.indexOf(event);
 		if (i == 0) {
 			return true;
