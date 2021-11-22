@@ -92,10 +92,27 @@ public class TraceOccurrencesAttributeFilter extends Filter {
 				occurrences.put(values, 1);
 			}
 		}
+		Map<Integer, Integer> variants = new HashMap<Integer, Integer>();
+		int m = 1;
+		for (int o : occurrences.values()) {
+			if (variants.containsKey(o)) {
+				variants.put(o, variants.get(o) + 1);
+			} else {
+				variants.put(o, 1);
+			}
+			String s = "" + o;
+			m = Math.max(m, s.length());
+		}
 		occurrenceAttributes.clear();
 		for (List<String> values : occurrences.keySet()) {
+			int o = occurrences.get(values);
+			int v = variants.get(o);
+			String s = "" + o;
 			occurrenceAttributes.put(values,
-					new AttributeValueType(getFactory().createAttributeDiscrete("", occurrences.get(values), null)));
+					new AttributeValueType(getFactory().createAttributeLiteral("",
+							String.format("%" + (2 * m - s.length()) + "d  (%d variant" + (v > 1 ? "s" : "") + ", %.2f %% of log)", o, v,
+									(100.0 * o * v / getLog().size())),
+							null)));
 		}
 	}
 
