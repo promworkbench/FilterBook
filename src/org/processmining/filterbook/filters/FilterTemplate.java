@@ -204,6 +204,16 @@ public class FilterTemplate implements HTMLToString {
 			filter.setTemplate(parameters);
 			return filter;
 		}
+		if (name.equals(TraceOccurrencesAttributeFilter.class.getName())) {
+			TraceOccurrencesAttributeFilter filter = new TraceOccurrencesAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(TraceOccurrencesClassifierFilter.class.getName())) {
+			TraceOccurrencesClassifierFilter filter = new TraceOccurrencesClassifierFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
 		if (name.equals(TraceLogFilter.class.getName())) {
 			TraceLogFilter filter = new TraceLogFilter(log, new Parameters(), cell);
 			filter.setTemplate(parameters);
