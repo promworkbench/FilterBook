@@ -102,6 +102,10 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 	 */
 	private void setOccurrences() {
 		occurrences.clear();
+		occurrenceAttributes.clear();
+		if (!isSuitable()) {
+			return;
+		}
 		/*
 		 * Get the classifier to use.
 		 */
@@ -136,7 +140,6 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 		 * of occurrences, the number of variants for this number of occurrences, and
 		 * the percentage of traces this option covers.
 		 */
-		occurrenceAttributes.clear();
 		for (List<String> variant : occurrences.keySet()) {
 			int o = occurrences.get(variant);
 			int v = variants.get(o);
