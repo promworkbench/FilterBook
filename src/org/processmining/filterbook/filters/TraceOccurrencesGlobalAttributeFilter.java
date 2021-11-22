@@ -109,7 +109,6 @@ public class TraceOccurrencesGlobalAttributeFilter extends Filter {
 			int o = occurrences.get(variant);
 			int v = variants.get(o);
 			String s = "" + o;
-			System.out.println("[TraceOccurrencesGlobalAttributeFilter] " + o + " " + v + " " + variant.toString());
 			occurrenceAttributes.put(variant,
 					new AttributeValueType(getFactory().createAttributeLiteral("",
 							String.format("%" + (2 * m - s.length()) + "d  (%d variant" + (v > 1 ? "s" : "") + ", %.2f %% of log)", o, v,
