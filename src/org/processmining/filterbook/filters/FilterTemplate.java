@@ -199,13 +199,20 @@ public class FilterTemplate implements HTMLToString {
 			filter.setTemplate(parameters);
 			return filter;
 		}
+		
 		if (name.equals(TraceLengthFilter.class.getName())) {
 			TraceLengthFilter filter = new TraceLengthFilter(log, new Parameters(), cell);
 			filter.setTemplate(parameters);
 			return filter;
 		}
+		
 		if (name.equals(TraceOccurrencesAttributeFilter.class.getName())) {
 			TraceOccurrencesAttributeFilter filter = new TraceOccurrencesAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(TraceOccurrencesGlobalAttributeFilter.class.getName())) {
+			TraceOccurrencesGlobalAttributeFilter filter = new TraceOccurrencesGlobalAttributeFilter(log, new Parameters(), cell);
 			filter.setTemplate(parameters);
 			return filter;
 		}
@@ -214,6 +221,7 @@ public class FilterTemplate implements HTMLToString {
 			filter.setTemplate(parameters);
 			return filter;
 		}
+		
 		if (name.equals(TraceLogFilter.class.getName())) {
 			TraceLogFilter filter = new TraceLogFilter(log, new Parameters(), cell);
 			filter.setTemplate(parameters);
