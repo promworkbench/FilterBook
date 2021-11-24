@@ -69,7 +69,7 @@ public class TraceOccurrencesGlobalAttributeFilter extends Filter {
 		if (getLog() == null) {
 			return false;
 		}
-		return hasEvents();
+		return hasGlobalEventAttributes() && hasEvents();
 	}
 
 	private List<String> getVariant(XTrace trace, XAttribute attribute) {
