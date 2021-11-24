@@ -158,7 +158,9 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 		/*
 		 * Get the relevant parameters.
 		 */
-		XEventClassifier classifier = getParameters().getOneFromListClassifier().getSelected().getClassifier();
+		XEventClassifier classifier = (getParameters().getOneFromListClassifier().getSelected() != null
+				? getParameters().getOneFromListClassifier().getSelected().getClassifier()
+				: getDummyClassifier());
 		Set<AttributeValueType> selectedValues = new HashSet<AttributeValueType>(
 				getParameters().getMultipleFromListAttributeValue().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();

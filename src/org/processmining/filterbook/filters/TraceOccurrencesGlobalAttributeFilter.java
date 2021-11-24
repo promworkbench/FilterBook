@@ -84,11 +84,9 @@ public class TraceOccurrencesGlobalAttributeFilter extends Filter {
 
 	private void setOccurrences() {
 		occurrences.clear();
-		occurrenceAttributes.clear();
-		if (!isSuitable()) {
-			return;
-		}
-		XAttribute attribute = getParameters().getOneFromListAttribute().getSelected().getAttribute();
+		XAttribute attribute = (getParameters().getOneFromListAttribute().getSelected() != null
+				? getParameters().getOneFromListAttribute().getSelected().getAttribute()
+				: getDummyAttribute());
 		for (XTrace trace : getLog()) {
 			List<String> variant = getVariant(trace, attribute);
 			if (occurrences.containsKey(variant)) {
@@ -108,6 +106,7 @@ public class TraceOccurrencesGlobalAttributeFilter extends Filter {
 			String s = "" + o;
 			m = Math.max(m, s.length());
 		}
+		occurrenceAttributes.clear();
 		for (List<String> variant : occurrences.keySet()) {
 			int o = occurrences.get(variant);
 			int v = variants.get(o);
@@ -124,7 +123,9 @@ public class TraceOccurrencesGlobalAttributeFilter extends Filter {
 		/*
 		 * Get the relevant parameters.
 		 */
-		XAttribute attribute = getParameters().getOneFromListAttribute().getSelected().getAttribute();
+		XAttribute attribute = (getParameters().getOneFromListAttribute().getSelected() != null
+				? getParameters().getOneFromListAttribute().getSelected().getAttribute()
+				: getDummyAttribute());
 		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(
 				getParameters().getMultipleFromListAttributeValue().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();

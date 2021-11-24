@@ -21,7 +21,7 @@ public class EventFirstEventAttributeFilter extends EventAttributeFilter {
 	private Set<AttributeValueType> cachedSelectedValues;
 	private SelectionType cachedSelectionType;
 	private XLog cachedFilteredLog;
-	
+
 	public EventFirstEventAttributeFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);
 		cachedLog = null;
@@ -31,21 +31,23 @@ public class EventFirstEventAttributeFilter extends EventAttributeFilter {
 		super(name, log, parameters, cell);
 		cachedLog = null;
 	}
-	
+
 	public XLog filter() {
 		/*
 		 * Get the relevant parameters.
 		 */
-		XAttribute attribute = getParameters().getOneFromListAttribute().getSelected().getAttribute();
-		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(getParameters().getMultipleFromListAttributeValue().getSelected());
+		XAttribute attribute = (getParameters().getOneFromListAttribute().getSelected() != null
+				? getParameters().getOneFromListAttribute().getSelected().getAttribute()
+				: getDummyAttribute());
+		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(
+				getParameters().getMultipleFromListAttributeValue().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
-		 * Check whether the cache is  valid.
+		 * Check whether the cache is valid.
 		 */
 		if (cachedLog == getLog()) {
-			if (cachedAttribute.equals(attribute) &&
-					cachedSelectedValues.equals(selectedValues) &&
-					cachedSelectionType == selectionType) {
+			if (cachedAttribute.equals(attribute) && cachedSelectedValues.equals(selectedValues)
+					&& cachedSelectionType == selectionType) {
 				/*
 				 * Yes, it is. Return the cached filtered log.
 				 */
@@ -96,7 +98,7 @@ public class EventFirstEventAttributeFilter extends EventAttributeFilter {
 		cachedFilteredLog = filteredLog;
 		return filteredLog;
 	}
-	
+
 	protected boolean isFirst(XTrace trace, XEvent event, XAttribute attribute) {
 		int i = trace.indexOf(event);
 		if (i == 0) {

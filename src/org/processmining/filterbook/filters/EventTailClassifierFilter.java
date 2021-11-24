@@ -34,7 +34,9 @@ public class EventTailClassifierFilter extends EventClassifierFilter {
 		/*
 		 * Get the relevant parameters.
 		 */
-		XEventClassifier classifier = getParameters().getOneFromListClassifier().getSelected().getClassifier();
+		XEventClassifier classifier = (getParameters().getOneFromListClassifier().getSelected() != null
+				? getParameters().getOneFromListClassifier().getSelected().getClassifier()
+				: getDummyClassifier());
 		Set<String> selectedValues = new TreeSet<String>(getParameters().getMultipleFromListString().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*

@@ -4,6 +4,8 @@ import java.util.Collection;
 
 import javax.swing.JComponent;
 
+import org.deckfour.xes.classification.XEventAttributeClassifier;
+import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.extension.std.XTimeExtension;
 import org.deckfour.xes.factory.XFactory;
@@ -48,11 +50,20 @@ public abstract class Filter implements Comparable<Filter> {
 
 	private final XFactory factory;
 
+	private static XAttribute dummyAttribute = null;
+	private static XEventClassifier dummyClassifier = null;
+	
 	Filter(String name, Parameters parameters, ComputationCell cell) {
 		this.name = name;
 		this.parameters = parameters;
 		this.cell = cell;
 		factory = XFactoryRegistry.instance().currentDefault();
+		if (dummyAttribute == null) {
+			dummyAttribute = factory.createAttributeLiteral("", "", null);
+		}
+		if (dummyClassifier == null) {
+			dummyClassifier = new XEventAttributeClassifier("", "");
+		}
 		valid4Log = null;
 	}
 
@@ -281,6 +292,14 @@ public abstract class Filter implements Comparable<Filter> {
 			}
 		}
 		return false;
+	}
+
+	public XAttribute getDummyAttribute() {
+		return dummyAttribute;
+	}
+
+	public XEventClassifier getDummyClassifier() {
+		return dummyClassifier;
 	}
 
 }

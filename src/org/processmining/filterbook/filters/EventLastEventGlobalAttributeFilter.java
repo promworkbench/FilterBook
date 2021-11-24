@@ -36,7 +36,9 @@ public class EventLastEventGlobalAttributeFilter extends EventGlobalAttributeFil
 		/*
 		 * Get the relevant parameters.
 		 */
-		XAttribute attribute = getParameters().getOneFromListAttribute().getSelected().getAttribute();
+		XAttribute attribute = (getParameters().getOneFromListAttribute().getSelected() != null
+				? getParameters().getOneFromListAttribute().getSelected().getAttribute()
+				: getDummyAttribute());
 		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(
 				getParameters().getMultipleFromListAttributeValue().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();

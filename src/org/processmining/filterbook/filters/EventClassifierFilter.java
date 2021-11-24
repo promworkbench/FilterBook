@@ -44,14 +44,15 @@ public class EventClassifierFilter extends Filter {
 	private JComponent attributeValueWidget;
 
 	/**
-	 * Caching filter results to avoid filtering the same log with the same settings over and over again.
+	 * Caching filter results to avoid filtering the same log with the same settings
+	 * over and over again.
 	 */
 	private XLog cachedLog;
 	private XEventClassifier cachedClassifier;
 	private Set<String> cachedSelectedValues;
 	private SelectionType cachedSelectionType;
 	private XLog cachedFilteredLog;
-	
+
 	public EventClassifierFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, parameters, cell);
 		cachedLog = null;
@@ -65,7 +66,8 @@ public class EventClassifierFilter extends Filter {
 	}
 
 	/**
-	 * This filter is suitable if the log contains classifiers and at least one event.
+	 * This filter is suitable if the log contains classifiers and at least one
+	 * event.
 	 */
 	public boolean isSuitable() {
 		if (getLog() == null) {
@@ -81,16 +83,17 @@ public class EventClassifierFilter extends Filter {
 		/*
 		 * Get the relevant parameters.
 		 */
-		XEventClassifier classifier = getParameters().getOneFromListClassifier().getSelected().getClassifier();
+		XEventClassifier classifier = (getParameters().getOneFromListClassifier().getSelected() != null
+				? getParameters().getOneFromListClassifier().getSelected().getClassifier()
+				: getDummyClassifier());
 		Set<String> selectedValues = new HashSet<String>(getParameters().getMultipleFromListString().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
-		 * Check whether the cache is  valid.
+		 * Check whether the cache is valid.
 		 */
 		if (cachedLog == getLog()) {
-			if (cachedClassifier.equals(classifier) &&
-					cachedSelectedValues.equals(selectedValues) &&
-					cachedSelectionType == selectionType) {
+			if (cachedClassifier.equals(classifier) && cachedSelectedValues.equals(selectedValues)
+					&& cachedSelectionType == selectionType) {
 				/*
 				 * Yes, it is. Return the cached filtered log.
 				 */
@@ -157,7 +160,7 @@ public class EventClassifierFilter extends Filter {
 		 */
 		setAttributeValues(true);
 	}
-	
+
 	private void updatedDone() {
 		/*
 		 * Get the new widget for the attribute value parameter, and replace the old one
@@ -170,7 +173,7 @@ public class EventClassifierFilter extends Filter {
 		getWidget().repaint();
 		getCell().updated();
 	}
-	
+
 	/**
 	 * Handle if a parameter was changed.
 	 */
@@ -280,7 +283,7 @@ public class EventClassifierFilter extends Filter {
 		// Update the selection type.
 		setSelectionType(true);
 	}
-	
+
 	/**
 	 * Gets a template for this filter.
 	 */
@@ -292,7 +295,8 @@ public class EventClassifierFilter extends Filter {
 		// Create a new parameters template.
 		filterTemplate.setParameters(new ParametersTemplate());
 		// Copy the selected classifier.
-		filterTemplate.getParameters().setClassifier(getParameters().getOneFromListClassifier().getSelected().getClassifier().name());
+		filterTemplate.getParameters()
+				.setClassifier(getParameters().getOneFromListClassifier().getSelected().getClassifier().name());
 		// Copy the selected classifier values.
 		filterTemplate.getParameters().setValues(new TreeSet<String>());
 		for (String value : getParameters().getMultipleFromListString().getSelected()) {

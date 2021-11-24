@@ -54,7 +54,9 @@ public class TraceFirstEventClassifierFilter extends EventClassifierFilter {
 		/*
 		 * Get the relevant parameters.
 		 */
-		XEventClassifier classifier = getParameters().getOneFromListClassifier().getSelected().getClassifier();
+		XEventClassifier classifier = (getParameters().getOneFromListClassifier().getSelected() != null
+				? getParameters().getOneFromListClassifier().getSelected().getClassifier()
+				: getDummyClassifier());
 		Set<String> selectedValues = new HashSet<String>(getParameters().getMultipleFromListString().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
