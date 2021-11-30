@@ -49,6 +49,10 @@ public class NewFilter extends Filter {
 		filters.add(new TraceOccurrencesGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
 		filters.add(new TraceOccurrencesClassifierFilter(getLog(), new Parameters(), getCell()));
 		
+		filters.add(new EventOccurrencesAttributeFilter(getLog(), new Parameters(), getCell()));
+		filters.add(new EventOccurrencesGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
+		filters.add(new EventOccurrencesClassifierFilter(getLog(), new Parameters(), getCell()));
+		
 		filters.add(new EventClassifierFilter(getLog(), new Parameters(), getCell()));
 		filters.add(new EventGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
 		filters.add(new EventAttributeFilter(getLog(), new Parameters(), getCell()));

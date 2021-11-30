@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -88,7 +87,7 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 	/*
 	 * Returns the variant for this trace, given the classifier to use.
 	 */
-	private List<String> getVariant(XTrace trace, XEventClassifier classifier) {
+	private List<String> getTraceClass(XTrace trace, XEventClassifier classifier) {
 		List<String> values = new ArrayList<String>();
 		for (XEvent event : trace) {
 			String value = classifier.getClassIdentity(event);
@@ -114,23 +113,23 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 		 * Compute the occurrences for all variants.
 		 */
 		for (XTrace trace : getLog()) {
-			List<String> variant = getVariant(trace, classifier);
-			if (occurrences.containsKey(variant)) {
-				occurrences.put(variant, occurrences.get(variant) + 1);
+			List<String> traceClass = getTraceClass(trace, classifier);
+			if (occurrences.containsKey(traceClass)) {
+				occurrences.put(traceClass, occurrences.get(traceClass) + 1);
 			} else {
-				occurrences.put(variant, 1);
+				occurrences.put(traceClass, 1);
 			}
 		}
 		/*
 		 * Count how many variants there are for every occurrence.
 		 */
-		Map<Integer, Integer> variants = new HashMap<Integer, Integer>();
+		Map<Integer, Integer> traceClasses = new HashMap<Integer, Integer>();
 		int m = 1;
 		for (int o : occurrences.values()) {
-			if (variants.containsKey(o)) {
-				variants.put(o, variants.get(o) + 1);
+			if (traceClasses.containsKey(o)) {
+				traceClasses.put(o, traceClasses.get(o) + 1);
 			} else {
-				variants.put(o, 1);
+				traceClasses.put(o, 1);
 			}
 			String s = "" + o;
 			m = Math.max(m, s.length());
@@ -140,13 +139,13 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 		 * of occurrences, the number of variants for this number of occurrences, and
 		 * the percentage of traces this option covers.
 		 */
-		for (List<String> variant : occurrences.keySet()) {
-			int o = occurrences.get(variant);
-			int v = variants.get(o);
+		for (List<String> traceClass : occurrences.keySet()) {
+			int o = occurrences.get(traceClass);
+			int v = traceClasses.get(o);
 			String s = "" + o;
-			occurrenceAttributes.put(variant,
+			occurrenceAttributes.put(traceClass,
 					new AttributeValueType(getFactory().createAttributeLiteral("", String.format(
-							"%" + (2 * m - s.length()) + "d  (%d variant" + (v > 1 ? "s" : "") + ", %.2f %% of log)", o,
+							"%" + (2 * m - s.length()) + "d  (%d trace class" + (v > 1 ? "es" : "") + ", %.2f %% of log)", o,
 							v, (100.0 * o * v / getLog().size())), null)));
 		}
 	}
@@ -161,7 +160,7 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 		XEventClassifier classifier = (getParameters().getOneFromListClassifier().getSelected() != null
 				? getParameters().getOneFromListClassifier().getSelected().getClassifier()
 				: getDummyClassifier());
-		Set<AttributeValueType> selectedValues = new HashSet<AttributeValueType>(
+		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(
 				getParameters().getMultipleFromListAttributeValue().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
@@ -186,11 +185,11 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 			/*
 			 * Construct the variant for this trace, given the classifier.
 			 */
-			List<String> variant = getVariant(trace, classifier);
+			List<String> traceClass = getTraceClass(trace, classifier);
 			/*
 			 * Check whether this variant has been selected.
 			 */
-			boolean match = selectedValues.contains(occurrenceAttributes.get(variant));
+			boolean match = selectedValues.contains(occurrenceAttributes.get(traceClass));
 			switch (selectionType) {
 				case FILTERIN : {
 					if (match) {

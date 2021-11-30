@@ -222,6 +222,22 @@ public class FilterTemplate implements HTMLToString {
 			return filter;
 		}
 		
+		if (name.equals(EventOccurrencesAttributeFilter.class.getName())) {
+			EventOccurrencesAttributeFilter filter = new EventOccurrencesAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(EventOccurrencesGlobalAttributeFilter.class.getName())) {
+			EventOccurrencesGlobalAttributeFilter filter = new EventOccurrencesGlobalAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(EventOccurrencesClassifierFilter.class.getName())) {
+			EventOccurrencesClassifierFilter filter = new EventOccurrencesClassifierFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		
 		if (name.equals(TraceLogFilter.class.getName())) {
 			TraceLogFilter filter = new TraceLogFilter(log, new Parameters(), cell);
 			filter.setTemplate(parameters);
