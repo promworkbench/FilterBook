@@ -288,6 +288,16 @@ public class FilterTemplate implements HTMLToString {
 			filter.setTemplate(parameters);
 			return filter;
 		}
+		if (name.equals(TraceDirectlyFollowsGlobalAttributeFilter.class.getName())) {
+			TraceDirectlyFollowsGlobalAttributeFilter filter = new TraceDirectlyFollowsGlobalAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(TraceDirectlyFollowsAttributeFilter.class.getName())) {
+			TraceDirectlyFollowsAttributeFilter filter = new TraceDirectlyFollowsAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
 		return null;
 	}
 

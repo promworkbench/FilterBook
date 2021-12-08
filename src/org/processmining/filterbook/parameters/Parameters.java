@@ -30,7 +30,8 @@ public class Parameters {
 	/*
 	 * Selected attribute values.
 	 */
-	private MultipleFromListParameter<AttributeValueType> multipleFromListAttributeValue;
+	private MultipleFromListParameter<AttributeValueType> multipleFromListAttributeValueA;
+	private MultipleFromListParameter<AttributeValueType> multipleFromListAttributeValueB;
 	/*
 	 * First boolean option.
 	 */
@@ -120,13 +121,39 @@ public class Parameters {
 		this.multipleFromListStringB = multipleFromListStringB;
 	}
 
+	/**
+	 * @deprecated Use getMultipleFromListAttributeValueA() instead.
+	 * @return
+	 */
 	public MultipleFromListParameter<AttributeValueType> getMultipleFromListAttributeValue() {
-		return multipleFromListAttributeValue;
+		return multipleFromListAttributeValueA;
 	}
 
+	/**
+	 * @deprecated Use setMultipleFromListAttributeValueA(multipleFromListAttributeValue) instead.
+	 * @param multipleFromListString
+	 */
 	public void setMultipleFromListAttributeValue(
 			MultipleFromListParameter<AttributeValueType> multipleFromListAttributeValue) {
-		this.multipleFromListAttributeValue = multipleFromListAttributeValue;
+		this.multipleFromListAttributeValueA = multipleFromListAttributeValue;
+	}
+
+	public MultipleFromListParameter<AttributeValueType> getMultipleFromListAttributeValueA() {
+		return multipleFromListAttributeValueA;
+	}
+
+	public void setMultipleFromListAttributeValueA(
+			MultipleFromListParameter<AttributeValueType> multipleFromListAttributeValueA) {
+		this.multipleFromListAttributeValueA = multipleFromListAttributeValueA;
+	}
+
+	public MultipleFromListParameter<AttributeValueType> getMultipleFromListAttributeValueB() {
+		return multipleFromListAttributeValueB;
+	}
+
+	public void setMultipleFromListAttributeValueB(
+			MultipleFromListParameter<AttributeValueType> multipleFromListAttributeValueB) {
+		this.multipleFromListAttributeValueB = multipleFromListAttributeValueB;
 	}
 
 	public YesNoParameter getYesNoA() {

@@ -97,6 +97,8 @@ public class NewFilter extends Filter {
 		filters.add(new EventTailAttributeFilter(getLog(), new Parameters(), getCell()));
 
 		filters.add(new TraceDirectlyFollowsClassifierFilter(getLog(), new Parameters(), getCell()));
+		filters.add(new TraceDirectlyFollowsGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
+		filters.add(new TraceDirectlyFollowsAttributeFilter(getLog(), new Parameters(), getCell()));
 
 		List<Filter> suitableFilters = new ArrayList<Filter>();
 		for (Filter filter : filters) {
