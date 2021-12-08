@@ -283,6 +283,11 @@ public class FilterTemplate implements HTMLToString {
 			filter.setTemplate(parameters);
 			return filter;
 		}
+		if (name.equals(TraceDirectlyFollowsClassifierFilter.class.getName())) {
+			TraceDirectlyFollowsClassifierFilter filter = new TraceDirectlyFollowsClassifierFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
 		return null;
 	}
 

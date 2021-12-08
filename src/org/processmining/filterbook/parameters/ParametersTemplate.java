@@ -27,7 +27,8 @@ public class ParametersTemplate implements HTMLToString {
 	/*
 	 * For the selected values.
 	 */
-	private Set<String> values;
+	private Set<String> valuesA;
+	private Set<String> valuesB;
 	/*
 	 * For the filter in/filter out.
 	 */
@@ -72,12 +73,36 @@ public class ParametersTemplate implements HTMLToString {
 		this.attribute = attribute;
 	}
 
+	/**
+	 * @deprecated Use getValuesA() instead.
+	 * @return
+	 */
 	public Set<String> getValues() {
-		return values;
+		return valuesA;
 	}
 
+	/**
+	 * @deprecated Use setValuesA(values) instead.
+	 * @param values
+	 */
 	public void setValues(Set<String> values) {
-		this.values = values;
+		this.valuesA = values;
+	}
+
+	public Set<String> getValuesA() {
+		return valuesA;
+	}
+
+	public void setValuesA(Set<String> valuesA) {
+		this.valuesA = valuesA;
+	}
+
+	public Set<String> getValuesB() {
+		return valuesB;
+	}
+
+	public void setValuesB(Set<String> valuesB) {
+		this.valuesB = valuesB;
 	}
 
 	public String getSelection() {
@@ -134,8 +159,11 @@ public class ParametersTemplate implements HTMLToString {
 		if (attribute != null) {
 			buf.append("<li>Attribute: " + StringEscapeUtils.escapeHtml4(attribute) + "</li>");
 		}
-		if (values != null) {
-			buf.append("<li>Values: " + StringEscapeUtils.escapeHtml4(values.toString()) + "</li>");
+		if (valuesA != null) {
+			buf.append("<li>ValuesA: " + StringEscapeUtils.escapeHtml4(valuesA.toString()) + "</li>");
+		}
+		if (valuesB != null) {
+			buf.append("<li>ValuesB: " + StringEscapeUtils.escapeHtml4(valuesB.toString()) + "</li>");
 		}
 		if (selection != null) {
 			buf.append("<li>Selection: " + StringEscapeUtils.escapeHtml4(selection) + "</li>");
@@ -163,8 +191,11 @@ public class ParametersTemplate implements HTMLToString {
 
 	/**
 	 * Exports the template to a XML document.
-	 * @param document The XML document
-	 * @param filterElement The filter element holding the parameters in the document.
+	 * 
+	 * @param document
+	 *            The XML document
+	 * @param filterElement
+	 *            The filter element holding the parameters in the document.
 	 */
 	public void exportToDocument(Document document, Element filterElement) {
 		if (classifier != null) {
@@ -177,9 +208,16 @@ public class ParametersTemplate implements HTMLToString {
 			attributeElement.appendChild(document.createTextNode(attribute));
 			filterElement.appendChild(attributeElement);
 		}
-		if (values != null) {
-			for (String value : values) {
-				Element valueElement = document.createElement("value");
+		if (valuesA != null) {
+			for (String value : valuesA) {
+				Element valueElement = document.createElement("valueA");
+				filterElement.appendChild(valueElement);
+				valueElement.appendChild(document.createTextNode(value));
+			}
+		}
+		if (valuesB != null) {
+			for (String value : valuesB) {
+				Element valueElement = document.createElement("valueB");
 				filterElement.appendChild(valueElement);
 				valueElement.appendChild(document.createTextNode(value));
 			}
@@ -218,8 +256,11 @@ public class ParametersTemplate implements HTMLToString {
 
 	/**
 	 * Imports the template from an XML document.
-	 * @param document The XML document
-	 * @param filterElement The filter element containing the template data.
+	 * 
+	 * @param document
+	 *            The XML document
+	 * @param filterElement
+	 *            The filter element containing the template data.
 	 */
 	public void importFromDocument(Document document, Element filterElement) {
 		NodeList nodes = filterElement.getElementsByTagName("classifier");
@@ -230,11 +271,26 @@ public class ParametersTemplate implements HTMLToString {
 		if (nodes.getLength() >= 1) {
 			setAttribute(nodes.item(0).getTextContent());
 		}
-		nodes = filterElement.getElementsByTagName("value");
+		nodes = filterElement.getElementsByTagName("valueA");
 		if (nodes.getLength() > 0) {
-			values = new TreeSet<String>();
+			valuesA = new TreeSet<String>();
 			for (int i = 0; i < nodes.getLength(); i++) {
-				values.add(nodes.item(i).getTextContent());
+				valuesA.add(nodes.item(i).getTextContent());
+			}
+		} else {
+			nodes = filterElement.getElementsByTagName("value");
+			if (nodes.getLength() > 0) {
+				valuesA = new TreeSet<String>();
+				for (int i = 0; i < nodes.getLength(); i++) {
+					valuesA.add(nodes.item(i).getTextContent());
+				}
+			}
+		}
+		nodes = filterElement.getElementsByTagName("valueB");
+		if (nodes.getLength() > 0) {
+			valuesB = new TreeSet<String>();
+			for (int i = 0; i < nodes.getLength(); i++) {
+				valuesB.add(nodes.item(i).getTextContent());
 			}
 		}
 		nodes = filterElement.getElementsByTagName("selection");

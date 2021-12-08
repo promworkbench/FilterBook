@@ -25,7 +25,8 @@ public class Parameters {
 	/*
 	 * Selected String values, like classifier values.
 	 */
-	private MultipleFromListParameter<String> multipleFromListString;
+	private MultipleFromListParameter<String> multipleFromListStringA;
+	private MultipleFromListParameter<String> multipleFromListStringB;
 	/*
 	 * Selected attribute values.
 	 */
@@ -87,12 +88,36 @@ public class Parameters {
 		this.oneFromListSelection = oneFromListSelection;
 	}
 
+	/**
+	 * @deprecated Use getMultipleFromListStringA() instead.
+	 * @return
+	 */
 	public MultipleFromListParameter<String> getMultipleFromListString() {
-		return multipleFromListString;
+		return multipleFromListStringA;
 	}
 
+	/**
+	 * @deprecated Use setMultipleFromListStringA(multipleFromListString) instead.
+	 * @param multipleFromListString
+	 */
 	public void setMultipleFromListString(MultipleFromListParameter<String> multipleFromListString) {
-		this.multipleFromListString = multipleFromListString;
+		this.multipleFromListStringA = multipleFromListString;
+	}
+
+	public MultipleFromListParameter<String> getMultipleFromListStringA() {
+		return multipleFromListStringA;
+	}
+
+	public void setMultipleFromListStringA(MultipleFromListParameter<String> multipleFromListStringA) {
+		this.multipleFromListStringA = multipleFromListStringA;
+	}
+
+	public MultipleFromListParameter<String> getMultipleFromListStringB() {
+		return multipleFromListStringB;
+	}
+
+	public void setMultipleFromListStringB(MultipleFromListParameter<String> multipleFromListStringB) {
+		this.multipleFromListStringB = multipleFromListStringB;
 	}
 
 	public MultipleFromListParameter<AttributeValueType> getMultipleFromListAttributeValue() {
