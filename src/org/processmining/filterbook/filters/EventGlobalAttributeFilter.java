@@ -92,7 +92,7 @@ public class EventGlobalAttributeFilter extends Filter {
 		XAttribute attribute = (getParameters().getOneFromListAttribute().getSelected() != null
 				? getParameters().getOneFromListAttribute().getSelected().getAttribute()
 				: getDummyAttribute());
-		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(getParameters().getMultipleFromListAttributeValue().getSelected());
+		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(getParameters().getMultipleFromListAttributeValueA().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
 		 * Check whether the cache is  valid.
@@ -155,7 +155,7 @@ public class EventGlobalAttributeFilter extends Filter {
 				{ TableLayoutConstants.FILL, 80 } };
 		widget.setLayout(new TableLayout(size));
 		widget.add(getParameters().getOneFromListAttribute().getWidget(), "0, 0");
-		attributeValueWidget = getParameters().getMultipleFromListAttributeValue().getWidget();
+		attributeValueWidget = getParameters().getMultipleFromListAttributeValueA().getWidget();
 		widget.add(attributeValueWidget, "1, 0");
 		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 1, 1, 1");
 		setWidget(widget);
@@ -174,7 +174,7 @@ public class EventGlobalAttributeFilter extends Filter {
 		 * with it.
 		 */
 		getWidget().remove(attributeValueWidget);
-		attributeValueWidget = getParameters().getMultipleFromListAttributeValue().getWidget();
+		attributeValueWidget = getParameters().getMultipleFromListAttributeValueA().getWidget();
 		getWidget().add(attributeValueWidget, "1, 0");
 		getWidget().revalidate();
 		getWidget().repaint();
@@ -233,7 +233,7 @@ public class EventGlobalAttributeFilter extends Filter {
 	 * Make sure the attribute values parameter is initialized.
 	 */
 	void setAttributeValues(boolean doReset) {
-		if (!doReset && getParameters().getMultipleFromListAttributeValue() != null) {
+		if (!doReset && getParameters().getMultipleFromListAttributeValueA() != null) {
 			return;
 		}
 		AttributeType attribute;
@@ -250,10 +250,10 @@ public class EventGlobalAttributeFilter extends Filter {
 		}
 		List<AttributeValueType> unsortedValues = new ArrayList<AttributeValueType>(values);
 		List<AttributeValueType> selectedValues = new ArrayList<AttributeValueType>(values);
-		if (getParameters().getMultipleFromListAttributeValue() != null) {
-			selectedValues.retainAll(getParameters().getMultipleFromListAttributeValue().getSelected());
+		if (getParameters().getMultipleFromListAttributeValueA() != null) {
+			selectedValues.retainAll(getParameters().getMultipleFromListAttributeValueA().getSelected());
 		}
-		getParameters().setMultipleFromListAttributeValue(
+		getParameters().setMultipleFromListAttributeValueA(
 				new MultipleFromListParameter<AttributeValueType>("Select values", this, selectedValues, unsortedValues, true));
 	}
 
@@ -283,9 +283,9 @@ public class EventGlobalAttributeFilter extends Filter {
 		filterTemplate.setName(getClass().getName());
 		filterTemplate.setParameters(new ParametersTemplate());
 		filterTemplate.getParameters().setAttribute(getParameters().getOneFromListAttribute().getSelected().getAttribute().getKey());
-		filterTemplate.getParameters().setValues(new TreeSet<String>());
-		for (AttributeValueType value : getParameters().getMultipleFromListAttributeValue().getSelected()) {
-			filterTemplate.getParameters().getValues().add(value.toString());
+		filterTemplate.getParameters().setValuesA(new TreeSet<String>());
+		for (AttributeValueType value : getParameters().getMultipleFromListAttributeValueA().getSelected()) {
+			filterTemplate.getParameters().getValuesA().add(value.toString());
 		}
 		filterTemplate.getParameters().setSelection(getParameters().getOneFromListSelection().getSelected().name());
 		return filterTemplate;
@@ -301,14 +301,14 @@ public class EventGlobalAttributeFilter extends Filter {
 			}
 		}
 		setAttributeValues(true);
-		if (parameters.getValues() != null) {
+		if (parameters.getValuesA() != null) {
 			List<AttributeValueType> values = new ArrayList<AttributeValueType>();
-			for (AttributeValueType value : getParameters().getMultipleFromListAttributeValue().getOptions()) {
-				if (value.getAttribute() != null && parameters.getValues().contains(value.getAttribute().toString())) {
+			for (AttributeValueType value : getParameters().getMultipleFromListAttributeValueA().getOptions()) {
+				if (value.getAttribute() != null && parameters.getValuesA().contains(value.getAttribute().toString())) {
 					values.add(value);
 				}
 			}
-			getParameters().getMultipleFromListAttributeValue().setSelected(values);
+			getParameters().getMultipleFromListAttributeValueA().setSelected(values);
 		}
 		setSelectionType(true);
 		if (parameters.getSelection() != null) {

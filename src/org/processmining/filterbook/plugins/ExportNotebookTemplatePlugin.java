@@ -1,7 +1,6 @@
 package org.processmining.filterbook.plugins;
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -33,7 +32,7 @@ import org.w3c.dom.Document;
 public class ExportNotebookTemplatePlugin {
 
 	@PluginVariant(variantLabel = "NBXML export (Notebook template)", requiredParameterLabels = { 0, 1 })
-	public void export(PluginContext context, NotebookTemplate notebookTemplate, File file) throws IOException {
+	public void export(PluginContext context, NotebookTemplate notebookTemplate, File file) {
 		try {
 			DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();

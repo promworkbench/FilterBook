@@ -40,7 +40,7 @@ public class EventLastEventAttributeFilter extends EventAttributeFilter {
 				? getParameters().getOneFromListAttribute().getSelected().getAttribute()
 				: getDummyAttribute());
 		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(
-				getParameters().getMultipleFromListAttributeValue().getSelected());
+				getParameters().getMultipleFromListAttributeValueA().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
 		 * Check whether the cache is  valid.

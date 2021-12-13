@@ -57,7 +57,7 @@ public class TraceLastEventClassifierFilter extends EventClassifierFilter {
 		XEventClassifier classifier = (getParameters().getOneFromListClassifier().getSelected() != null
 				? getParameters().getOneFromListClassifier().getSelected().getClassifier()
 				: getDummyClassifier());
-		Set<String> selectedValues = new HashSet<String>(getParameters().getMultipleFromListString().getSelected());
+		Set<String> selectedValues = new HashSet<String>(getParameters().getMultipleFromListStringA().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
 		 * Check whether the cache is  valid.
@@ -114,7 +114,7 @@ public class TraceLastEventClassifierFilter extends EventClassifierFilter {
 	 * Make sure the attribute values parameter is initialized.
 	 */
 	void setAttributeValues(boolean doReset) {
-		if (!doReset && getParameters().getMultipleFromListString() != null) {
+		if (!doReset && getParameters().getMultipleFromListStringA() != null) {
 			return;
 		}
 		XEventClassifier classifier;
@@ -131,10 +131,10 @@ public class TraceLastEventClassifierFilter extends EventClassifierFilter {
 		}
 		List<String> unsortedValues = new ArrayList<String>(values);
 		List<String> selectedValues = new ArrayList<String>(values);
-		if (getParameters().getMultipleFromListString() != null) {
-			selectedValues.retainAll(getParameters().getMultipleFromListString().getSelected());
+		if (getParameters().getMultipleFromListStringA() != null) {
+			selectedValues.retainAll(getParameters().getMultipleFromListStringA().getSelected());
 		}
-		getParameters().setMultipleFromListString(
+		getParameters().setMultipleFromListStringA(
 				new MultipleFromListParameter<String>("Select values", this, selectedValues, unsortedValues, true));
 	}
 

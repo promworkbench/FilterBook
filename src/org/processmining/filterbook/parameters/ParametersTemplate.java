@@ -73,22 +73,6 @@ public class ParametersTemplate implements HTMLToString {
 		this.attribute = attribute;
 	}
 
-	/**
-	 * @deprecated Use getValuesA() instead.
-	 * @return
-	 */
-	public Set<String> getValues() {
-		return valuesA;
-	}
-
-	/**
-	 * @deprecated Use setValuesA(values) instead.
-	 * @param values
-	 */
-	public void setValues(Set<String> values) {
-		this.valuesA = values;
-	}
-
 	public Set<String> getValuesA() {
 		return valuesA;
 	}

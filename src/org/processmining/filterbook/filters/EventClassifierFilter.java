@@ -86,7 +86,7 @@ public class EventClassifierFilter extends Filter {
 		XEventClassifier classifier = (getParameters().getOneFromListClassifier().getSelected() != null
 				? getParameters().getOneFromListClassifier().getSelected().getClassifier()
 				: getDummyClassifier());
-		Set<String> selectedValues = new HashSet<String>(getParameters().getMultipleFromListString().getSelected());
+		Set<String> selectedValues = new HashSet<String>(getParameters().getMultipleFromListStringA().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
 		 * Check whether the cache is valid.
@@ -148,7 +148,7 @@ public class EventClassifierFilter extends Filter {
 				{ TableLayoutConstants.FILL, 80 } };
 		widget.setLayout(new TableLayout(size));
 		widget.add(getParameters().getOneFromListClassifier().getWidget(), "0, 0");
-		attributeValueWidget = getParameters().getMultipleFromListString().getWidget();
+		attributeValueWidget = getParameters().getMultipleFromListStringA().getWidget();
 		widget.add(attributeValueWidget, "1, 0");
 		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 1, 1, 1");
 		setWidget(widget);
@@ -167,7 +167,7 @@ public class EventClassifierFilter extends Filter {
 		 * with it.
 		 */
 		getWidget().remove(attributeValueWidget);
-		attributeValueWidget = getParameters().getMultipleFromListString().getWidget();
+		attributeValueWidget = getParameters().getMultipleFromListStringA().getWidget();
 		getWidget().add(attributeValueWidget, "1, 0");
 		getWidget().revalidate();
 		getWidget().repaint();
@@ -232,7 +232,7 @@ public class EventClassifierFilter extends Filter {
 	 * Make sure the attribute values parameter is initialized.
 	 */
 	void setAttributeValues(boolean doReset) {
-		if (!doReset && getParameters().getMultipleFromListString() != null) {
+		if (!doReset && getParameters().getMultipleFromListStringA() != null) {
 			return;
 		}
 		XEventClassifier classifier;
@@ -250,10 +250,10 @@ public class EventClassifierFilter extends Filter {
 		}
 		List<String> unsortedValues = new ArrayList<String>(values);
 		List<String> selectedValues = new ArrayList<String>(values);
-		if (getParameters().getMultipleFromListString() != null) {
-			selectedValues.retainAll(getParameters().getMultipleFromListString().getSelected());
+		if (getParameters().getMultipleFromListStringA() != null) {
+			selectedValues.retainAll(getParameters().getMultipleFromListStringA().getSelected());
 		}
-		getParameters().setMultipleFromListString(
+		getParameters().setMultipleFromListStringA(
 				new MultipleFromListParameter<String>("Select values", this, selectedValues, unsortedValues, true));
 	}
 
@@ -298,9 +298,9 @@ public class EventClassifierFilter extends Filter {
 		filterTemplate.getParameters()
 				.setClassifier(getParameters().getOneFromListClassifier().getSelected().getClassifier().name());
 		// Copy the selected classifier values.
-		filterTemplate.getParameters().setValues(new TreeSet<String>());
-		for (String value : getParameters().getMultipleFromListString().getSelected()) {
-			filterTemplate.getParameters().getValues().add(value);
+		filterTemplate.getParameters().setValuesA(new TreeSet<String>());
+		for (String value : getParameters().getMultipleFromListStringA().getSelected()) {
+			filterTemplate.getParameters().getValuesA().add(value);
 		}
 		// Copy the selection type.
 		filterTemplate.getParameters().setSelection(getParameters().getOneFromListSelection().getSelected().name());
@@ -324,14 +324,14 @@ public class EventClassifierFilter extends Filter {
 		// Initialize the classifier values.
 		setAttributeValues(true);
 		// Select the classifier values.
-		if (parameters.getValues() != null) {
+		if (parameters.getValuesA() != null) {
 			List<String> values = new ArrayList<String>();
-			for (String value : getParameters().getMultipleFromListString().getOptions()) {
-				if (value != null && parameters.getValues().contains(value)) {
+			for (String value : getParameters().getMultipleFromListStringA().getOptions()) {
+				if (value != null && parameters.getValuesA().contains(value)) {
 					values.add(value);
 				}
 			}
-			getParameters().getMultipleFromListString().setSelected(values);
+			getParameters().getMultipleFromListStringA().setSelected(values);
 		}
 		// Initialize the selection type.
 		setSelectionType(true);

@@ -39,7 +39,7 @@ public class EventFirstLastEventGlobalAttributeFilter extends EventGlobalAttribu
 		XAttribute attribute = (getParameters().getOneFromListAttribute().getSelected() != null
 				? getParameters().getOneFromListAttribute().getSelected().getAttribute()
 				: getDummyAttribute());
-		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(getParameters().getMultipleFromListAttributeValue().getSelected());
+		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(getParameters().getMultipleFromListAttributeValueA().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
 		 * Check whether the cache is  valid.

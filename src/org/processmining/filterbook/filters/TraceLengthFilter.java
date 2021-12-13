@@ -285,9 +285,9 @@ public class TraceLengthFilter extends Filter {
 		filterTemplate.setParameters(new ParametersTemplate());
 		filterTemplate.getParameters().setYesNoA(getParameters().getYesNoA().getSelected());
 		filterTemplate.getParameters().setYesNoB(getParameters().getYesNoB().getSelected());
-		filterTemplate.getParameters().setValues(new TreeSet<String>());
+		filterTemplate.getParameters().setValuesA(new TreeSet<String>());
 		for (Integer selected : getParameters().getMultipleFromListInteger().getSelected()) {
-			filterTemplate.getParameters().getValues().add(selected.toString());
+			filterTemplate.getParameters().getValuesA().add(selected.toString());
 		}
 		filterTemplate.getParameters().setSelection(getParameters().getOneFromListSelection().getSelected().name());
 		return filterTemplate;
@@ -299,10 +299,10 @@ public class TraceLengthFilter extends Filter {
 		setRoundUp(true);
 		getParameters().getYesNoB().setSelected(parameters.isYesNoB());
 		setTraceLengths(true);
-		if (parameters.getValues() != null) {
+		if (parameters.getValuesA() != null) {
 			List<Integer> values = new ArrayList<Integer>();
 			for (Integer value : getParameters().getMultipleFromListInteger().getOptions()) {
-				if (value != null && parameters.getValues().contains(value.toString())) {
+				if (value != null && parameters.getValuesA().contains(value.toString())) {
 					values.add(value);
 				}
 			}

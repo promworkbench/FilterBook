@@ -89,22 +89,6 @@ public class Parameters {
 		this.oneFromListSelection = oneFromListSelection;
 	}
 
-	/**
-	 * @deprecated Use getMultipleFromListStringA() instead.
-	 * @return
-	 */
-	public MultipleFromListParameter<String> getMultipleFromListString() {
-		return multipleFromListStringA;
-	}
-
-	/**
-	 * @deprecated Use setMultipleFromListStringA(multipleFromListString) instead.
-	 * @param multipleFromListString
-	 */
-	public void setMultipleFromListString(MultipleFromListParameter<String> multipleFromListString) {
-		this.multipleFromListStringA = multipleFromListString;
-	}
-
 	public MultipleFromListParameter<String> getMultipleFromListStringA() {
 		return multipleFromListStringA;
 	}
@@ -119,23 +103,6 @@ public class Parameters {
 
 	public void setMultipleFromListStringB(MultipleFromListParameter<String> multipleFromListStringB) {
 		this.multipleFromListStringB = multipleFromListStringB;
-	}
-
-	/**
-	 * @deprecated Use getMultipleFromListAttributeValueA() instead.
-	 * @return
-	 */
-	public MultipleFromListParameter<AttributeValueType> getMultipleFromListAttributeValue() {
-		return multipleFromListAttributeValueA;
-	}
-
-	/**
-	 * @deprecated Use setMultipleFromListAttributeValueA(multipleFromListAttributeValue) instead.
-	 * @param multipleFromListString
-	 */
-	public void setMultipleFromListAttributeValue(
-			MultipleFromListParameter<AttributeValueType> multipleFromListAttributeValue) {
-		this.multipleFromListAttributeValueA = multipleFromListAttributeValue;
 	}
 
 	public MultipleFromListParameter<AttributeValueType> getMultipleFromListAttributeValueA() {

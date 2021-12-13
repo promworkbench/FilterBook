@@ -37,7 +37,7 @@ public class EventTailClassifierFilter extends EventClassifierFilter {
 		XEventClassifier classifier = (getParameters().getOneFromListClassifier().getSelected() != null
 				? getParameters().getOneFromListClassifier().getSelected().getClassifier()
 				: getDummyClassifier());
-		Set<String> selectedValues = new TreeSet<String>(getParameters().getMultipleFromListString().getSelected());
+		Set<String> selectedValues = new TreeSet<String>(getParameters().getMultipleFromListStringA().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
 		 * Check whether the cache is  valid.

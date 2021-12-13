@@ -160,7 +160,7 @@ public class EventOccurrencesClassifierFilter extends Filter {
 				? getParameters().getOneFromListClassifier().getSelected().getClassifier()
 				: getDummyClassifier());
 		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(
-				getParameters().getMultipleFromListAttributeValue().getSelected());
+				getParameters().getMultipleFromListAttributeValueA().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
 		 * Check whether the cache is valid.
@@ -222,7 +222,7 @@ public class EventOccurrencesClassifierFilter extends Filter {
 				{ TableLayoutConstants.FILL, 80 } };
 		widget.setLayout(new TableLayout(size));
 		widget.add(getParameters().getOneFromListClassifier().getWidget(), "0, 0");
-		attributeValueWidget = getParameters().getMultipleFromListAttributeValue().getWidget();
+		attributeValueWidget = getParameters().getMultipleFromListAttributeValueA().getWidget();
 		widget.add(attributeValueWidget, "1, 0");
 		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 1, 1, 1");
 		setWidget(widget);
@@ -241,7 +241,7 @@ public class EventOccurrencesClassifierFilter extends Filter {
 		 * with it.
 		 */
 		getWidget().remove(attributeValueWidget);
-		attributeValueWidget = getParameters().getMultipleFromListAttributeValue().getWidget();
+		attributeValueWidget = getParameters().getMultipleFromListAttributeValueA().getWidget();
 		getWidget().add(attributeValueWidget, "1, 0");
 		getWidget().revalidate();
 		getWidget().repaint();
@@ -306,17 +306,17 @@ public class EventOccurrencesClassifierFilter extends Filter {
 	 * Make sure the attribute values parameter is initialized.
 	 */
 	void setAttributeValues(boolean doReset) {
-		if (!doReset && getParameters().getMultipleFromListAttributeValue() != null) {
+		if (!doReset && getParameters().getMultipleFromListAttributeValueA() != null) {
 			return;
 		}
 		setOccurrences();
 		Set<AttributeValueType> values = new TreeSet<AttributeValueType>(occurrenceAttributes.values());
 		List<AttributeValueType> unsortedValues = new ArrayList<AttributeValueType>(values);
 		List<AttributeValueType> selectedValues = new ArrayList<AttributeValueType>(values);
-		if (getParameters().getMultipleFromListAttributeValue() != null) {
-			selectedValues.retainAll(getParameters().getMultipleFromListAttributeValue().getSelected());
+		if (getParameters().getMultipleFromListAttributeValueA() != null) {
+			selectedValues.retainAll(getParameters().getMultipleFromListAttributeValueA().getSelected());
 		}
-		getParameters().setMultipleFromListAttributeValue(new MultipleFromListParameter<AttributeValueType>(
+		getParameters().setMultipleFromListAttributeValueA(new MultipleFromListParameter<AttributeValueType>(
 				"Select values", this, selectedValues, unsortedValues, true));
 	}
 
@@ -361,9 +361,9 @@ public class EventOccurrencesClassifierFilter extends Filter {
 		filterTemplate.getParameters()
 				.setClassifier(getParameters().getOneFromListClassifier().getSelected().getClassifier().name());
 		// Copy the selected classifier values.
-		filterTemplate.getParameters().setValues(new TreeSet<String>());
-		for (AttributeValueType value : getParameters().getMultipleFromListAttributeValue().getSelected()) {
-			filterTemplate.getParameters().getValues().add(value.toString());
+		filterTemplate.getParameters().setValuesA(new TreeSet<String>());
+		for (AttributeValueType value : getParameters().getMultipleFromListAttributeValueA().getSelected()) {
+			filterTemplate.getParameters().getValuesA().add(value.toString());
 		}
 		// Copy the selection type.
 		filterTemplate.getParameters().setSelection(getParameters().getOneFromListSelection().getSelected().name());
@@ -387,14 +387,14 @@ public class EventOccurrencesClassifierFilter extends Filter {
 		// Initialize the classifier values.
 		setAttributeValues(true);
 		// Select the classifier values.
-		if (parameters.getValues() != null) {
-			List<AttributeValueType> values = new ArrayList<AttributeValueType>();
-			for (AttributeValueType value : getParameters().getMultipleFromListAttributeValue().getOptions()) {
-				if (value != null && parameters.getValues().contains(value)) {
+		if (parameters.getValuesA() != null) {
+			List<String> values = new ArrayList<String>();
+			for (String value : getParameters().getMultipleFromListStringA().getOptions()) {
+				if (value != null && parameters.getValuesA().contains(value)) {
 					values.add(value);
 				}
 			}
-			getParameters().getMultipleFromListAttributeValue().setSelected(values);
+			getParameters().getMultipleFromListStringA().setSelected(values);
 		}
 		// Initialize the selection type.
 		setSelectionType(true);

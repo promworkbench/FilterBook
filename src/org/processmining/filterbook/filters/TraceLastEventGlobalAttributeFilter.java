@@ -60,7 +60,7 @@ public class TraceLastEventGlobalAttributeFilter extends EventGlobalAttributeFil
 		XAttribute attribute = (getParameters().getOneFromListAttribute().getSelected() != null
 				? getParameters().getOneFromListAttribute().getSelected().getAttribute()
 				: getDummyAttribute());
-		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(getParameters().getMultipleFromListAttributeValue().getSelected());
+		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(getParameters().getMultipleFromListAttributeValueA().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
 		 * Check whether the cache is  valid.
@@ -117,7 +117,7 @@ public class TraceLastEventGlobalAttributeFilter extends EventGlobalAttributeFil
 	 * Make sure the attribute values parameter is initialized.
 	 */
 	void setAttributeValues(boolean doReset) {
-		if (!doReset && getParameters().getMultipleFromListAttributeValue() != null) {
+		if (!doReset && getParameters().getMultipleFromListAttributeValueA() != null) {
 			return;
 		}
 		AttributeType attribute;
@@ -134,10 +134,10 @@ public class TraceLastEventGlobalAttributeFilter extends EventGlobalAttributeFil
 		}
 		List<AttributeValueType> unsortedValues = new ArrayList<AttributeValueType>(values);
 		List<AttributeValueType> selectedValues = new ArrayList<AttributeValueType>(values);
-		if (getParameters().getMultipleFromListAttributeValue() != null) {
-			selectedValues.retainAll(getParameters().getMultipleFromListAttributeValue().getSelected());
+		if (getParameters().getMultipleFromListAttributeValueA() != null) {
+			selectedValues.retainAll(getParameters().getMultipleFromListAttributeValueA().getSelected());
 		}
-		getParameters().setMultipleFromListAttributeValue(
+		getParameters().setMultipleFromListAttributeValueA(
 				new MultipleFromListParameter<AttributeValueType>("Select values", this, selectedValues, unsortedValues, true));
 	}
 

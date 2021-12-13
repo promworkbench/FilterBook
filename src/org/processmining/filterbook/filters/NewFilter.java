@@ -189,6 +189,7 @@ public class NewFilter extends Filter {
 		setWidget(widget);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void updatedDoInBackground(Parameter parameter) {
 		if (getCell() != null) {
 			getCell().add(((OneFromListParameter<Filter>) parameter).getSelected());

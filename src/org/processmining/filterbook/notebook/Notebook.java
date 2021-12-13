@@ -30,6 +30,7 @@ public class Notebook implements ActionListener {
 	private ProMCanceller canceller;
 
 	private LogType inputLog;
+	@SuppressWarnings("unused")
 	private LogType outputLog;
 
 	private JComponent widget;
