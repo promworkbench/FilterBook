@@ -22,13 +22,15 @@ public class NewFilter extends Filter {
 
 	public static final String NAME = "Add filter...";
 
-	private OneFromListParameter<Filter> filterProjectOnClassifierList;
-	private OneFromListParameter<Filter> filterProjectOnGlobalAttributeList;
-	private OneFromListParameter<Filter> filterProjectOnAttributeList;
 	private OneFromListParameter<Filter> filterSelectOnClassifierList;
 	private OneFromListParameter<Filter> filterSelectOnGlobalAttributeList;
 	private OneFromListParameter<Filter> filterSelectOnAttributeList;
-	private OneFromListParameter<Filter> filterMiscList;
+	private OneFromListParameter<Filter> filterSelectMiscList;
+	private OneFromListParameter<Filter> filterProjectOnClassifierList;
+	private OneFromListParameter<Filter> filterProjectOnGlobalAttributeList;
+	private OneFromListParameter<Filter> filterProjectOnAttributeList;
+	private OneFromListParameter<Filter> filterProjectMiscList;
+	private OneFromListParameter<Filter> filterMetaList;
 
 	public NewFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, parameters, cell);
@@ -41,19 +43,21 @@ public class NewFilter extends Filter {
 
 	public void constructWidget() {
 		JComponent widget = new JPanel();
-		double size[][] = { { TableLayoutConstants.FILL, TableLayoutConstants.FILL }, { TableLayoutConstants.FILL,
+		double size[][] = { { TableLayoutConstants.FILL, TableLayoutConstants.FILL, TableLayoutConstants.FILL }, { TableLayoutConstants.FILL,
 				TableLayoutConstants.FILL, TableLayoutConstants.FILL, TableLayoutConstants.FILL } };
 		widget.setLayout(new TableLayout(size));
 		// TODO Auto-generated method stub
-		List<Filter> filtersProjectOnClassifier = new ArrayList<Filter>();
-		List<Filter> filtersProjectOnGlobalAttribute = new ArrayList<Filter>();
-		List<Filter> filtersProjectOnAttribute = new ArrayList<Filter>();
 		List<Filter> filtersSelectOnClassifier = new ArrayList<Filter>();
 		List<Filter> filtersSelectOnGlobalAttribute = new ArrayList<Filter>();
 		List<Filter> filtersSelectOnAttribute = new ArrayList<Filter>();
-		List<Filter> filtersMisc = new ArrayList<Filter>();
+		List<Filter> filtersSelectMisc = new ArrayList<Filter>();
+		List<Filter> filtersProjectOnClassifier = new ArrayList<Filter>();
+		List<Filter> filtersProjectOnGlobalAttribute = new ArrayList<Filter>();
+		List<Filter> filtersProjectOnAttribute = new ArrayList<Filter>();
+		List<Filter> filtersProjectMisc = new ArrayList<Filter>();
+		List<Filter> filtersMeta = new ArrayList<Filter>();
 
-		filtersMisc.add(new LogGlobalsFilter(getLog(), new Parameters(), getCell()));
+		filtersMeta.add(new LogGlobalsFilter(getLog(), new Parameters(), getCell()));
 
 		filtersSelectOnGlobalAttribute.add(new TraceFirstEventGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
 		filtersSelectOnClassifier.add(new TraceFirstEventClassifierFilter(getLog(), new Parameters(), getCell()));
@@ -64,7 +68,7 @@ public class NewFilter extends Filter {
 		filtersSelectOnGlobalAttribute.add(new TraceGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
 		filtersSelectOnAttribute.add(new TraceAttributeFilter(getLog(), new Parameters(), getCell()));
 
-		filtersMisc.add(new TraceLengthFilter(getLog(), new Parameters(), getCell()));
+		filtersSelectMisc.add(new TraceLengthFilter(getLog(), new Parameters(), getCell()));
 
 		filtersSelectOnAttribute.add(new TraceOccurrencesAttributeFilter(getLog(), new Parameters(), getCell()));
 		filtersSelectOnGlobalAttribute.add(new TraceOccurrencesGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
@@ -102,12 +106,12 @@ public class NewFilter extends Filter {
 		filtersProjectOnGlobalAttribute.add(new EventFirstLastEventGlobalAttributeTraceFilter(getLog(), new Parameters(), getCell()));
 		filtersProjectOnClassifier.add(new EventFirstLastEventClassifierTraceFilter(getLog(), new Parameters(), getCell()));
 
-		filtersMisc.add(new TraceLogFilter(getLog(), new Parameters(), getCell()));
-		filtersMisc.add(new TraceUniqueNameFilter(getLog(), new Parameters(), getCell()));
+		filtersProjectMisc.add(new TraceLogFilter(getLog(), new Parameters(), getCell()));
+		filtersMeta.add(new TraceUniqueNameFilter(getLog(), new Parameters(), getCell()));
 
-		filtersMisc.add(new TraceFirstLastEventFilter(getLog(), new Parameters(), getCell()));
+		filtersProjectMisc.add(new TraceFirstLastEventFilter(getLog(), new Parameters(), getCell()));
 
-		filtersMisc.add(new TraceSampleFilter(getLog(), new Parameters(), getCell()));
+		filtersSelectMisc.add(new TraceSampleFilter(getLog(), new Parameters(), getCell()));
 
 		filtersSelectOnGlobalAttribute.add(new TraceDateFilter(getLog(), new Parameters(), getCell()));
 		filtersProjectOnGlobalAttribute.add(new EventDateFilter(getLog(), new Parameters(), getCell()));
@@ -121,27 +125,6 @@ public class NewFilter extends Filter {
 		filtersSelectOnGlobalAttribute.add(new TraceDirectlyFollowsGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
 		filtersSelectOnAttribute.add(new TraceDirectlyFollowsAttributeFilter(getLog(), new Parameters(), getCell()));
 
-		List<Filter> suitableProjectOnClassifierFilters = new ArrayList<Filter>();
-		for (Filter filter : filtersProjectOnClassifier) {
-			if (filter.isSuitable()) {
-				System.out.println("[NewFilter] Project on Classifier Filter " + filter.getName() + " added.");
-				suitableProjectOnClassifierFilters.add(filter);
-			}
-		}
-		List<Filter> suitableProjectOnGlobalAttributeFilters = new ArrayList<Filter>();
-		for (Filter filter : filtersProjectOnGlobalAttribute) {
-			if (filter.isSuitable()) {
-				System.out.println("[NewFilter] Project on Global Attribute Filter " + filter.getName() + " added.");
-				suitableProjectOnGlobalAttributeFilters.add(filter);
-			}
-		}
-		List<Filter> suitableProjectOnAttributeFilters = new ArrayList<Filter>();
-		for (Filter filter : filtersProjectOnAttribute) {
-			if (filter.isSuitable()) {
-				System.out.println("[NewFilter] Project on Attribute Filter " + filter.getName() + " added.");
-				suitableProjectOnAttributeFilters.add(filter);
-			}
-		}
 		List<Filter> suitableSelectOnClassifierFilters = new ArrayList<Filter>();
 		for (Filter filter : filtersSelectOnClassifier) {
 			if (filter.isSuitable()) {
@@ -163,28 +146,67 @@ public class NewFilter extends Filter {
 				suitableSelectOnAttributeFilters.add(filter);
 			}
 		}
-		List<Filter> suitableMiscFilters = new ArrayList<Filter>();
-		for (Filter filter : filtersMisc) {
+		List<Filter> suitableSelectMiscFilters = new ArrayList<Filter>();
+		for (Filter filter : filtersSelectMisc) {
 			if (filter.isSuitable()) {
-				System.out.println("[NewFilter] Miscellaneous Filter " + filter.getName() + " added.");
-				suitableMiscFilters.add(filter);
+				System.out.println("[NewFilter] Select on Miscellaneous Filter " + filter.getName() + " added.");
+				suitableSelectMiscFilters.add(filter);
 			}
 		}
-		filterProjectOnClassifierList = new OneFromListParameter<Filter>("Select a new project-on-classifier filter", this, null, suitableProjectOnClassifierFilters, true);
-		filterProjectOnGlobalAttributeList = new OneFromListParameter<Filter>("Select a new project-on-global-atttribute filter", this, null, suitableProjectOnGlobalAttributeFilters, true);
-		filterProjectOnAttributeList = new OneFromListParameter<Filter>("Select a new project-on-attribute filter", this, null, suitableProjectOnAttributeFilters, true);
-		filterSelectOnClassifierList = new OneFromListParameter<Filter>("Select a new select-on-classifier filter", this, null, suitableSelectOnClassifierFilters, true);
-		filterSelectOnGlobalAttributeList = new OneFromListParameter<Filter>("Select a new select-on-global-attribute filter", this, null, suitableSelectOnGlobalAttributeFilters, true);
-		filterSelectOnAttributeList = new OneFromListParameter<Filter>("Select a new select-on-attribute filter", this, null, suitableSelectOnAttributeFilters, true);
-		filterMiscList = new OneFromListParameter<Filter>("Select a new miscellaneous filter", this, null, suitableMiscFilters, true);
+		List<Filter> suitableProjectOnClassifierFilters = new ArrayList<Filter>();
+		for (Filter filter : filtersProjectOnClassifier) {
+			if (filter.isSuitable()) {
+				System.out.println("[NewFilter] Project on Classifier Filter " + filter.getName() + " added.");
+				suitableProjectOnClassifierFilters.add(filter);
+			}
+		}
+		List<Filter> suitableProjectOnGlobalAttributeFilters = new ArrayList<Filter>();
+		for (Filter filter : filtersProjectOnGlobalAttribute) {
+			if (filter.isSuitable()) {
+				System.out.println("[NewFilter] Project on Global Attribute Filter " + filter.getName() + " added.");
+				suitableProjectOnGlobalAttributeFilters.add(filter);
+			}
+		}
+		List<Filter> suitableProjectOnAttributeFilters = new ArrayList<Filter>();
+		for (Filter filter : filtersProjectOnAttribute) {
+			if (filter.isSuitable()) {
+				System.out.println("[NewFilter] Project on Attribute Filter " + filter.getName() + " added.");
+				suitableProjectOnAttributeFilters.add(filter);
+			}
+		}
+		List<Filter> suitableProjectMiscFilters = new ArrayList<Filter>();
+		for (Filter filter : filtersProjectMisc) {
+			if (filter.isSuitable()) {
+				System.out.println("[NewFilter] Project on Miscellaneous Filter " + filter.getName() + " added.");
+				suitableProjectMiscFilters.add(filter);
+			}
+		}
+		List<Filter> suitableMetaFilters = new ArrayList<Filter>();
+		for (Filter filter : filtersMeta) {
+			if (filter.isSuitable()) {
+				System.out.println("[NewFilter] Meta Filter " + filter.getName() + " added.");
+				suitableMetaFilters.add(filter);
+			}
+		}
+		filterSelectOnClassifierList = new OneFromListParameter<Filter>("Select a select-on-classifier filter", this, null, suitableSelectOnClassifierFilters, true);
+		filterSelectOnGlobalAttributeList = new OneFromListParameter<Filter>("Select a select-on-global-attribute filter", this, null, suitableSelectOnGlobalAttributeFilters, true);
+		filterSelectOnAttributeList = new OneFromListParameter<Filter>("Select a select-on-attribute filter", this, null, suitableSelectOnAttributeFilters, true);
+		filterSelectMiscList = new OneFromListParameter<Filter>("Select a select-on-other filter", this, null, suitableSelectMiscFilters, true);
+		filterProjectOnClassifierList = new OneFromListParameter<Filter>("Select a project-on-classifier filter", this, null, suitableProjectOnClassifierFilters, true);
+		filterProjectOnGlobalAttributeList = new OneFromListParameter<Filter>("Select a project-on-global-atttribute filter", this, null, suitableProjectOnGlobalAttributeFilters, true);
+		filterProjectOnAttributeList = new OneFromListParameter<Filter>("Select a project-on-attribute filter", this, null, suitableProjectOnAttributeFilters, true);
+		filterProjectMiscList = new OneFromListParameter<Filter>("Select a project-on-other filter", this, null, suitableProjectMiscFilters, true);
+		filterMetaList = new OneFromListParameter<Filter>("Select a meta filter", this, null, suitableMetaFilters, true);
 		
-		widget.add(filterProjectOnClassifierList.getWidget(), "0, 0");
-		widget.add(filterProjectOnGlobalAttributeList.getWidget(), "0, 1");
-		widget.add(filterProjectOnAttributeList.getWidget(), "0, 2");
-		widget.add(filterSelectOnClassifierList.getWidget(), "1, 0");
-		widget.add(filterSelectOnGlobalAttributeList.getWidget(), "1, 1");
-		widget.add(filterSelectOnAttributeList.getWidget(), "1, 2");
-		widget.add(filterMiscList.getWidget(), "0, 3, 1, 3");
+		widget.add(filterSelectOnClassifierList.getWidget(), "0, 0");
+		widget.add(filterSelectOnGlobalAttributeList.getWidget(), "0, 1");
+		widget.add(filterSelectOnAttributeList.getWidget(), "0, 2");
+		widget.add(filterSelectMiscList.getWidget(), "0, 3");
+		widget.add(filterProjectOnClassifierList.getWidget(), "1, 0");
+		widget.add(filterProjectOnGlobalAttributeList.getWidget(), "1, 1");
+		widget.add(filterProjectOnAttributeList.getWidget(), "1, 2");
+		widget.add(filterProjectMiscList.getWidget(), "1, 3");
+		widget.add(filterMetaList.getWidget(), "2, 0, 2, 3");
 		
 		setWidget(widget);
 	}

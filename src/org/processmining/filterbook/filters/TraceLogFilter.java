@@ -22,7 +22,7 @@ import info.clearthought.layout.TableLayoutConstants;
 
 public class TraceLogFilter extends Filter {
 
-	public static final String NAME = "Select on log";
+	public static final String NAME = "Restore full traces";
 
 	private XLog cachedLog;
 	private SelectionType cachedSelectionType;
