@@ -14,6 +14,11 @@ import javax.swing.SwingWorker;
 
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
@@ -126,14 +131,44 @@ public class TraceLengthFilter extends Filter {
 				{ 30, 30, TableLayoutConstants.FILL, 80 } };
 		widget.setLayout(new TableLayout(size));
 		traceLengthWidget = getParameters().getMultipleFromListInteger().getWidget();
-		widget.add(traceLengthWidget, "1, 0, 1, 2");
-		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 3, 1, 3");
+		widget.add(traceLengthWidget, "0, 2, 0, 2");
+		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 3");
 		widget.add(getParameters().getYesNoA().getWidget(), "0, 0");
 		roundUpWidget = getParameters().getYesNoB().getWidget();
 		//		widget.add(getParameters().getRoundUp().getWidget(), "0, 1");
+		
+		widget.add(getChartWidget(), "1, 0, 1, 3");
+
 		setWidget(widget);
 	}
 
+	private JComponent getChartWidget() {
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+		int maxValue = Integer.MIN_VALUE;
+		int minValue = Integer.MAX_VALUE;
+		for (XTrace trace : getLog()) {
+			int value = trace.size();
+			maxValue = Math.max(maxValue, value);			
+			minValue = Math.min(minValue, value);			
+		}
+		double values[] = new double[maxValue + 1 - minValue];
+		for (XTrace trace : getLog()) {
+			int length = trace.size();
+			values[length - minValue]++;
+		}
+		for (int i = minValue; i <= maxValue; i++) {
+			dataset.addValue(values[i - minValue], "Number of traces", String.valueOf(i));
+		}
+	    JFreeChart chart = ChartFactory.createBarChart(
+	             "Overview of trace lengths",           
+	             "Trace length",            
+	             "Number of traces",            
+	             dataset,          
+	             PlotOrientation.VERTICAL,           
+	             false, true, false);
+	    return new ChartPanel(chart);
+	}
+	
 	private void updatedDoInBackground() {
 		/*
 		 * Reset the trace lengths parameter.

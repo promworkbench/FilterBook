@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.JComponent;
@@ -18,6 +20,11 @@ import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
@@ -43,6 +50,7 @@ public class EventGlobalAttributeFilter extends Filter {
 	 * classifier parameter is changed.
 	 */
 	private JComponent attributeValueWidget;
+	private JComponent chartWidget;
 
 	private XLog cachedLog;
 	private XAttribute cachedAttribute;
@@ -73,7 +81,8 @@ public class EventGlobalAttributeFilter extends Filter {
 	}
 
 	/**
-	 * This filter is suitable if the log contains global event attributes and at least one event.
+	 * This filter is suitable if the log contains global event attributes and at
+	 * least one event.
 	 */
 	public boolean isSuitable() {
 		if (getLog() == null) {
@@ -81,7 +90,7 @@ public class EventGlobalAttributeFilter extends Filter {
 		}
 		return hasGlobalEventAttributes() && hasEvents();
 	}
-	
+
 	/**
 	 * Filter the set log on the events using the set parameters.
 	 */
@@ -92,15 +101,15 @@ public class EventGlobalAttributeFilter extends Filter {
 		XAttribute attribute = (getParameters().getOneFromListAttribute().getSelected() != null
 				? getParameters().getOneFromListAttribute().getSelected().getAttribute()
 				: getDummyAttribute());
-		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(getParameters().getMultipleFromListAttributeValueA().getSelected());
+		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(
+				getParameters().getMultipleFromListAttributeValueA().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
-		 * Check whether the cache is  valid.
+		 * Check whether the cache is valid.
 		 */
 		if (cachedLog == getLog()) {
-			if (cachedAttribute.equals(attribute) &&
-					cachedSelectedValues.equals(selectedValues) &&
-					cachedSelectionType == selectionType) {
+			if (cachedAttribute.equals(attribute) && cachedSelectedValues.equals(selectedValues)
+					&& cachedSelectionType == selectionType) {
 				/*
 				 * Yes, it is. Return the cached filtered log.
 				 */
@@ -152,13 +161,53 @@ public class EventGlobalAttributeFilter extends Filter {
 	public void constructWidget() {
 		JComponent widget = new JPanel();
 		double size[][] = { { TableLayoutConstants.FILL, TableLayoutConstants.FILL },
-				{ TableLayoutConstants.FILL, 80 } };
+				{ TableLayoutConstants.FILL, TableLayoutConstants.FILL, 80 } };
 		widget.setLayout(new TableLayout(size));
 		widget.add(getParameters().getOneFromListAttribute().getWidget(), "0, 0");
 		attributeValueWidget = getParameters().getMultipleFromListAttributeValueA().getWidget();
-		widget.add(attributeValueWidget, "1, 0");
-		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 1, 1, 1");
+		widget.add(attributeValueWidget, "0, 1");
+		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 2");
+		chartWidget = getChartWidget();
+		widget.add(chartWidget, "1, 0, 1, 2");
+		
 		setWidget(widget);
+	}
+
+	protected JComponent getChartWidget() {
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+		AttributeType attribute;
+		if (getParameters().getOneFromListAttribute() == null
+				|| getParameters().getOneFromListAttribute().getSelected() == null) {
+			attribute = new AttributeType(new XAttributeLiteralImpl(XConceptExtension.KEY_NAME, ""));
+		} else {
+			attribute = getParameters().getOneFromListAttribute().getSelected();
+		}
+
+		Set<AttributeValueType> values = new TreeSet<AttributeValueType>();
+		Map<AttributeValueType, Integer> counts = new TreeMap<AttributeValueType, Integer>();
+		for (XTrace trace : getLog()) {
+			for (XEvent event : trace) {
+				AttributeValueType value = new AttributeValueType(event.getAttributes().get(attribute.getAttribute().getKey()));
+				values.add(value);
+				if (counts.containsKey(value)) {
+					counts.put(value,  counts.get(value) + 1);
+				} else {
+					counts.put(value, 1);
+				}
+			}
+		}
+		for (AttributeValueType value : values) {
+			XAttribute a = value.getAttribute();
+			if (a != null) {
+				dataset.addValue(counts.get(value), attribute.getAttribute().getKey(), a.toString());
+			} else {
+				dataset.addValue(counts.get(value), attribute.getAttribute().getKey(), AttributeValueType.NOATTRIBUTEVALUE);
+			}
+		}
+		JFreeChart chart = ChartFactory.createBarChart("Overview", attribute.getAttribute().getKey(), "Number of events",
+				dataset, PlotOrientation.VERTICAL, false, true, false);
+		return new ChartPanel(chart);
 	}
 
 	private void updatedDoInBackground() {
@@ -167,7 +216,7 @@ public class EventGlobalAttributeFilter extends Filter {
 		 */
 		setAttributeValues(true);
 	}
-	
+
 	private void updatedDone() {
 		/*
 		 * Get the new widget for the attribute value parameter, and replace the old one
@@ -175,12 +224,15 @@ public class EventGlobalAttributeFilter extends Filter {
 		 */
 		getWidget().remove(attributeValueWidget);
 		attributeValueWidget = getParameters().getMultipleFromListAttributeValueA().getWidget();
-		getWidget().add(attributeValueWidget, "1, 0");
+		getWidget().add(attributeValueWidget, "0, 1");
+		getWidget().remove(chartWidget);
+		chartWidget = getChartWidget();
+		getWidget().add(chartWidget, "1, 0, 1, 2");
 		getWidget().revalidate();
 		getWidget().repaint();
 		getCell().updated();
 	}
-	
+
 	/**
 	 * Handle if a parameter values was changed.
 	 */
@@ -190,7 +242,7 @@ public class EventGlobalAttributeFilter extends Filter {
 			JLabel label = new JLabel("<html><h3>Scanning log, please be patient...</h3></html>");
 			label.setHorizontalAlignment(JLabel.CENTER);
 			attributeValueWidget = label;
-			getWidget().add(attributeValueWidget, "1, 0");
+			getWidget().add(attributeValueWidget, "0, 1");
 			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 				public Void doInBackground() {
 					updatedDoInBackground();
@@ -223,10 +275,11 @@ public class EventGlobalAttributeFilter extends Filter {
 		AttributeType selectedAttribute = attributes.isEmpty() ? null : attributes.get(0);
 		if (getParameters().getOneFromListAttribute() != null
 				&& attributes.contains(getParameters().getOneFromListAttribute().getSelected())) {
-			selectedAttribute = attributes.get(attributes.indexOf(getParameters().getOneFromListAttribute().getSelected()));
+			selectedAttribute = attributes
+					.get(attributes.indexOf(getParameters().getOneFromListAttribute().getSelected()));
 		}
-		getParameters().setOneFromListAttribute(new OneFromListParameter<AttributeType>("Select a global attribute", this,
-				selectedAttribute, attributes, true));
+		getParameters().setOneFromListAttribute(new OneFromListParameter<AttributeType>("Select a global attribute",
+				this, selectedAttribute, attributes, true));
 	}
 
 	/*
@@ -237,7 +290,8 @@ public class EventGlobalAttributeFilter extends Filter {
 			return;
 		}
 		AttributeType attribute;
-		if (getParameters().getOneFromListAttribute() == null || getParameters().getOneFromListAttribute().getSelected() == null) {
+		if (getParameters().getOneFromListAttribute() == null
+				|| getParameters().getOneFromListAttribute().getSelected() == null) {
 			attribute = new AttributeType(new XAttributeLiteralImpl(XConceptExtension.KEY_NAME, ""));
 		} else {
 			attribute = getParameters().getOneFromListAttribute().getSelected();
@@ -253,8 +307,8 @@ public class EventGlobalAttributeFilter extends Filter {
 		if (getParameters().getMultipleFromListAttributeValueA() != null) {
 			selectedValues.retainAll(getParameters().getMultipleFromListAttributeValueA().getSelected());
 		}
-		getParameters().setMultipleFromListAttributeValueA(
-				new MultipleFromListParameter<AttributeValueType>("Select values", this, selectedValues, unsortedValues, true));
+		getParameters().setMultipleFromListAttributeValueA(new MultipleFromListParameter<AttributeValueType>(
+				"Select values", this, selectedValues, unsortedValues, true));
 	}
 
 	/*
@@ -277,12 +331,13 @@ public class EventGlobalAttributeFilter extends Filter {
 		setAttributeValues(true);
 		setSelectionType(true);
 	}
-	
+
 	public FilterTemplate getTemplate() {
 		FilterTemplate filterTemplate = new FilterTemplate();
 		filterTemplate.setName(getClass().getName());
 		filterTemplate.setParameters(new ParametersTemplate());
-		filterTemplate.getParameters().setAttribute(getParameters().getOneFromListAttribute().getSelected().getAttribute().getKey());
+		filterTemplate.getParameters()
+				.setAttribute(getParameters().getOneFromListAttribute().getSelected().getAttribute().getKey());
 		filterTemplate.getParameters().setValuesA(new TreeSet<String>());
 		for (AttributeValueType value : getParameters().getMultipleFromListAttributeValueA().getSelected()) {
 			filterTemplate.getParameters().getValuesA().add(value.toString());

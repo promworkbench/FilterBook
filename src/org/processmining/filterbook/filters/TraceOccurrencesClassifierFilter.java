@@ -18,6 +18,11 @@ import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
@@ -43,6 +48,7 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 	 * classifier parameter is changed.
 	 */
 	private JComponent attributeValueWidget;
+	private JComponent chartWidget;
 
 	/**
 	 * Caching filter results to avoid filtering the same log with the same settings
@@ -143,10 +149,13 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 			int o = occurrences.get(traceClass);
 			int v = traceClasses.get(o);
 			String s = "" + o;
-			occurrenceAttributes.put(traceClass,
-					new AttributeValueType(getFactory().createAttributeLiteral("", String.format(
-							"%" + (2 * m - s.length()) + "d  (%d trace class" + (v > 1 ? "es" : "") + ", %.2f %% of log)", o,
-							v, (100.0 * o * v / getLog().size())), null)));
+			occurrenceAttributes
+					.put(traceClass,
+							new AttributeValueType(getFactory().createAttributeLiteral("",
+									String.format("%" + (2 * m - s.length()) + "d  (%d trace class"
+											+ (v > 1 ? "es" : "") + ", %.2f %% of log)", o, v,
+											(100.0 * o * v / getLog().size())),
+									null)));
 		}
 	}
 
@@ -222,13 +231,35 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 	public void constructWidget() {
 		JComponent widget = new JPanel();
 		double size[][] = { { TableLayoutConstants.FILL, TableLayoutConstants.FILL },
-				{ TableLayoutConstants.FILL, 80 } };
+				{ TableLayoutConstants.FILL, TableLayoutConstants.FILL, 80 } };
 		widget.setLayout(new TableLayout(size));
 		widget.add(getParameters().getOneFromListClassifier().getWidget(), "0, 0");
 		attributeValueWidget = getParameters().getMultipleFromListAttributeValueA().getWidget();
-		widget.add(attributeValueWidget, "1, 0");
-		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 1, 1, 1");
+		widget.add(attributeValueWidget, "0, 1");
+		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 2");
+		chartWidget = getChartWidget();
+		widget.add(chartWidget, "1, 0, 1, 2");
 		setWidget(widget);
+	}
+
+	protected JComponent getChartWidget() {
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+		XEventClassifier classifier = (getParameters().getOneFromListClassifier().getSelected() != null
+				? getParameters().getOneFromListClassifier().getSelected().getClassifier()
+				: getDummyClassifier());
+
+		TreeSet<Integer> values = new TreeSet<Integer>(occurrences.values());
+		for (Integer v : values) {
+			for (List<String> value : occurrences.keySet()) {
+				if (occurrences.get(value).equals(v)) {
+					dataset.addValue(occurrences.get(value), classifier.name(), value.toString());
+				}
+			}
+		}
+		JFreeChart chart = ChartFactory.createBarChart("Overview", classifier.name(), "Number of traces", dataset,
+				PlotOrientation.VERTICAL, false, true, false);
+		return new ChartPanel(chart);
 	}
 
 	private void updatedDoInBackground() {
@@ -245,7 +276,10 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 		 */
 		getWidget().remove(attributeValueWidget);
 		attributeValueWidget = getParameters().getMultipleFromListAttributeValueA().getWidget();
-		getWidget().add(attributeValueWidget, "1, 0");
+		getWidget().add(attributeValueWidget, "0, 1");
+		getWidget().remove(chartWidget);
+		chartWidget = getChartWidget();
+		getWidget().add(chartWidget, "1, 0, 1, 2");
 		getWidget().revalidate();
 		getWidget().repaint();
 		getCell().updated();

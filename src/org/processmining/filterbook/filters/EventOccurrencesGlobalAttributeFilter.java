@@ -14,10 +14,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
+import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
+import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
@@ -39,6 +46,7 @@ public class EventOccurrencesGlobalAttributeFilter extends Filter {
 	public static final String NAME = "Project on number of occurrences using global attribute value";
 
 	private JComponent attributeValueWidget;
+	private JComponent chartWidget;
 
 	private XLog cachedLog;
 	private XAttribute cachedAttribute;
@@ -74,7 +82,7 @@ public class EventOccurrencesGlobalAttributeFilter extends Filter {
 
 	private String getEventClass(XEvent event, XAttribute attribute) {
 		XAttribute a = event.getAttributes().get(attribute.getKey());
-		return (a != null ? a.toString() : "");
+		return (a != null ? a.toString() : AttributeValueType.NOATTRIBUTEVALUE);
 	}
 
 	private void setOccurrences() {
@@ -181,13 +189,39 @@ public class EventOccurrencesGlobalAttributeFilter extends Filter {
 	public void constructWidget() {
 		JComponent widget = new JPanel();
 		double size[][] = { { TableLayoutConstants.FILL, TableLayoutConstants.FILL },
-				{ TableLayoutConstants.FILL, 80 } };
+				{ TableLayoutConstants.FILL, TableLayoutConstants.FILL, 80 } };
 		widget.setLayout(new TableLayout(size));
 		widget.add(getParameters().getOneFromListAttribute().getWidget(), "0, 0");
 		attributeValueWidget = getParameters().getMultipleFromListAttributeValueA().getWidget();
-		widget.add(attributeValueWidget, "1, 0");
-		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 1, 1, 1");
+		widget.add(attributeValueWidget, "0, 1");
+		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 2");
+		chartWidget = getChartWidget();
+		widget.add(chartWidget, "1, 0, 1, 2");
 		setWidget(widget);
+	}
+
+	protected JComponent getChartWidget() {
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+		AttributeType attribute;
+		if (getParameters().getOneFromListAttribute() == null
+				|| getParameters().getOneFromListAttribute().getSelected() == null) {
+			attribute = new AttributeType(new XAttributeLiteralImpl(XConceptExtension.KEY_NAME, ""));
+		} else {
+			attribute = getParameters().getOneFromListAttribute().getSelected();
+		}
+
+		TreeSet<Integer> values = new TreeSet<Integer>(occurrences.values());
+		for (Integer v : values) {
+			for (String value : occurrences.keySet()) {
+				if (occurrences.get(value).equals(v)) {
+					dataset.addValue(occurrences.get(value), attribute.getAttribute().getKey(), value);
+				}
+			}
+		}
+		JFreeChart chart = ChartFactory.createBarChart("Overview", attribute.getAttribute().getKey(), "Number of events",
+				dataset, PlotOrientation.VERTICAL, false, true, false);
+		return new ChartPanel(chart);
 	}
 
 	private void updatedDoInBackground() {
@@ -204,7 +238,10 @@ public class EventOccurrencesGlobalAttributeFilter extends Filter {
 		 */
 		getWidget().remove(attributeValueWidget);
 		attributeValueWidget = getParameters().getMultipleFromListAttributeValueA().getWidget();
-		getWidget().add(attributeValueWidget, "1, 0");
+		getWidget().add(attributeValueWidget, "0, 1");
+		getWidget().remove(chartWidget);
+		chartWidget = getChartWidget();
+		getWidget().add(chartWidget, "1, 0, 1, 2");
 		getWidget().revalidate();
 		getWidget().repaint();
 		getCell().updated();

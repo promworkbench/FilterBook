@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.JComponent;
@@ -18,6 +20,11 @@ import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
@@ -44,6 +51,7 @@ public class TraceDirectlyFollowsGlobalAttributeFilter extends Filter {
 	 */
 	private JComponent attributeValueWidgetA;
 	private JComponent attributeValueWidgetB;
+	private JComponent chartWidget;
 
 	private XLog cachedLog;
 	private XAttribute cachedAttribute;
@@ -167,15 +175,54 @@ public class TraceDirectlyFollowsGlobalAttributeFilter extends Filter {
 	public void constructWidget() {
 		JComponent widget = new JPanel();
 		double size[][] = { { TableLayoutConstants.FILL, TableLayoutConstants.FILL },
-				{ TableLayoutConstants.FILL, TableLayoutConstants.FILL, 80 } };
+				{ TableLayoutConstants.FILL, TableLayoutConstants.FILL, TableLayoutConstants.FILL, 80 } };
 		widget.setLayout(new TableLayout(size));
-		widget.add(getParameters().getOneFromListAttribute().getWidget(), "0, 0, 0, 1");
+		widget.add(getParameters().getOneFromListAttribute().getWidget(), "0, 0");
 		attributeValueWidgetA = getParameters().getMultipleFromListAttributeValueA().getWidget();
-		widget.add(attributeValueWidgetA, "1, 0");
+		widget.add(attributeValueWidgetA, "0, 1");
 		attributeValueWidgetB = getParameters().getMultipleFromListAttributeValueB().getWidget();
-		widget.add(attributeValueWidgetB, "1, 1");
-		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 2, 1, 2");
+		widget.add(attributeValueWidgetB, "0, 2");
+		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 3");
+		chartWidget = getChartWidget();
+		widget.add(chartWidget, "1, 0, 1, 3");
 		setWidget(widget);
+	}
+
+	protected JComponent getChartWidget() {
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+		AttributeType attribute;
+		if (getParameters().getOneFromListAttribute() == null
+				|| getParameters().getOneFromListAttribute().getSelected() == null) {
+			attribute = new AttributeType(new XAttributeLiteralImpl(XConceptExtension.KEY_NAME, ""));
+		} else {
+			attribute = getParameters().getOneFromListAttribute().getSelected();
+		}
+
+		Set<AttributeValueType> values = new TreeSet<AttributeValueType>();
+		Map<AttributeValueType, Integer> counts = new TreeMap<AttributeValueType, Integer>();
+		for (XTrace trace : getLog()) {
+			for (XEvent event : trace) {
+				AttributeValueType value = new AttributeValueType(event.getAttributes().get(attribute.getAttribute().getKey()));
+				values.add(value);
+				if (counts.containsKey(value)) {
+					counts.put(value,  counts.get(value) + 1);
+				} else {
+					counts.put(value, 1);
+				}
+			}
+		}
+		for (AttributeValueType value : values) {
+			XAttribute a = value.getAttribute();
+			if (a != null) {
+				dataset.addValue(counts.get(value), attribute.getAttribute().getKey(), a.toString());
+			} else {
+				dataset.addValue(counts.get(value), attribute.getAttribute().getKey(), AttributeValueType.NOATTRIBUTEVALUE);
+			}
+		}
+		JFreeChart chart = ChartFactory.createBarChart("Overview", attribute.getAttribute().getKey(), "Number of events",
+				dataset, PlotOrientation.VERTICAL, false, true, false);
+		return new ChartPanel(chart);
 	}
 
 	private void updatedDoInBackground() {
@@ -193,10 +240,13 @@ public class TraceDirectlyFollowsGlobalAttributeFilter extends Filter {
 		 */
 		getWidget().remove(attributeValueWidgetA);
 		attributeValueWidgetA = getParameters().getMultipleFromListAttributeValueA().getWidget();
-		getWidget().add(attributeValueWidgetA, "1, 0");
+		getWidget().add(attributeValueWidgetA, "0, 1");
 		getWidget().remove(attributeValueWidgetB);
 		attributeValueWidgetB = getParameters().getMultipleFromListAttributeValueB().getWidget();
-		getWidget().add(attributeValueWidgetB, "1, 1");
+		getWidget().add(attributeValueWidgetB, "0, 2");
+		getWidget().remove(chartWidget);
+		chartWidget = getChartWidget();
+		getWidget().add(chartWidget, "1, 0, 1, 3");
 		getWidget().revalidate();
 		getWidget().repaint();
 		getCell().updated();

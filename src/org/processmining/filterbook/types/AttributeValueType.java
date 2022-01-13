@@ -7,6 +7,7 @@ public class AttributeValueType implements Comparable<AttributeValueType> {
 	/*
 	 * Wrapper class for attribute vluae.
 	 */
+	public final static String NOATTRIBUTEVALUE = "<Null>";
 	
 	/**
 	 * The attribute. May be null.
@@ -25,7 +26,7 @@ public class AttributeValueType implements Comparable<AttributeValueType> {
 	 * Name for the attribute value type. Use attribute value.
 	 */
 	public String toString() {
-		return attribute == null ? "(NULL)" : attribute.toString();
+		return attribute == null ? NOATTRIBUTEVALUE : attribute.toString();
 	}
 
 	public int compareTo(AttributeValueType o) {

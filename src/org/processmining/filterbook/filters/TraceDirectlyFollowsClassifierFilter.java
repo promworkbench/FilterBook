@@ -5,7 +5,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.JComponent;
@@ -18,6 +20,11 @@ import org.deckfour.xes.classification.XEventNameClassifier;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
@@ -43,6 +50,7 @@ public class TraceDirectlyFollowsClassifierFilter extends Filter {
 	 */
 	private JComponent attributeValueWidgetA;
 	private JComponent attributeValueWidgetB;
+	private JComponent chartWidget;
 
 	/**
 	 * Caching filter results to avoid filtering the same log with the same settings
@@ -155,15 +163,45 @@ public class TraceDirectlyFollowsClassifierFilter extends Filter {
 	public void constructWidget() {
 		JComponent widget = new JPanel();
 		double size[][] = { { TableLayoutConstants.FILL, TableLayoutConstants.FILL },
-				{ TableLayoutConstants.FILL, TableLayoutConstants.FILL, 80 } };
+				{ TableLayoutConstants.FILL, TableLayoutConstants.FILL, TableLayoutConstants.FILL, 80 } };
 		widget.setLayout(new TableLayout(size));
-		widget.add(getParameters().getOneFromListClassifier().getWidget(), "0, 0, 0, 1");
+		widget.add(getParameters().getOneFromListClassifier().getWidget(), "0, 0");
 		attributeValueWidgetA = getParameters().getMultipleFromListStringA().getWidget();
-		widget.add(attributeValueWidgetA, "1, 0");
+		widget.add(attributeValueWidgetA, "0, 1");
 		attributeValueWidgetB = getParameters().getMultipleFromListStringB().getWidget();
-		widget.add(attributeValueWidgetB, "1, 1");
-		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 2, 1, 2");
+		widget.add(attributeValueWidgetB, "0, 2");
+		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 3");
+		chartWidget = getChartWidget();
+		widget.add(chartWidget, "1, 0, 1, 3");
 		setWidget(widget);
+	}
+
+	protected JComponent getChartWidget() {
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+		XEventClassifier classifier = (getParameters().getOneFromListClassifier().getSelected() != null
+				? getParameters().getOneFromListClassifier().getSelected().getClassifier()
+				: getDummyClassifier());
+
+		Set<String> values = new TreeSet<String>();
+		Map<String, Integer> counts = new TreeMap<String, Integer>();
+		for (XTrace trace : getLog()) {
+			for (XEvent event : trace) {
+				String value = classifier.getClassIdentity(event);
+				values.add(value);
+				if (counts.containsKey(value)) {
+					counts.put(value,  counts.get(value) + 1);
+				} else {
+					counts.put(value, 1);
+				}
+			}
+		}
+		for (String value : values) {
+			dataset.addValue(counts.get(value), classifier.name(), value);
+		}
+		JFreeChart chart = ChartFactory.createBarChart("Overview", classifier.name(), "Number of events",
+				dataset, PlotOrientation.VERTICAL, false, true, false);
+		return new ChartPanel(chart);
 	}
 
 	private void updatedDoInBackground() {
@@ -181,10 +219,13 @@ public class TraceDirectlyFollowsClassifierFilter extends Filter {
 		 */
 		getWidget().remove(attributeValueWidgetA);
 		attributeValueWidgetA = getParameters().getMultipleFromListStringA().getWidget();
-		getWidget().add(attributeValueWidgetA, "1, 0");
+		getWidget().add(attributeValueWidgetA, "0, 1");
 		getWidget().remove(attributeValueWidgetB);
 		attributeValueWidgetB = getParameters().getMultipleFromListStringB().getWidget();
-		getWidget().add(attributeValueWidgetB, "1, 1");
+		getWidget().add(attributeValueWidgetB, "0, 2");
+		getWidget().remove(chartWidget);
+		chartWidget = getChartWidget();
+		getWidget().add(chartWidget, "1, 0, 1, 3");
 		getWidget().revalidate();
 		getWidget().repaint();
 		getCell().updated();
