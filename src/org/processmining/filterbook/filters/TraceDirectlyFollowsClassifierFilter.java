@@ -23,8 +23,8 @@ import org.deckfour.xes.model.XTrace;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.util.TableOrder;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
@@ -33,6 +33,8 @@ import org.processmining.filterbook.parameters.Parameters;
 import org.processmining.filterbook.parameters.ParametersTemplate;
 import org.processmining.filterbook.types.ClassifierType;
 import org.processmining.filterbook.types.SelectionType;
+import org.processmining.framework.util.Pair;
+import org.processmining.framework.util.collection.ComparablePair;
 
 import info.clearthought.layout.TableLayout;
 import info.clearthought.layout.TableLayoutConstants;
@@ -183,24 +185,28 @@ public class TraceDirectlyFollowsClassifierFilter extends Filter {
 				? getParameters().getOneFromListClassifier().getSelected().getClassifier()
 				: getDummyClassifier());
 
-		Set<String> values = new TreeSet<String>();
-		Map<String, Integer> counts = new TreeMap<String, Integer>();
+		Set<Pair<String, String>> values = new TreeSet<Pair<String, String>>();
+		Map<Pair<String, String>, Integer> counts = new TreeMap<Pair<String, String>, Integer>();
 		for (XTrace trace : getLog()) {
+			String prevValue = null;
 			for (XEvent event : trace) {
 				String value = classifier.getClassIdentity(event);
-				values.add(value);
-				if (counts.containsKey(value)) {
-					counts.put(value,  counts.get(value) + 1);
-				} else {
-					counts.put(value, 1);
+				if (prevValue != null) {
+					Pair<String, String> pair = new ComparablePair<String, String>(prevValue, value);
+					values.add(pair);
+					if (counts.containsKey(pair)) {
+						counts.put(pair, counts.get(pair) + 1);
+					} else {
+						counts.put(pair, 1);
+					}
 				}
+				prevValue = value;
 			}
 		}
-		for (String value : values) {
-			dataset.addValue(counts.get(value), classifier.name(), value);
+		for (Pair<String, String> value : values) {
+			dataset.addValue(counts.get(value), value.getFirst(), value.getSecond());
 		}
-		JFreeChart chart = ChartFactory.createBarChart("Overview", classifier.name(), "Number of events",
-				dataset, PlotOrientation.VERTICAL, false, true, false);
+		JFreeChart chart = ChartFactory.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW, true, true, false);
 		return new ChartPanel(chart);
 	}
 

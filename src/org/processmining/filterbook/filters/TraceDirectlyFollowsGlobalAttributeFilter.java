@@ -23,8 +23,8 @@ import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.util.TableOrder;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
@@ -34,6 +34,8 @@ import org.processmining.filterbook.parameters.ParametersTemplate;
 import org.processmining.filterbook.types.AttributeType;
 import org.processmining.filterbook.types.AttributeValueType;
 import org.processmining.filterbook.types.SelectionType;
+import org.processmining.framework.util.Pair;
+import org.processmining.framework.util.collection.ComparablePair;
 
 import info.clearthought.layout.TableLayout;
 import info.clearthought.layout.TableLayoutConstants;
@@ -199,29 +201,34 @@ public class TraceDirectlyFollowsGlobalAttributeFilter extends Filter {
 			attribute = getParameters().getOneFromListAttribute().getSelected();
 		}
 
-		Set<AttributeValueType> values = new TreeSet<AttributeValueType>();
-		Map<AttributeValueType, Integer> counts = new TreeMap<AttributeValueType, Integer>();
+		Set<Pair<AttributeValueType, AttributeValueType>> values = new TreeSet<Pair<AttributeValueType, AttributeValueType>>();
+		Map<Pair<AttributeValueType, AttributeValueType>, Integer> counts = new TreeMap<Pair<AttributeValueType, AttributeValueType>, Integer>();
 		for (XTrace trace : getLog()) {
+			AttributeValueType prevValue = null;
 			for (XEvent event : trace) {
-				AttributeValueType value = new AttributeValueType(event.getAttributes().get(attribute.getAttribute().getKey()));
-				values.add(value);
-				if (counts.containsKey(value)) {
-					counts.put(value,  counts.get(value) + 1);
-				} else {
-					counts.put(value, 1);
+				AttributeValueType value = new AttributeValueType(
+						event.getAttributes().get(attribute.getAttribute().getKey()));
+				if (prevValue != null) {
+					Pair<AttributeValueType, AttributeValueType> pair = new ComparablePair<AttributeValueType, AttributeValueType>(
+							prevValue, value);
+					values.add(pair);
+					if (counts.containsKey(pair)) {
+						counts.put(pair, counts.get(pair) + 1);
+					} else {
+						counts.put(pair, 1);
+					}
 				}
+				prevValue = value;
 			}
 		}
-		for (AttributeValueType value : values) {
-			XAttribute a = value.getAttribute();
-			if (a != null) {
-				dataset.addValue(counts.get(value), attribute.getAttribute().getKey(), a.toString());
-			} else {
-				dataset.addValue(counts.get(value), attribute.getAttribute().getKey(), AttributeValueType.NOATTRIBUTEVALUE);
-			}
+		for (Pair<AttributeValueType, AttributeValueType> value : values) {
+			XAttribute a1 = value.getFirst().getAttribute();
+			XAttribute a2 = value.getSecond().getAttribute();
+			dataset.addValue(counts.get(value), (a1 != null ? a1.toString() : AttributeValueType.NOATTRIBUTEVALUE),
+					(a2 != null ? a2.toString() : AttributeValueType.NOATTRIBUTEVALUE));
 		}
-		JFreeChart chart = ChartFactory.createBarChart("Overview", attribute.getAttribute().getKey(), "Number of events",
-				dataset, PlotOrientation.VERTICAL, false, true, false);
+		JFreeChart chart = ChartFactory.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW, true, true,
+				false);
 		return new ChartPanel(chart);
 	}
 
