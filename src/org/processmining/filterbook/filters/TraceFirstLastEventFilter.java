@@ -1,5 +1,10 @@
 package org.processmining.filterbook.filters;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
@@ -9,6 +14,11 @@ import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.util.TableOrder;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.parameters.Parameter;
 import org.processmining.filterbook.parameters.Parameters;
@@ -21,6 +31,8 @@ import info.clearthought.layout.TableLayoutConstants;
 public class TraceFirstLastEventFilter extends Filter {
 
 	public static final String NAME = "Add artificial first and/or last";
+
+	private JComponent chartWidget;
 
 	private XLog cachedLog;
 	private boolean cachedYesNoA;
@@ -122,11 +134,51 @@ public class TraceFirstLastEventFilter extends Filter {
 
 	public void constructWidget() {
 		JComponent widget = new JPanel();
-		double size[][] = { { TableLayoutConstants.FILL }, { 30, 30, TableLayoutConstants.FILL } };
+		double size[][] = { { TableLayoutConstants.FILL, TableLayoutConstants.FILL }, { 30, 30, TableLayoutConstants.FILL } };
 		widget.setLayout(new TableLayout(size));
 		widget.add(getParameters().getYesNoA().getWidget(), "0, 0");
 		widget.add(getParameters().getYesNoB().getWidget(), "0, 1");
+		chartWidget = getChartWidget();
+		widget.add(chartWidget, "1, 0, 1, 2");
 		setWidget(widget);
+	}
+
+	protected JComponent getChartWidget() {
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+		Set<String> firstValues = new TreeSet<String>();
+		Set<String> lastValues = new TreeSet<String>();
+		Map<String, Integer> firstCounts = new TreeMap<String, Integer>();
+		Map<String, Integer> lastCounts = new TreeMap<String, Integer>();
+		for (XTrace trace : getLog()) {
+			if (!trace.isEmpty()) {
+				String firstValue = XConceptExtension.instance().extractName(trace.get(0));
+				firstValues.add(firstValue);
+				if (firstCounts.containsKey(firstValue)) {
+					firstCounts.put(firstValue,  firstCounts.get(firstValue) + 1);
+				} else {
+					firstCounts.put(firstValue, 1);
+				}
+				String lastValue = XConceptExtension.instance().extractName(trace.get(trace.size() - 1));
+				lastValues.add(lastValue);
+				if (lastCounts.containsKey(lastValue)) {
+					lastCounts.put(lastValue,  lastCounts.get(lastValue) + 1);
+				} else {
+					lastCounts.put(lastValue, 1);
+				}
+			}
+		}
+		for (String value : firstValues) {
+			dataset.addValue(firstCounts.get(value), "First", value);
+		}
+		for (String value : lastValues) {
+			dataset.addValue(lastCounts.get(value), "Last", value);
+		}
+		JFreeChart chart = ChartFactory.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW, true, true,
+				false);
+//		JFreeChart chart = ChartFactory.createBarChart("Overview", classifier.name(), "Number of traces",
+//				dataset, PlotOrientation.VERTICAL, false, true, false);
+		return new ChartPanel(chart);
 	}
 
 	public void updated(Parameter parameter) {
@@ -141,7 +193,7 @@ public class TraceFirstLastEventFilter extends Filter {
 		if (getParameters().getYesNoA() != null) {
 			selected = getParameters().getYesNoA().getSelected();
 		}
-		getParameters().setYesNoA(new YesNoParameter("Add first \u03b1 event?", this, selected));
+		getParameters().setYesNoA(new YesNoParameter("Add artificial first \u03b1 event?", this, selected));
 	}
 
 	private void setLast(boolean doReset) {
@@ -152,7 +204,7 @@ public class TraceFirstLastEventFilter extends Filter {
 		if (getParameters().getYesNoB() != null) {
 			selected = getParameters().getYesNoB().getSelected();
 		}
-		getParameters().setYesNoB(new YesNoParameter("Add last \u03c9 event?", this, selected));
+		getParameters().setYesNoB(new YesNoParameter("Add artifical last \u03c9 event?", this, selected));
 	}
 
 	public void updateParameters() {

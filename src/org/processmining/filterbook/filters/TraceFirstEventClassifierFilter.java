@@ -17,8 +17,8 @@ import org.deckfour.xes.model.XTrace;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.util.TableOrder;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.Parameters;
@@ -143,8 +143,10 @@ public class TraceFirstEventClassifierFilter extends EventClassifierFilter {
 		for (String value : values) {
 			dataset.addValue(counts.get(value), classifier.name(), value);
 		}
-		JFreeChart chart = ChartFactory.createBarChart("Overview", classifier.name(), "Number of traces",
-				dataset, PlotOrientation.VERTICAL, false, true, false);
+		JFreeChart chart = ChartFactory.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW, true, true,
+				false);
+//		JFreeChart chart = ChartFactory.createBarChart("Overview", classifier.name(), "Number of traces",
+//				dataset, PlotOrientation.VERTICAL, false, true, false);
 		return new ChartPanel(chart);
 	}
 

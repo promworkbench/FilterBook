@@ -3,6 +3,10 @@ package org.processmining.filterbook.filters;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -11,6 +15,11 @@ import org.deckfour.xes.extension.std.XTimeExtension;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.parameters.DateParameter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
@@ -29,6 +38,8 @@ public class EventDateFilter extends Filter {
 	 */
 	public static final String NAME = "Project on date";
 	
+	private JComponent chartWidget;
+
 	private Date firstLogDate = null;
 	private Date lastLogDate = null;
 
@@ -141,12 +152,43 @@ public class EventDateFilter extends Filter {
 	public void constructWidget() {
 		JComponent widget = new JPanel();
 		double size[][] = { { TableLayoutConstants.FILL, TableLayoutConstants.FILL },
-				{ TableLayoutConstants.FILL, 80 } };
+				{ TableLayoutConstants.FILL, TableLayoutConstants.FILL, 80 } };
 		widget.setLayout(new TableLayout(size));
 		widget.add(getParameters().getDateA().getWidget(), "0, 0");
-		widget.add(getParameters().getDateB().getWidget(), "1, 0");
-		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 1, 1, 1");
+		widget.add(getParameters().getDateB().getWidget(), "0, 1");
+		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 2");
+		chartWidget = getChartWidget();
+		widget.add(chartWidget, "1, 0, 1, 2");
 		setWidget(widget);
+	}
+
+	protected JComponent getChartWidget() {
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+		Set<Date> values = new TreeSet<Date>();
+		Map<Date, Integer> counts = new TreeMap<Date, Integer>();
+		for (XTrace trace : getLog()) {
+			if (!trace.isEmpty()) {
+				Date value = XTimeExtension.instance().extractTimestamp(trace.get(0));
+				// Round every time to noon on that day (to reduce the number of values in the chart).
+				long time = (24*60*60*1000) * (value.getTime() / (24*60*60*1000)) + 12*60*60*1000;
+				value.setTime(time);
+				values.add(value);
+				if (counts.containsKey(value)) {
+					counts.put(value,  counts.get(value) + 1);
+				} else {
+					counts.put(value, 1);
+				}
+			}
+		}
+		for (Date value : values) {
+			dataset.addValue(counts.get(value), "Day", value);
+		}
+//		JFreeChart chart = ChartFactory.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW, true, true,
+//				false);
+		JFreeChart chart = ChartFactory.createBarChart("Overview", "Days", "Number of events",
+				dataset, PlotOrientation.VERTICAL, false, true, false);
+		return new ChartPanel(chart);
 	}
 
 	public void updated(Parameter parameter) {

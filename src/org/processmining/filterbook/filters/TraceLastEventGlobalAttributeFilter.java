@@ -17,8 +17,8 @@ import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.util.TableOrder;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.Parameters;
@@ -154,8 +154,10 @@ public class TraceLastEventGlobalAttributeFilter extends EventGlobalAttributeFil
 				dataset.addValue(counts.get(value), attribute.getAttribute().getKey(), AttributeValueType.NOATTRIBUTEVALUE);
 			}
 		}
-		JFreeChart chart = ChartFactory.createBarChart("Overview", attribute.getAttribute().getKey(), "Number of traces",
-				dataset, PlotOrientation.VERTICAL, false, true, false);
+		JFreeChart chart = ChartFactory.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW, true, true,
+				false);
+//		JFreeChart chart = ChartFactory.createBarChart("Overview", attribute.getAttribute().getKey(), "Number of traces",
+//				dataset, PlotOrientation.VERTICAL, false, true, false);
 		return new ChartPanel(chart);
 	}
 
