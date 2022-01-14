@@ -1,5 +1,6 @@
 package org.processmining.filterbook.filters;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -165,29 +166,77 @@ public class EventDateFilter extends Filter {
 	protected JComponent getChartWidget() {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-		Set<Date> values = new TreeSet<Date>();
-		Map<Date, Integer> counts = new TreeMap<Date, Integer>();
+		Set<String> firstValues = new TreeSet<String>();
+		Set<String> lastValues = new TreeSet<String>();
+		Map<String, Integer> firstCounts = new TreeMap<String, Integer>();
+		Map<String, Integer> lastCounts = new TreeMap<String, Integer>();
+		Date firstFirstValue = null;
+		Date lastLastValue = null;
 		for (XTrace trace : getLog()) {
-			if (!trace.isEmpty()) {
-				Date value = XTimeExtension.instance().extractTimestamp(trace.get(0));
-				// Round every time to noon on that day (to reduce the number of values in the chart).
-				long time = (24*60*60*1000) * (value.getTime() / (24*60*60*1000)) + 12*60*60*1000;
-				value.setTime(time);
-				values.add(value);
-				if (counts.containsKey(value)) {
-					counts.put(value,  counts.get(value) + 1);
-				} else {
-					counts.put(value, 1);
+			if (!trace.isEmpty()) {				
+				Date firstValue = XTimeExtension.instance().extractTimestamp(trace.get(0));
+				if (firstFirstValue == null || firstValue.compareTo(firstFirstValue) < 0) {
+					firstFirstValue = firstValue;
+				}
+				Date lastValue = XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1));
+				if (lastLastValue == null || lastValue.compareTo(lastLastValue) > 0) {
+					lastLastValue = lastValue;
 				}
 			}
 		}
-		for (Date value : values) {
-			dataset.addValue(counts.get(value), "Day", value);
+		long duration = lastLastValue.getTime() - firstFirstValue.getTime();
+		SimpleDateFormat dateFormat;
+		String units;
+		if (duration < 1000) {
+			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+			units = new String("Millis");
+		} else if (duration < 60*1000L) {
+			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			units = new String("Seconds");
+		} else if (duration < 60*60*1000L) {
+			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+			units = new String("Minutes");
+		} else if (duration < 24*60*60*1000L) {
+			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH");
+			units = new String("Hours");
+		} else if (duration < 30*24*60*60*1000L) {
+			dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			units = new String("Days");
+		} else if (duration < 12*30*24*60*60*1000L) {
+			dateFormat = new SimpleDateFormat("yyyy-MM");
+			units = new String("Months");
+		} else {
+			dateFormat = new SimpleDateFormat("yyyy");
+			units = new String("Years");
+		}
+		for (XTrace trace : getLog()) {
+			if (!trace.isEmpty()) {
+				String firstValue = dateFormat.format(XTimeExtension.instance().extractTimestamp(trace.get(0)));
+				firstValues.add(firstValue);
+				if (firstCounts.containsKey(firstValue)) {
+					firstCounts.put(firstValue,  firstCounts.get(firstValue) + 1);
+				} else {
+					firstCounts.put(firstValue, 1);
+				}
+				String lastValue = dateFormat.format(XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)));
+				lastValues.add(lastValue);
+				if (lastCounts.containsKey(lastValue)) {
+					lastCounts.put(lastValue,  lastCounts.get(lastValue) + 1);
+				} else {
+					lastCounts.put(lastValue, 1);
+				}
+			}
+		}
+		for (String value : firstValues) {
+			dataset.addValue(firstCounts.get(value), "First date", value);
+		}
+		for (String value : lastValues) {
+			dataset.addValue(lastCounts.get(value), "Last date", value);
 		}
 //		JFreeChart chart = ChartFactory.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW, true, true,
 //				false);
-		JFreeChart chart = ChartFactory.createBarChart("Overview", "Days", "Number of events",
-				dataset, PlotOrientation.VERTICAL, false, true, false);
+		JFreeChart chart = ChartFactory.createBarChart("Overview", "Dates", "Number of events",
+				dataset, PlotOrientation.VERTICAL, true, true, false);
 		return new ChartPanel(chart);
 	}
 
