@@ -170,44 +170,30 @@ public class EventDateFilter extends Filter {
 		Set<String> lastValues = new TreeSet<String>();
 		Map<String, Integer> firstCounts = new TreeMap<String, Integer>();
 		Map<String, Integer> lastCounts = new TreeMap<String, Integer>();
-		Date firstFirstValue = null;
-		Date lastLastValue = null;
-		for (XTrace trace : getLog()) {
-			if (!trace.isEmpty()) {				
-				Date firstValue = XTimeExtension.instance().extractTimestamp(trace.get(0));
-				if (firstFirstValue == null || firstValue.compareTo(firstFirstValue) < 0) {
-					firstFirstValue = firstValue;
-				}
-				Date lastValue = XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1));
-				if (lastLastValue == null || lastValue.compareTo(lastLastValue) > 0) {
-					lastLastValue = lastValue;
-				}
-			}
-		}
-		long duration = lastLastValue.getTime() - firstFirstValue.getTime();
+		long duration = lastLogDate.getTime() - firstLogDate.getTime();
 		SimpleDateFormat dateFormat;
 		String units;
 		if (duration < 1000) {
 			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-			units = new String("Millis");
-		} else if (duration < 60*1000L) {
+			units = "Millis";
+		} else if (duration < 600000L) { // 600 seconds
 			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-			units = new String("Seconds");
-		} else if (duration < 60*60*1000L) {
+			units = "Seconds";
+		} else if (duration < 36000000L) { // 600 minutes
 			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-			units = new String("Minutes");
-		} else if (duration < 24*60*60*1000L) {
+			units = "Minutes";
+		} else if (duration < 864000000L) { // 240 hours
 			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH");
-			units = new String("Hours");
-		} else if (duration < 30*24*60*60*1000L) {
+			units = "Hours";
+		} else if (duration < 25920000000L) { // 300 days
 			dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			units = new String("Days");
-		} else if (duration < 12*30*24*60*60*1000L) {
+			units = "Days";
+		} else if (duration < 311040000000L) { // 120 months
 			dateFormat = new SimpleDateFormat("yyyy-MM");
-			units = new String("Months");
+			units = "Months";
 		} else {
 			dateFormat = new SimpleDateFormat("yyyy");
-			units = new String("Years");
+			units = "Years";
 		}
 		for (XTrace trace : getLog()) {
 			if (!trace.isEmpty()) {
@@ -235,7 +221,7 @@ public class EventDateFilter extends Filter {
 		}
 //		JFreeChart chart = ChartFactory.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW, true, true,
 //				false);
-		JFreeChart chart = ChartFactory.createBarChart("Overview", "Dates", "Number of events",
+		JFreeChart chart = ChartFactory.createBarChart("Overview", units, "Number of events",
 				dataset, PlotOrientation.VERTICAL, true, true, false);
 		return new ChartPanel(chart);
 	}
