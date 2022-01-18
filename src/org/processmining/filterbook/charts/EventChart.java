@@ -25,6 +25,15 @@ import org.processmining.filterbook.types.AttributeValueType;
 
 public class EventChart {
 
+	/**
+	 * Returns a bar chart showing for every event class:
+	 *   1. how many events have that event class.
+	 * 
+	 * @param log The log.
+	 * @param dummyClassifer The dummy classifier.
+	 * @param parameters The parameters.
+	 * @return The panel containing the bar chart.
+	 */
 	public static JComponent getChart(XLog log, XEventClassifier dummyClassifer, Parameters parameters) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -53,6 +62,14 @@ public class EventChart {
 		return new ChartPanel(chart);
 	}
 	
+	/**
+	 * Returns a bar chart showing for every attribute value:
+	 *   1. how many events have that attribute value.
+	 * 
+	 * @param log The log.
+	 * @param parameters The parameters.
+	 * @return The panel containing the bar chart.
+	 */
 	public static JComponent getChart(XLog log, Parameters parameters) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 

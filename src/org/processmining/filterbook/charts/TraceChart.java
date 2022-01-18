@@ -23,6 +23,14 @@ import org.processmining.filterbook.types.AttributeValueType;
 
 public class TraceChart {
 
+	/**
+	 * Returns a bar chart showing for every attribute value:
+	 *   1. how many traces have that attribute value.
+	 * 
+	 * @param log The log.
+	 * @param parameters The parameters.
+	 * @return The panel containing the bar chart.
+	 */
 	public static JComponent getChart(XLog log, Parameters parameters) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 

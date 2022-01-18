@@ -19,6 +19,15 @@ import org.processmining.filterbook.types.AttributeType;
 
 public class EventsChart {
 
+	/**
+	 * Returns a bar chart showing for every (classifier-based) variant:
+	 *   1. how many times this variant occurs in the log.
+	 * 
+	 * @param occurrences For every variant the number of times it occurs in the log.
+	 * @param dummyClassifier The dummy classifier.
+	 * @param parameters The parameters.
+	 * @return The panel containing the bar chart.
+	 */
 	public static JComponent getChart(Map<List<String>, Integer> occurrences, XEventClassifier dummyClassifier, Parameters parameters) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -39,6 +48,14 @@ public class EventsChart {
 		return new ChartPanel(chart);
 	}
 	
+	/**
+	 * Returns a bar chart showing for every (attribute-based) variant:
+	 *   1. how many times this variant occurs in the log.
+	 * 
+	 * @param occurrences For every variant the number of times it occurs in the log.
+	 * @param parameters The parameters.
+	 * @return The panel containing the bar chart.
+	 */
 	public static JComponent getChart(Map<List<String>, Integer> occurrences, Parameters parameters) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 

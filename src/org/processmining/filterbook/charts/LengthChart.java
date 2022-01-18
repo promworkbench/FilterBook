@@ -12,6 +12,13 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 public class LengthChart {
 
+	/**
+	 * Returns a bar chart showing for every trace length:
+	 *   1. how many traces have that length.
+	 *   
+	 * @param log The log.
+	 * @return The panel containing the chart.
+	 */
 	public static JComponent getChart(XLog log) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
 		int maxValue = Integer.MIN_VALUE;

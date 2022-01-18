@@ -18,6 +18,16 @@ import org.jfree.util.TableOrder;
 
 public class FirstLastChart {
 
+	/**
+	 * Returns two pie charts showing the concept names for:
+	 *   1. the first events in the log and
+	 *   2. the last events in the log.
+	 * 
+	 * @param log The log.
+	 * @param dummyClassifier The dummy classifier.
+	 * @param parameters The parameters.
+	 * @return The panel containing the pie charts.
+	 */
 	public static JComponent getChart(XLog log) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 

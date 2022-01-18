@@ -24,6 +24,14 @@ import org.processmining.filterbook.types.AttributeValueType;
 
 public class LastChart {
 
+	/**
+	 * Returns a pie chart showing the event classes for the last events in the log.
+	 * 
+	 * @param log The log.
+	 * @param dummyClassifier The dummy classifier.
+	 * @param parameters The parameters.
+	 * @return The panel containing the pie chart.
+	 */
 	public static JComponent getChart(XLog log, XEventClassifier dummyClassifier, Parameters parameters) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -54,6 +62,13 @@ public class LastChart {
 		return new ChartPanel(chart);
 	}
 	
+	/**
+	 * Returns a pie chart showing the attribute values for the last events in the log.
+	 * 
+	 * @param log The log.
+	 * @param parameters The parameters.
+	 * @return The panel containing the pie chart.
+	 */
 	public static JComponent getChart(XLog log, Parameters parameters) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
