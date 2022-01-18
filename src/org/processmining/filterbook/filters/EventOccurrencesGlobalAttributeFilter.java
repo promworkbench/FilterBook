@@ -14,18 +14,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
-import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
-import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.DefaultCategoryDataset;
 import org.processmining.filterbook.cells.ComputationCell;
+import org.processmining.filterbook.charts.EventChart;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
 import org.processmining.filterbook.parameters.Parameter;
@@ -201,27 +195,7 @@ public class EventOccurrencesGlobalAttributeFilter extends Filter {
 	}
 
 	protected JComponent getChartWidget() {
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-		AttributeType attribute;
-		if (getParameters().getOneFromListAttribute() == null
-				|| getParameters().getOneFromListAttribute().getSelected() == null) {
-			attribute = new AttributeType(new XAttributeLiteralImpl(XConceptExtension.KEY_NAME, ""));
-		} else {
-			attribute = getParameters().getOneFromListAttribute().getSelected();
-		}
-
-		TreeSet<Integer> values = new TreeSet<Integer>(occurrences.values());
-		for (Integer v : values) {
-			for (String value : occurrences.keySet()) {
-				if (occurrences.get(value).equals(v)) {
-					dataset.addValue(occurrences.get(value), attribute.getAttribute().getKey(), value);
-				}
-			}
-		}
-		JFreeChart chart = ChartFactory.createBarChart("Overview", attribute.getAttribute().getKey(), "Number of events",
-				dataset, PlotOrientation.VERTICAL, false, true, false);
-		return new ChartPanel(chart);
+		return EventChart.getChart(occurrences, getParameters());
 	}
 
 	private void updatedDoInBackground() {

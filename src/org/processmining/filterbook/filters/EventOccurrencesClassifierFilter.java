@@ -18,12 +18,8 @@ import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.DefaultCategoryDataset;
 import org.processmining.filterbook.cells.ComputationCell;
+import org.processmining.filterbook.charts.EventChart;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
 import org.processmining.filterbook.parameters.Parameter;
@@ -237,23 +233,7 @@ public class EventOccurrencesClassifierFilter extends Filter {
 	}
 
 	protected JComponent getChartWidget() {
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-		XEventClassifier classifier = (getParameters().getOneFromListClassifier().getSelected() != null
-				? getParameters().getOneFromListClassifier().getSelected().getClassifier()
-				: getDummyClassifier());
-
-		TreeSet<Integer> values = new TreeSet<Integer>(occurrences.values());
-		for (Integer v : values) {
-			for (String value : occurrences.keySet()) {
-				if (occurrences.get(value).equals(v)) {
-					dataset.addValue(occurrences.get(value), classifier.name(), value);
-				}
-			}
-		}
-		JFreeChart chart = ChartFactory.createBarChart("Overview", classifier.name(), "Number of events",
-				dataset, PlotOrientation.VERTICAL, false, true, false);
-		return new ChartPanel(chart);
+		return EventChart.getChart(occurrences, getDummyClassifier(), getParameters());
 	}
 
 	private void updatedDoInBackground() {

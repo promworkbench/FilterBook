@@ -107,4 +107,65 @@ public class EventChart {
 		return new ChartPanel(chart);
 	}
 
+	/**
+	 * Returns a bar chart showing for every event class:
+	 *   1. how many events have that event class.
+	 * 
+	 * @param occurrences How many times an event class occurs in the log.
+	 * @param dummyClassifier The dummy classifier.
+	 * @param parameters The parameters.
+	 * @return The panel containing the chart.
+	 */
+	public static JComponent getChart(Map<String, Integer> occurrences, XEventClassifier dummyClassifier, Parameters parameters) {
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+		XEventClassifier classifier = (parameters.getOneFromListClassifier().getSelected() != null
+				? parameters.getOneFromListClassifier().getSelected().getClassifier()
+				: dummyClassifier);
+
+		TreeSet<Integer> values = new TreeSet<Integer>(occurrences.values());
+		for (Integer v : values) {
+			for (String value : occurrences.keySet()) {
+				if (occurrences.get(value).equals(v)) {
+					dataset.addValue(occurrences.get(value), classifier.name(), value);
+				}
+			}
+		}
+		JFreeChart chart = ChartFactory.createBarChart("Overview", classifier.name(), "Number of events",
+				dataset, PlotOrientation.VERTICAL, false, true, false);
+		return new ChartPanel(chart);
+	}
+
+	/**
+	 * Returns a bar chart showing for every attribute value:
+	 *   1. how many events have that attribute value.
+	 * 
+	 * @param occurrences How many times an attribute value (as String) occurs in the log.
+	 * @param parameters The parameters.
+	 * @return The panel containing the chart.
+	 */
+	public static JComponent getChart(Map<String, Integer> occurrences, Parameters parameters) {
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+		AttributeType attribute;
+		if (parameters.getOneFromListAttribute() == null
+				|| parameters.getOneFromListAttribute().getSelected() == null) {
+			attribute = new AttributeType(new XAttributeLiteralImpl(XConceptExtension.KEY_NAME, ""));
+		} else {
+			attribute = parameters.getOneFromListAttribute().getSelected();
+		}
+
+		TreeSet<Integer> values = new TreeSet<Integer>(occurrences.values());
+		for (Integer v : values) {
+			for (String value : occurrences.keySet()) {
+				if (occurrences.get(value).equals(v)) {
+					dataset.addValue(occurrences.get(value), attribute.getAttribute().getKey(), value);
+				}
+			}
+		}
+		JFreeChart chart = ChartFactory.createBarChart("Overview", attribute.getAttribute().getKey(), "Number of events",
+				dataset, PlotOrientation.VERTICAL, false, true, false);
+		return new ChartPanel(chart);
+	}
+
 }
