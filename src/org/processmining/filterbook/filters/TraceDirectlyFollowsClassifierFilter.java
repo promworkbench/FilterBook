@@ -5,9 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.JComponent;
@@ -20,12 +18,8 @@ import org.deckfour.xes.classification.XEventNameClassifier;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.util.TableOrder;
 import org.processmining.filterbook.cells.ComputationCell;
+import org.processmining.filterbook.charts.DirectlyFollowsChart;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
 import org.processmining.filterbook.parameters.Parameter;
@@ -33,8 +27,6 @@ import org.processmining.filterbook.parameters.Parameters;
 import org.processmining.filterbook.parameters.ParametersTemplate;
 import org.processmining.filterbook.types.ClassifierType;
 import org.processmining.filterbook.types.SelectionType;
-import org.processmining.framework.util.Pair;
-import org.processmining.framework.util.collection.ComparablePair;
 
 import info.clearthought.layout.TableLayout;
 import info.clearthought.layout.TableLayoutConstants;
@@ -179,35 +171,7 @@ public class TraceDirectlyFollowsClassifierFilter extends Filter {
 	}
 
 	protected JComponent getChartWidget() {
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-		XEventClassifier classifier = (getParameters().getOneFromListClassifier().getSelected() != null
-				? getParameters().getOneFromListClassifier().getSelected().getClassifier()
-				: getDummyClassifier());
-
-		Set<Pair<String, String>> values = new TreeSet<Pair<String, String>>();
-		Map<Pair<String, String>, Integer> counts = new TreeMap<Pair<String, String>, Integer>();
-		for (XTrace trace : getLog()) {
-			String prevValue = null;
-			for (XEvent event : trace) {
-				String value = classifier.getClassIdentity(event);
-				if (prevValue != null) {
-					Pair<String, String> pair = new ComparablePair<String, String>(prevValue, value);
-					values.add(pair);
-					if (counts.containsKey(pair)) {
-						counts.put(pair, counts.get(pair) + 1);
-					} else {
-						counts.put(pair, 1);
-					}
-				}
-				prevValue = value;
-			}
-		}
-		for (Pair<String, String> value : values) {
-			dataset.addValue(counts.get(value), value.getFirst(), value.getSecond());
-		}
-		JFreeChart chart = ChartFactory.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW, true, true, false);
-		return new ChartPanel(chart);
+		return DirectlyFollowsChart.getChart(getLog(), getDummyClassifier(), getParameters());
 	}
 
 	private void updatedDoInBackground() {

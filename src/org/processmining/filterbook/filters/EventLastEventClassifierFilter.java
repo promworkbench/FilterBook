@@ -3,11 +3,14 @@ package org.processmining.filterbook.filters;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.swing.JComponent;
+
 import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.processmining.filterbook.cells.ComputationCell;
+import org.processmining.filterbook.charts.DirectlyFollowsChart;
 import org.processmining.filterbook.parameters.Parameters;
 import org.processmining.filterbook.types.SelectionType;
 
@@ -104,4 +107,9 @@ public class EventLastEventClassifierFilter extends EventClassifierFilter {
 		}
 		return !classifier.getClassIdentity(event).equals(classifier.getClassIdentity(trace.get(i + 1)));
 	}
+	
+	protected JComponent getChartWidget() {
+		return DirectlyFollowsChart.getChart(getLog(), getDummyClassifier(), getParameters());
+	}
+
 }

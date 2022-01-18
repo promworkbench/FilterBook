@@ -5,9 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.JComponent;
@@ -20,12 +18,8 @@ import org.deckfour.xes.classification.XEventNameClassifier;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.DefaultCategoryDataset;
 import org.processmining.filterbook.cells.ComputationCell;
+import org.processmining.filterbook.charts.EventChart;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
 import org.processmining.filterbook.parameters.Parameter;
@@ -165,31 +159,7 @@ public class EventClassifierFilter extends Filter {
 	}
 
 	protected JComponent getChartWidget() {
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-		XEventClassifier classifier = (getParameters().getOneFromListClassifier().getSelected() != null
-				? getParameters().getOneFromListClassifier().getSelected().getClassifier()
-				: getDummyClassifier());
-
-		Set<String> values = new TreeSet<String>();
-		Map<String, Integer> counts = new TreeMap<String, Integer>();
-		for (XTrace trace : getLog()) {
-			for (XEvent event : trace) {
-				String value = classifier.getClassIdentity(event);
-				values.add(value);
-				if (counts.containsKey(value)) {
-					counts.put(value,  counts.get(value) + 1);
-				} else {
-					counts.put(value, 1);
-				}
-			}
-		}
-		for (String value : values) {
-			dataset.addValue(counts.get(value), classifier.name(), value);
-		}
-		JFreeChart chart = ChartFactory.createBarChart("Overview", classifier.name(), "Number of events",
-				dataset, PlotOrientation.VERTICAL, false, true, false);
-		return new ChartPanel(chart);
+		return EventChart.getChart(getLog(), getDummyClassifier(), getParameters());
 	}
 
 	private void updatedDoInBackground() {

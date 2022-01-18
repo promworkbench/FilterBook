@@ -14,12 +14,8 @@ import javax.swing.SwingWorker;
 
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.DefaultCategoryDataset;
 import org.processmining.filterbook.cells.ComputationCell;
+import org.processmining.filterbook.charts.LengthChart;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
 import org.processmining.filterbook.parameters.Parameter;
@@ -143,30 +139,7 @@ public class TraceLengthFilter extends Filter {
 	}
 
 	private JComponent getChartWidget() {
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
-		int maxValue = Integer.MIN_VALUE;
-		int minValue = Integer.MAX_VALUE;
-		for (XTrace trace : getLog()) {
-			int value = trace.size();
-			maxValue = Math.max(maxValue, value);			
-			minValue = Math.min(minValue, value);			
-		}
-		double values[] = new double[maxValue + 1 - minValue];
-		for (XTrace trace : getLog()) {
-			int length = trace.size();
-			values[length - minValue]++;
-		}
-		for (int i = minValue; i <= maxValue; i++) {
-			dataset.addValue(values[i - minValue], "Number of traces", String.valueOf(i));
-		}
-	    JFreeChart chart = ChartFactory.createBarChart(
-	             "Overview of trace lengths",           
-	             "Trace length",            
-	             "Number of traces",            
-	             dataset,          
-	             PlotOrientation.VERTICAL,           
-	             false, true, false);
-	    return new ChartPanel(chart);
+	    return LengthChart.getChart(getLog());
 	}
 	
 	private void updatedDoInBackground() {

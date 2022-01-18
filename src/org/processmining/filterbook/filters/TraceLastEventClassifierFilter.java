@@ -3,10 +3,7 @@ package org.processmining.filterbook.filters;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 import javax.swing.JComponent;
 
@@ -14,12 +11,8 @@ import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.classification.XEventNameClassifier;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.util.TableOrder;
 import org.processmining.filterbook.cells.ComputationCell;
+import org.processmining.filterbook.charts.LastChart;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.Parameters;
 import org.processmining.filterbook.types.SelectionType;
@@ -121,33 +114,7 @@ public class TraceLastEventClassifierFilter extends EventClassifierFilter {
 	}
 	
 	protected JComponent getChartWidget() {
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-		XEventClassifier classifier = (getParameters().getOneFromListClassifier().getSelected() != null
-				? getParameters().getOneFromListClassifier().getSelected().getClassifier()
-				: getDummyClassifier());
-
-		Set<String> values = new TreeSet<String>();
-		Map<String, Integer> counts = new TreeMap<String, Integer>();
-		for (XTrace trace : getLog()) {
-			if (!trace.isEmpty()) {
-				String value = classifier.getClassIdentity(trace.get(trace.size() - 1));
-				values.add(value);
-				if (counts.containsKey(value)) {
-					counts.put(value,  counts.get(value) + 1);
-				} else {
-					counts.put(value, 1);
-				}
-			}
-		}
-		for (String value : values) {
-			dataset.addValue(counts.get(value), classifier.name(), value);
-		}
-		JFreeChart chart = ChartFactory.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW, true, true,
-				false);
-//		JFreeChart chart = ChartFactory.createBarChart("Overview", classifier.name(), "Number of traces",
-//				dataset, PlotOrientation.VERTICAL, false, true, false);
-		return new ChartPanel(chart);
+		return LastChart.getChart(getLog(), getDummyClassifier(), getParameters());
 	}
 
 	/*

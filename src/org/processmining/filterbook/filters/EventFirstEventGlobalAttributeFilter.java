@@ -3,11 +3,14 @@ package org.processmining.filterbook.filters;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.swing.JComponent;
+
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.processmining.filterbook.cells.ComputationCell;
+import org.processmining.filterbook.charts.DirectlyFollowsChart;
 import org.processmining.filterbook.parameters.Parameters;
 import org.processmining.filterbook.types.AttributeValueType;
 import org.processmining.filterbook.types.SelectionType;
@@ -106,4 +109,9 @@ public class EventFirstEventGlobalAttributeFilter extends EventGlobalAttributeFi
 		}
 		return !attribute.equals(trace.get(i - 1).getAttributes().get(attribute.getKey()));
 	}
+	
+	protected JComponent getChartWidget() {
+		return DirectlyFollowsChart.getChart(getLog(), getDummyClassifier(), getParameters());
+	}
+
 }

@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.JComponent;
@@ -20,12 +18,8 @@ import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.util.TableOrder;
 import org.processmining.filterbook.cells.ComputationCell;
+import org.processmining.filterbook.charts.DirectlyFollowsChart;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
 import org.processmining.filterbook.parameters.Parameter;
@@ -34,8 +28,6 @@ import org.processmining.filterbook.parameters.ParametersTemplate;
 import org.processmining.filterbook.types.AttributeType;
 import org.processmining.filterbook.types.AttributeValueType;
 import org.processmining.filterbook.types.SelectionType;
-import org.processmining.framework.util.Pair;
-import org.processmining.framework.util.collection.ComparablePair;
 
 import info.clearthought.layout.TableLayout;
 import info.clearthought.layout.TableLayoutConstants;
@@ -191,45 +183,7 @@ public class TraceDirectlyFollowsGlobalAttributeFilter extends Filter {
 	}
 
 	protected JComponent getChartWidget() {
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-		AttributeType attribute;
-		if (getParameters().getOneFromListAttribute() == null
-				|| getParameters().getOneFromListAttribute().getSelected() == null) {
-			attribute = new AttributeType(new XAttributeLiteralImpl(XConceptExtension.KEY_NAME, ""));
-		} else {
-			attribute = getParameters().getOneFromListAttribute().getSelected();
-		}
-
-		Set<Pair<AttributeValueType, AttributeValueType>> values = new TreeSet<Pair<AttributeValueType, AttributeValueType>>();
-		Map<Pair<AttributeValueType, AttributeValueType>, Integer> counts = new TreeMap<Pair<AttributeValueType, AttributeValueType>, Integer>();
-		for (XTrace trace : getLog()) {
-			AttributeValueType prevValue = null;
-			for (XEvent event : trace) {
-				AttributeValueType value = new AttributeValueType(
-						event.getAttributes().get(attribute.getAttribute().getKey()));
-				if (prevValue != null) {
-					Pair<AttributeValueType, AttributeValueType> pair = new ComparablePair<AttributeValueType, AttributeValueType>(
-							prevValue, value);
-					values.add(pair);
-					if (counts.containsKey(pair)) {
-						counts.put(pair, counts.get(pair) + 1);
-					} else {
-						counts.put(pair, 1);
-					}
-				}
-				prevValue = value;
-			}
-		}
-		for (Pair<AttributeValueType, AttributeValueType> value : values) {
-			XAttribute a1 = value.getFirst().getAttribute();
-			XAttribute a2 = value.getSecond().getAttribute();
-			dataset.addValue(counts.get(value), (a1 != null ? a1.toString() : AttributeValueType.NOATTRIBUTEVALUE),
-					(a2 != null ? a2.toString() : AttributeValueType.NOATTRIBUTEVALUE));
-		}
-		JFreeChart chart = ChartFactory.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW, true, true,
-				false);
-		return new ChartPanel(chart);
+		return DirectlyFollowsChart.getChart(getLog(), getParameters());
 	}
 
 	private void updatedDoInBackground() {

@@ -1,13 +1,8 @@
 package org.processmining.filterbook.filters;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -16,12 +11,8 @@ import org.deckfour.xes.extension.std.XTimeExtension;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.DefaultCategoryDataset;
 import org.processmining.filterbook.cells.ComputationCell;
+import org.processmining.filterbook.charts.DateChart;
 import org.processmining.filterbook.parameters.DateParameter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
 import org.processmining.filterbook.parameters.Parameter;
@@ -164,66 +155,7 @@ public class EventDateFilter extends Filter {
 	}
 
 	protected JComponent getChartWidget() {
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-		Set<String> firstValues = new TreeSet<String>();
-		Set<String> lastValues = new TreeSet<String>();
-		Map<String, Integer> firstCounts = new TreeMap<String, Integer>();
-		Map<String, Integer> lastCounts = new TreeMap<String, Integer>();
-		long duration = lastLogDate.getTime() - firstLogDate.getTime();
-		SimpleDateFormat dateFormat;
-		String units;
-		if (duration < 1000) {
-			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-			units = "Millis";
-		} else if (duration < 600000L) { // 600 seconds
-			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-			units = "Seconds";
-		} else if (duration < 36000000L) { // 600 minutes
-			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-			units = "Minutes";
-		} else if (duration < 864000000L) { // 240 hours
-			dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH");
-			units = "Hours";
-		} else if (duration < 25920000000L) { // 300 days
-			dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			units = "Days";
-		} else if (duration < 311040000000L) { // 120 months
-			dateFormat = new SimpleDateFormat("yyyy-MM");
-			units = "Months";
-		} else {
-			dateFormat = new SimpleDateFormat("yyyy");
-			units = "Years";
-		}
-		for (XTrace trace : getLog()) {
-			if (!trace.isEmpty()) {
-				String firstValue = dateFormat.format(XTimeExtension.instance().extractTimestamp(trace.get(0)));
-				firstValues.add(firstValue);
-				if (firstCounts.containsKey(firstValue)) {
-					firstCounts.put(firstValue,  firstCounts.get(firstValue) + 1);
-				} else {
-					firstCounts.put(firstValue, 1);
-				}
-				String lastValue = dateFormat.format(XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)));
-				lastValues.add(lastValue);
-				if (lastCounts.containsKey(lastValue)) {
-					lastCounts.put(lastValue,  lastCounts.get(lastValue) + 1);
-				} else {
-					lastCounts.put(lastValue, 1);
-				}
-			}
-		}
-		for (String value : firstValues) {
-			dataset.addValue(firstCounts.get(value), "First date", value);
-		}
-		for (String value : lastValues) {
-			dataset.addValue(lastCounts.get(value), "Last date", value);
-		}
-//		JFreeChart chart = ChartFactory.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW, true, true,
-//				false);
-		JFreeChart chart = ChartFactory.createBarChart("Overview", units, "Number of events",
-				dataset, PlotOrientation.VERTICAL, true, true, false);
-		return new ChartPanel(chart);
+		return DateChart.getChart(getLog(), firstLogDate, lastLogDate);
 	}
 
 	public void updated(Parameter parameter) {
