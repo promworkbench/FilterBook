@@ -156,7 +156,7 @@ public class TraceLengthFilter extends Filter {
 		 */
 		getWidget().remove(traceLengthWidget);
 		traceLengthWidget = getParameters().getMultipleFromListInteger().getWidget();
-		getWidget().add(traceLengthWidget, "1, 0, 1, 2");
+		getWidget().add(traceLengthWidget, "0, 2");
 		getWidget().revalidate();
 		getWidget().repaint();
 		getCell().updated();

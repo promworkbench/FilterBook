@@ -119,7 +119,7 @@ public class EventFirstLastEventAttributeFilter extends EventAttributeFilter {
 	}
 	
 	protected JComponent getChartWidget() {
-		return DirectlyFollowsChart.getChart(getLog(), getDummyClassifier(), getParameters());
+		return DirectlyFollowsChart.getChart(getLog(), getParameters());
 	}
 
 }

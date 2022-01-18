@@ -44,7 +44,7 @@ public class EventsChart {
 			}
 		}
 		JFreeChart chart = ChartFactory.createBarChart("Overview", classifier.name(), "Number of traces", dataset,
-				PlotOrientation.VERTICAL, false, true, false);
+				PlotOrientation.HORIZONTAL, false, true, false);
 		return new ChartPanel(chart);
 	}
 	
@@ -76,7 +76,7 @@ public class EventsChart {
 			}
 		}
 		JFreeChart chart = ChartFactory.createBarChart("Overview", attribute.getAttribute().getKey(), "Number of traces", dataset,
-				PlotOrientation.VERTICAL, false, true, false);
+				PlotOrientation.HORIZONTAL, false, true, false);
 		return new ChartPanel(chart);
 	}
 

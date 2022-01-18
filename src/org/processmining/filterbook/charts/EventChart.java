@@ -28,6 +28,7 @@ public class EventChart {
 	/**
 	 * Returns a bar chart showing for every event class:
 	 *   1. how many events have that event class.
+	 * The chart is sorted on event class.
 	 * 
 	 * @param log The log.
 	 * @param dummyClassifer The dummy classifier.
@@ -58,13 +59,14 @@ public class EventChart {
 			dataset.addValue(counts.get(value), classifier.name(), value);
 		}
 		JFreeChart chart = ChartFactory.createBarChart("Overview", classifier.name(), "Number of events",
-				dataset, PlotOrientation.VERTICAL, false, true, false);
+				dataset, PlotOrientation.HORIZONTAL, false, true, false);
 		return new ChartPanel(chart);
 	}
 	
 	/**
 	 * Returns a bar chart showing for every attribute value:
 	 *   1. how many events have that attribute value.
+	 * The chart is sorted on attribute value.
 	 * 
 	 * @param log The log.
 	 * @param parameters The parameters.
@@ -103,13 +105,14 @@ public class EventChart {
 			}
 		}
 		JFreeChart chart = ChartFactory.createBarChart("Overview", attribute.getAttribute().getKey(), "Number of events",
-				dataset, PlotOrientation.VERTICAL, false, true, false);
+				dataset, PlotOrientation.HORIZONTAL, false, true, false);
 		return new ChartPanel(chart);
 	}
 
 	/**
 	 * Returns a bar chart showing for every event class:
 	 *   1. how many events have that event class.
+	 * The chart is sorted on non-decreasing bar height.
 	 * 
 	 * @param occurrences How many times an event class occurs in the log.
 	 * @param dummyClassifier The dummy classifier.
@@ -132,13 +135,14 @@ public class EventChart {
 			}
 		}
 		JFreeChart chart = ChartFactory.createBarChart("Overview", classifier.name(), "Number of events",
-				dataset, PlotOrientation.VERTICAL, false, true, false);
+				dataset, PlotOrientation.HORIZONTAL, false, true, false);
 		return new ChartPanel(chart);
 	}
 
 	/**
 	 * Returns a bar chart showing for every attribute value:
 	 *   1. how many events have that attribute value.
+	 * The chart is sorted on non-decreasing bar height.
 	 * 
 	 * @param occurrences How many times an attribute value (as String) occurs in the log.
 	 * @param parameters The parameters.
@@ -164,7 +168,7 @@ public class EventChart {
 			}
 		}
 		JFreeChart chart = ChartFactory.createBarChart("Overview", attribute.getAttribute().getKey(), "Number of events",
-				dataset, PlotOrientation.VERTICAL, false, true, false);
+				dataset, PlotOrientation.HORIZONTAL, false, true, false);
 		return new ChartPanel(chart);
 	}
 

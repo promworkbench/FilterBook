@@ -41,7 +41,7 @@ public class LengthChart {
 	             "Trace length",            
 	             "Number of traces",            
 	             dataset,          
-	             PlotOrientation.VERTICAL,           
+	             PlotOrientation.HORIZONTAL,           
 	             false, true, false);
 	    return new ChartPanel(chart);
 	}

@@ -64,7 +64,7 @@ public class TraceChart {
 			}
 		}
 		JFreeChart chart = ChartFactory.createBarChart("Overview", attribute.getAttribute().getKey(),
-				"Number of traces", dataset, PlotOrientation.VERTICAL, false, true, false);
+				"Number of traces", dataset, PlotOrientation.HORIZONTAL, false, true, false);
 		return new ChartPanel(chart);
 	}
 

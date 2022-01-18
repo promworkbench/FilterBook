@@ -111,7 +111,7 @@ public class EventFirstEventGlobalAttributeFilter extends EventGlobalAttributeFi
 	}
 	
 	protected JComponent getChartWidget() {
-		return DirectlyFollowsChart.getChart(getLog(), getDummyClassifier(), getParameters());
+		return DirectlyFollowsChart.getChart(getLog(), getParameters());
 	}
 
 }
