@@ -298,6 +298,23 @@ public class FilterTemplate implements HTMLToString {
 			filter.setTemplate(parameters);
 			return filter;
 		}
+		
+		if (name.equals(TraceVariantFirstClassifierFilter.class.getName())) {
+			TraceVariantFirstClassifierFilter filter = new TraceVariantFirstClassifierFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(TraceVariantFirstGlobalAttributeFilter.class.getName())) {
+			TraceVariantFirstGlobalAttributeFilter filter = new TraceVariantFirstGlobalAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(TraceVariantFirstAttributeFilter.class.getName())) {
+			TraceVariantFirstAttributeFilter filter = new TraceVariantFirstAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+
 		return null;
 	}
 

@@ -6,8 +6,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -20,30 +18,28 @@ import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.charts.EventsChart;
-import org.processmining.filterbook.parameters.MultipleFromListParameter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
 import org.processmining.filterbook.parameters.Parameter;
 import org.processmining.filterbook.parameters.Parameters;
 import org.processmining.filterbook.parameters.ParametersTemplate;
-import org.processmining.filterbook.types.AttributeValueType;
 import org.processmining.filterbook.types.ClassifierType;
 import org.processmining.filterbook.types.SelectionType;
 
 import info.clearthought.layout.TableLayout;
 import info.clearthought.layout.TableLayoutConstants;
 
-public class TraceOccurrencesClassifierFilter extends Filter {
+public abstract class TraceVariantAbstractClassifierFilter extends Filter {
+
 
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select on number of occurrences using classifier value";
+	public static final String NAME = "Select one variant using classifier value";
 
 	/**
-	 * Handle to the widget for attribute values, as this may change if the
+	 * Handle to the widget for chart, as this may change if the
 	 * classifier parameter is changed.
 	 */
-	private JComponent attributeValueWidget;
 	private JComponent chartWidget;
 
 	/**
@@ -52,27 +48,23 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 	 */
 	private XLog cachedLog;
 	private XEventClassifier cachedClassifier;
-	private Set<AttributeValueType> cachedSelectedValues;
 	private SelectionType cachedSelectionType;
 	private XLog cachedFilteredLog;
 
-	private Map<List<String>, Integer> occurrences;
-	private Map<List<String>, AttributeValueType> occurrenceAttributes;
+	protected Map<List<String>, List<XTrace>> traces;
 
-	public TraceOccurrencesClassifierFilter(XLog log, Parameters parameters, ComputationCell cell) {
+	public TraceVariantAbstractClassifierFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, parameters, cell);
 		cachedLog = null;
 		setLog(log);
-		occurrences = new HashMap<List<String>, Integer>();
-		occurrenceAttributes = new HashMap<List<String>, AttributeValueType>();
+		traces = new HashMap<List<String>, List<XTrace>>();
 	}
 
-	public TraceOccurrencesClassifierFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
+	public TraceVariantAbstractClassifierFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
 		super(name, parameters, cell);
 		cachedLog = null;
 		setLog(log);
-		occurrences = new HashMap<List<String>, Integer>();
-		occurrenceAttributes = new HashMap<List<String>, AttributeValueType>();
+		traces = new HashMap<List<String>, List<XTrace>>();
 	}
 
 	/**
@@ -101,9 +93,8 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 	/*
 	 * Refresh the occurrences.
 	 */
-	private void setOccurrences() {
-		occurrences.clear();
-		occurrenceAttributes.clear();
+	private void setTraces() {
+		traces.clear();
 		if (!isSuitable()) {
 			return;
 		}
@@ -116,45 +107,18 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 		 */
 		for (XTrace trace : getLog()) {
 			List<String> traceClass = getTraceClass(trace, classifier);
-			if (occurrences.containsKey(traceClass)) {
-				occurrences.put(traceClass, occurrences.get(traceClass) + 1);
+			if (traces.containsKey(traceClass)) {
+				traces.get(traceClass).add(trace);
 			} else {
-				occurrences.put(traceClass, 1);
+				List<XTrace> traceList = new ArrayList<XTrace>();
+				traceList.add(trace);
+				traces.put(traceClass, traceList);
 			}
-		}
-		/*
-		 * Count how many variants there are for every occurrence.
-		 */
-		Map<Integer, Integer> traceClasses = new HashMap<Integer, Integer>();
-		int m = 1;
-		for (int o : occurrences.values()) {
-			if (traceClasses.containsKey(o)) {
-				traceClasses.put(o, traceClasses.get(o) + 1);
-			} else {
-				traceClasses.put(o, 1);
-			}
-			String s = "" + o;
-			m = Math.max(m, s.length());
-		}
-		/*
-		 * Construct the list of options to choose from. Every option lists the number
-		 * of occurrences, the number of variants for this number of occurrences, and
-		 * the percentage of traces this option covers.
-		 */
-		for (List<String> traceClass : occurrences.keySet()) {
-			int o = occurrences.get(traceClass);
-			int v = traceClasses.get(o);
-			String s = "" + o;
-			occurrenceAttributes
-					.put(traceClass,
-							new AttributeValueType(getFactory().createAttributeLiteral("",
-									String.format("%" + (2 * m - s.length()) + "d  (%d trace class"
-											+ (v > 1 ? "es" : "") + ", %.2f %% of log)", o, v,
-											(100.0 * o * v / getLog().size())),
-									null)));
 		}
 	}
 
+	protected abstract void select();
+	
 	/**
 	 * Filter the set log on the events using the set parameters.
 	 */
@@ -165,15 +129,12 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 		XEventClassifier classifier = (getParameters().getOneFromListClassifier().getSelected() != null
 				? getParameters().getOneFromListClassifier().getSelected().getClassifier()
 				: getDummyClassifier());
-		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(
-				getParameters().getMultipleFromListAttributeValueA().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
 		 * Check whether the cache is valid.
 		 */
 		if (cachedLog == getLog()) {
-			if (cachedClassifier.equals(classifier) && cachedSelectedValues.equals(selectedValues)
-					&& cachedSelectionType == selectionType) {
+			if (cachedClassifier.equals(classifier) && cachedSelectionType == selectionType) {
 				/*
 				 * Yes, it is. Return the cached filtered log.
 				 */
@@ -186,6 +147,7 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 		 */
 		System.out.println("[" + NAME + "]: Returning newly filtered log.");
 		XLog filteredLog = initializeLog(getLog());
+		select();
 		for (XTrace trace : getLog()) {
 			/*
 			 * Construct the variant for this trace, given the classifier.
@@ -194,7 +156,7 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 			/*
 			 * Check whether this variant has been selected.
 			 */
-			boolean match = selectedValues.contains(occurrenceAttributes.get(traceClass));
+			boolean match = traces.get(traceClass).contains(trace);
 			switch (selectionType) {
 				case FILTERIN : {
 					if (match) {
@@ -215,7 +177,6 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 		 */
 		cachedLog = getLog();
 		cachedClassifier = classifier;
-		cachedSelectedValues = selectedValues;
 		cachedSelectionType = selectionType;
 		cachedFilteredLog = filteredLog;
 		return filteredLog;
@@ -229,9 +190,7 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 		double size[][] = { { TableLayoutConstants.FILL, TableLayoutConstants.FILL },
 				{ TableLayoutConstants.FILL, TableLayoutConstants.FILL, 80 } };
 		widget.setLayout(new TableLayout(size));
-		widget.add(getParameters().getOneFromListClassifier().getWidget(), "0, 0");
-		attributeValueWidget = getParameters().getMultipleFromListAttributeValueA().getWidget();
-		widget.add(attributeValueWidget, "0, 1");
+		widget.add(getParameters().getOneFromListClassifier().getWidget(), "0, 0, 0, 1");
 		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 2");
 		chartWidget = getChartWidget();
 		widget.add(chartWidget, "1, 0, 1, 2");
@@ -239,14 +198,15 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 	}
 
 	protected JComponent getChartWidget() {
+		Map<List<String>, Integer> occurrences = new HashMap<List<String>, Integer>();
+		for (List<String> traceClass : traces.keySet()) {
+			occurrences.put(traceClass, traces.get(traceClass).size());
+		}
 		return EventsChart.getChart(occurrences, getDummyClassifier(), getParameters());
 	}
 
 	private void updatedDoInBackground() {
-		/*
-		 * Reset the attribute values parameter.
-		 */
-		setAttributeValues(true);
+		setTraces();
 	}
 
 	private void updatedDone() {
@@ -254,9 +214,6 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 		 * Get the new widget for the attribute value parameter, and replace the old one
 		 * with it.
 		 */
-		getWidget().remove(attributeValueWidget);
-		attributeValueWidget = getParameters().getMultipleFromListAttributeValueA().getWidget();
-		getWidget().add(attributeValueWidget, "0, 1");
 		getWidget().remove(chartWidget);
 		chartWidget = getChartWidget();
 		getWidget().add(chartWidget, "1, 0, 1, 2");
@@ -271,11 +228,11 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 	public void updated(Parameter parameter) {
 		if (parameter == getParameters().getOneFromListClassifier()) {
 			// Classifier parameter changed. Get new classifier values from the log.
-			getWidget().remove(attributeValueWidget);
+			getWidget().remove(chartWidget);
 			JLabel label = new JLabel("<html><h3>Scanning log, please be patient...</h3></html>");
 			label.setHorizontalAlignment(JLabel.CENTER);
-			attributeValueWidget = label;
-			getWidget().add(attributeValueWidget, "0, 1");
+			chartWidget = label;
+			getWidget().add(chartWidget, "1, 0, ,1, 2");
 			getWidget().revalidate();
 			getWidget().repaint();
 			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
@@ -320,24 +277,6 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 	}
 
 	/*
-	 * Make sure the attribute values parameter is initialized.
-	 */
-	void setAttributeValues(boolean doReset) {
-		if (!doReset && getParameters().getMultipleFromListAttributeValueA() != null) {
-			return;
-		}
-		setOccurrences();
-		Set<AttributeValueType> values = new TreeSet<AttributeValueType>(occurrenceAttributes.values());
-		List<AttributeValueType> unsortedValues = new ArrayList<AttributeValueType>(values);
-		List<AttributeValueType> selectedValues = new ArrayList<AttributeValueType>(values);
-		if (getParameters().getMultipleFromListAttributeValueA() != null) {
-			selectedValues.retainAll(getParameters().getMultipleFromListAttributeValueA().getSelected());
-		}
-		getParameters().setMultipleFromListAttributeValueA(new MultipleFromListParameter<AttributeValueType>(
-				"Select values", this, selectedValues, unsortedValues, true));
-	}
-
-	/*
 	 * Make sure the selection type parameter is initialized.
 	 */
 	void setSelectionType(boolean doReset) {
@@ -358,8 +297,7 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 	public void updateParameters() {
 		// Update the classifier.
 		setClassifiers(true);
-		// Update the classifier values.
-		setAttributeValues(true);
+		setTraces();
 		// Update the selection type.
 		setSelectionType(true);
 	}
@@ -377,11 +315,6 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 		// Copy the selected classifier.
 		filterTemplate.getParameters()
 				.setClassifier(getParameters().getOneFromListClassifier().getSelected().getClassifier().name());
-		// Copy the selected classifier values.
-		filterTemplate.getParameters().setValuesA(new TreeSet<String>());
-		for (AttributeValueType value : getParameters().getMultipleFromListAttributeValueA().getSelected()) {
-			filterTemplate.getParameters().getValuesA().add(value.toString());
-		}
 		// Copy the selection type.
 		filterTemplate.getParameters().setSelection(getParameters().getOneFromListSelection().getSelected().name());
 		return filterTemplate;
@@ -400,18 +333,6 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 					getParameters().getOneFromListClassifier().setSelected(classifier);
 				}
 			}
-		}
-		// Initialize the classifier values.
-		setAttributeValues(true);
-		// Select the classifier values.
-		if (parameters.getValuesA() != null) {
-			List<String> values = new ArrayList<String>();
-			for (String value : getParameters().getMultipleFromListStringA().getOptions()) {
-				if (value != null && parameters.getValuesA().contains(value)) {
-					values.add(value);
-				}
-			}
-			getParameters().getMultipleFromListStringA().setSelected(values);
 		}
 		// Initialize the selection type.
 		setSelectionType(true);
