@@ -129,6 +129,10 @@ public class NewFilter extends Filter {
 		filtersSelectOnGlobalAttribute.add(new TraceVariantFirstGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
 		filtersSelectOnAttribute.add(new TraceVariantFirstAttributeFilter(getLog(), new Parameters(), getCell()));
 		
+		filtersSelectOnClassifier.add(new TraceVariantDFClassifierFilter(getLog(), new Parameters(), getCell()));
+		filtersSelectOnGlobalAttribute.add(new TraceVariantDFGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
+		filtersSelectOnAttribute.add(new TraceVariantDFAttributeFilter(getLog(), new Parameters(), getCell()));
+
 		List<Filter> suitableSelectOnClassifierFilters = new ArrayList<Filter>();
 		for (Filter filter : filtersSelectOnClassifier) {
 			if (filter.isSuitable()) {

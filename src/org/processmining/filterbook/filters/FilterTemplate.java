@@ -315,6 +315,22 @@ public class FilterTemplate implements HTMLToString {
 			return filter;
 		}
 
+		if (name.equals(TraceVariantDFClassifierFilter.class.getName())) {
+			TraceVariantDFClassifierFilter filter = new TraceVariantDFClassifierFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(TraceVariantDFGlobalAttributeFilter.class.getName())) {
+			TraceVariantDFGlobalAttributeFilter filter = new TraceVariantDFGlobalAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		if (name.equals(TraceVariantDFAttributeFilter.class.getName())) {
+			TraceVariantDFAttributeFilter filter = new TraceVariantDFAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		
 		return null;
 	}
 
