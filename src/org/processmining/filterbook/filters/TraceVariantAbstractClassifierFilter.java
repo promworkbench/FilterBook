@@ -52,12 +52,14 @@ public abstract class TraceVariantAbstractClassifierFilter extends Filter {
 	private XLog cachedFilteredLog;
 
 	protected Map<List<String>, List<XTrace>> traces;
+	protected Map<List<String>, List<XTrace>> selectedTraces;
 
 	public TraceVariantAbstractClassifierFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, parameters, cell);
 		cachedLog = null;
 		setLog(log);
 		traces = new HashMap<List<String>, List<XTrace>>();
+		selectedTraces = null;
 	}
 
 	public TraceVariantAbstractClassifierFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
@@ -65,6 +67,7 @@ public abstract class TraceVariantAbstractClassifierFilter extends Filter {
 		cachedLog = null;
 		setLog(log);
 		traces = new HashMap<List<String>, List<XTrace>>();
+		selectedTraces = null;
 	}
 
 	/**
@@ -95,6 +98,7 @@ public abstract class TraceVariantAbstractClassifierFilter extends Filter {
 	 */
 	private void setTraces() {
 		traces.clear();
+		selectedTraces = null;
 		if (!isSuitable()) {
 			return;
 		}
@@ -156,7 +160,7 @@ public abstract class TraceVariantAbstractClassifierFilter extends Filter {
 			/*
 			 * Check whether this variant has been selected.
 			 */
-			boolean match = traces.get(traceClass).contains(trace);
+			boolean match = selectedTraces.get(traceClass).contains(trace);
 			switch (selectionType) {
 				case FILTERIN : {
 					if (match) {

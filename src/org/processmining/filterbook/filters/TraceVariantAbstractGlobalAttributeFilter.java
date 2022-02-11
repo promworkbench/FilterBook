@@ -44,12 +44,14 @@ public abstract class TraceVariantAbstractGlobalAttributeFilter extends Filter{
 	private XLog cachedFilteredLog;
 
 	protected Map<List<String>, List<XTrace>> traces;
+	protected Map<List<String>, List<XTrace>> selectedTraces;
 
 	public TraceVariantAbstractGlobalAttributeFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, parameters, cell);
 		setLog(log);
 		cachedLog = null;
 		traces = new HashMap<List<String>, List<XTrace>>();
+		selectedTraces = null;
 	}
 
 	public TraceVariantAbstractGlobalAttributeFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
@@ -57,6 +59,7 @@ public abstract class TraceVariantAbstractGlobalAttributeFilter extends Filter{
 		setLog(log);
 		cachedLog = null;
 		traces = new HashMap<List<String>, List<XTrace>>();
+		selectedTraces = null;
 	}
 
 	public boolean isSuitable() {
@@ -78,6 +81,7 @@ public abstract class TraceVariantAbstractGlobalAttributeFilter extends Filter{
 
 	private void setTraces() {
 		traces.clear();
+		selectedTraces = null;
 		if (!isSuitable()) {
 			return;
 		}
@@ -129,7 +133,7 @@ public abstract class TraceVariantAbstractGlobalAttributeFilter extends Filter{
 		select();
 		for (XTrace trace : getLog()) {
 			List<String> traceClass = getTraceClass(trace, attribute);
-			boolean match = traces.get(traceClass).contains(trace);
+			boolean match = selectedTraces.get(traceClass).contains(trace);
 			switch (selectionType) {
 				case FILTERIN : {
 					if (match) {
