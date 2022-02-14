@@ -7,9 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JComponent;
+
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.processmining.filterbook.cells.ComputationCell;
+import org.processmining.filterbook.charts.DirectlyFollowsChart;
 import org.processmining.filterbook.parameters.Parameters;
 import org.processmining.framework.util.Pair;
 import org.processmining.lpengines.factories.LPEngineFactory;
@@ -18,19 +21,19 @@ import org.processmining.lpengines.interfaces.LPEngine.EngineType;
 import org.processmining.lpengines.interfaces.LPEngine.ObjectiveTargetType;
 import org.processmining.lpengines.interfaces.LPEngine.Operator;
 
-public class TraceVariantDFGlobalAttributeFilter extends TraceVariantAbstractGlobalAttributeFilter {
+public class TraceVariantDFCoverClassifierFilter extends TraceVariantAbstractClassifierFilter {
 
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select minimal DF cover using global attribute value";
+	public static final String NAME = "Select minimal DF cover using classifier value";
 
-	public TraceVariantDFGlobalAttributeFilter(XLog log, Parameters parameters, ComputationCell cell) {
+	public TraceVariantDFCoverClassifierFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);
 		// TODO Auto-generated constructor stub
 	}
 
-	public TraceVariantDFGlobalAttributeFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
+	public TraceVariantDFCoverClassifierFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
 		super(name, log, parameters, cell);
 		// TODO Auto-generated constructor stub
 	}
@@ -101,5 +104,9 @@ public class TraceVariantDFGlobalAttributeFilter extends TraceVariantAbstractGlo
 				selectedTraces.put(traceClass, traceList);
 			}
 		}
+	}
+
+	protected JComponent getChartWidget() {
+		return DirectlyFollowsChart.getChart(getLog(), getDummyClassifier(), getParameters());
 	}
 }

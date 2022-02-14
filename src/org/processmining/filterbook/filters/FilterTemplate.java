@@ -315,18 +315,18 @@ public class FilterTemplate implements HTMLToString {
 			return filter;
 		}
 
-		if (name.equals(TraceVariantDFClassifierFilter.class.getName())) {
-			TraceVariantDFClassifierFilter filter = new TraceVariantDFClassifierFilter(log, new Parameters(), cell);
+		if (name.equals(TraceVariantDFCoverClassifierFilter.class.getName())) {
+			TraceVariantDFCoverClassifierFilter filter = new TraceVariantDFCoverClassifierFilter(log, new Parameters(), cell);
 			filter.setTemplate(parameters);
 			return filter;
 		}
-		if (name.equals(TraceVariantDFGlobalAttributeFilter.class.getName())) {
-			TraceVariantDFGlobalAttributeFilter filter = new TraceVariantDFGlobalAttributeFilter(log, new Parameters(), cell);
+		if (name.equals(TraceVariantDFCoverGlobalAttributeFilter.class.getName())) {
+			TraceVariantDFCoverGlobalAttributeFilter filter = new TraceVariantDFCoverGlobalAttributeFilter(log, new Parameters(), cell);
 			filter.setTemplate(parameters);
 			return filter;
 		}
-		if (name.equals(TraceVariantDFAttributeFilter.class.getName())) {
-			TraceVariantDFAttributeFilter filter = new TraceVariantDFAttributeFilter(log, new Parameters(), cell);
+		if (name.equals(TraceVariantDFCoverAttributeFilter.class.getName())) {
+			TraceVariantDFCoverAttributeFilter filter = new TraceVariantDFCoverAttributeFilter(log, new Parameters(), cell);
 			filter.setTemplate(parameters);
 			return filter;
 		}

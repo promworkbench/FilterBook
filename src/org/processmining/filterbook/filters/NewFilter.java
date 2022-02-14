@@ -129,9 +129,9 @@ public class NewFilter extends Filter {
 		filtersSelectOnGlobalAttribute.add(new TraceVariantFirstGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
 		filtersSelectOnAttribute.add(new TraceVariantFirstAttributeFilter(getLog(), new Parameters(), getCell()));
 		
-		filtersSelectOnClassifier.add(new TraceVariantDFClassifierFilter(getLog(), new Parameters(), getCell()));
-		filtersSelectOnGlobalAttribute.add(new TraceVariantDFGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
-		filtersSelectOnAttribute.add(new TraceVariantDFAttributeFilter(getLog(), new Parameters(), getCell()));
+		filtersSelectOnClassifier.add(new TraceVariantDFCoverClassifierFilter(getLog(), new Parameters(), getCell()));
+		filtersSelectOnGlobalAttribute.add(new TraceVariantDFCoverGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
+		filtersSelectOnAttribute.add(new TraceVariantDFCoverAttributeFilter(getLog(), new Parameters(), getCell()));
 
 		filtersSelectOnClassifier.add(new TraceVariantFastestClassifierFilter(getLog(), new Parameters(), getCell()));
 		filtersSelectOnGlobalAttribute.add(new TraceVariantFastestGlobalAttributeFilter(getLog(), new Parameters(), getCell()));

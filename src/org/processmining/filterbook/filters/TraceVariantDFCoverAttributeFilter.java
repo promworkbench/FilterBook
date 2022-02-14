@@ -18,19 +18,19 @@ import org.processmining.lpengines.interfaces.LPEngine.EngineType;
 import org.processmining.lpengines.interfaces.LPEngine.ObjectiveTargetType;
 import org.processmining.lpengines.interfaces.LPEngine.Operator;
 
-public class TraceVariantDFClassifierFilter extends TraceVariantAbstractClassifierFilter {
+public class TraceVariantDFCoverAttributeFilter extends TraceVariantAbstractAttributeFilter {
 
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select minimal DF cover using classifier value";
+	public static final String NAME = "Select minimal DF cover using attribute value";
 
-	public TraceVariantDFClassifierFilter(XLog log, Parameters parameters, ComputationCell cell) {
+	public TraceVariantDFCoverAttributeFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);
 		// TODO Auto-generated constructor stub
 	}
 
-	public TraceVariantDFClassifierFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
+	public TraceVariantDFCoverAttributeFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
 		super(name, log, parameters, cell);
 		// TODO Auto-generated constructor stub
 	}
