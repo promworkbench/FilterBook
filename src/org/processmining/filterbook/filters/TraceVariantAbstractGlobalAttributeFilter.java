@@ -130,6 +130,7 @@ public abstract class TraceVariantAbstractGlobalAttributeFilter extends Filter{
 		 */
 		System.out.println("[" + NAME + "]: Returning newly filtered log.");
 		XLog filteredLog = initializeLog(getLog());
+		setTraces();
 		select();
 		for (XTrace trace : getLog()) {
 			List<String> traceClass = getTraceClass(trace, attribute);
@@ -173,6 +174,7 @@ public abstract class TraceVariantAbstractGlobalAttributeFilter extends Filter{
 
 	protected JComponent getChartWidget() {
 		Map<List<String>, Integer> occurrences = new HashMap<List<String>, Integer>();
+		setTraces();
 		for (List<String> traceClass : traces.keySet()) {
 			occurrences.put(traceClass, traces.get(traceClass).size());
 		}
@@ -180,7 +182,7 @@ public abstract class TraceVariantAbstractGlobalAttributeFilter extends Filter{
 	}
 
 	private void updatedDoInBackground() {
-		setTraces();
+//		setTraces();
 	}
 
 	private void updatedDone() {
@@ -252,7 +254,7 @@ public abstract class TraceVariantAbstractGlobalAttributeFilter extends Filter{
 
 	public void updateParameters() {
 		setAttributes(true);
-		setTraces();
+//		setTraces();
 		setSelectionType(true);
 	}
 	

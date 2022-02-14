@@ -136,7 +136,7 @@ public abstract class TraceVariantAbstractClassifierFilter extends Filter {
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
 		 * Check whether the cache is valid.
-		 */
+		 */		
 		if (cachedLog == getLog()) {
 			if (cachedClassifier.equals(classifier) && cachedSelectionType == selectionType) {
 				/*
@@ -151,6 +151,13 @@ public abstract class TraceVariantAbstractClassifierFilter extends Filter {
 		 */
 		System.out.println("[" + NAME + "]: Returning newly filtered log.");
 		XLog filteredLog = initializeLog(getLog());
+		/*
+		 * Make sure the traces are up-to-date.
+		 */
+		setTraces();
+		/*
+		 * Select the appropriate traces.
+		 */
 		select();
 		for (XTrace trace : getLog()) {
 			/*
@@ -203,6 +210,7 @@ public abstract class TraceVariantAbstractClassifierFilter extends Filter {
 
 	protected JComponent getChartWidget() {
 		Map<List<String>, Integer> occurrences = new HashMap<List<String>, Integer>();
+		setTraces();
 		for (List<String> traceClass : traces.keySet()) {
 			occurrences.put(traceClass, traces.get(traceClass).size());
 		}
@@ -210,7 +218,7 @@ public abstract class TraceVariantAbstractClassifierFilter extends Filter {
 	}
 
 	private void updatedDoInBackground() {
-		setTraces();
+//		setTraces();
 	}
 
 	private void updatedDone() {
@@ -301,7 +309,7 @@ public abstract class TraceVariantAbstractClassifierFilter extends Filter {
 	public void updateParameters() {
 		// Update the classifier.
 		setClassifiers(true);
-		setTraces();
+//		setTraces();
 		// Update the selection type.
 		setSelectionType(true);
 	}
