@@ -889,8 +889,12 @@ public class ComputationCell extends Cell implements ListSelectionListener, Acti
 			}
 			// Recreate list of filters.
 			DefaultListModel<Filter> filterListModel = new DefaultListModel<Filter>();
+			XLog log = getInputLog().getLog();
 			for (Filter filter : filters) {
 				filterListModel.addElement(filter);
+				XLog oldLog = filter.getLog();
+				filter.setLog(log);
+				log = oldLog;
 			}
 			if (!filtersHidden) {
 				widget.remove(filterList);
