@@ -53,6 +53,7 @@ import org.processmining.filterbook.filters.select.attribute.TraceVariantFastest
 import org.processmining.filterbook.filters.select.attribute.TraceVariantFirstAttributeFilter;
 import org.processmining.filterbook.filters.select.attribute.TraceVariantLastAttributeFilter;
 import org.processmining.filterbook.filters.select.attribute.TraceVariantRandomAttributeFilter;
+import org.processmining.filterbook.filters.select.attribute.TraceVariantSlowestAttributeFilter;
 import org.processmining.filterbook.filters.select.classifier.TraceDirectlyFollowsClassifierFilter;
 import org.processmining.filterbook.filters.select.classifier.TraceFirstEventClassifierFilter;
 import org.processmining.filterbook.filters.select.classifier.TraceLastEventClassifierFilter;
@@ -62,6 +63,7 @@ import org.processmining.filterbook.filters.select.classifier.TraceVariantFastes
 import org.processmining.filterbook.filters.select.classifier.TraceVariantFirstClassifierFilter;
 import org.processmining.filterbook.filters.select.classifier.TraceVariantLastClassifierFilter;
 import org.processmining.filterbook.filters.select.classifier.TraceVariantRandomClassifierFilter;
+import org.processmining.filterbook.filters.select.classifier.TraceVariantSlowestClassifierFilter;
 import org.processmining.filterbook.filters.select.global.TraceDateFilter;
 import org.processmining.filterbook.filters.select.global.TraceDirectlyFollowsGlobalAttributeFilter;
 import org.processmining.filterbook.filters.select.global.TraceFirstEventGlobalAttributeFilter;
@@ -73,6 +75,7 @@ import org.processmining.filterbook.filters.select.global.TraceVariantFastestGlo
 import org.processmining.filterbook.filters.select.global.TraceVariantFirstGlobalAttributeFilter;
 import org.processmining.filterbook.filters.select.global.TraceVariantLastGlobalAttributeFilter;
 import org.processmining.filterbook.filters.select.global.TraceVariantRandomGlobalAttributeFilter;
+import org.processmining.filterbook.filters.select.global.TraceVariantSlowestGlobalAttributeFilter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
 import org.processmining.filterbook.parameters.Parameter;
 import org.processmining.filterbook.parameters.Parameters;
@@ -207,6 +210,10 @@ public class NewFilter extends Filter {
 		filtersSelectOnClassifier.add(new TraceVariantFastestClassifierFilter(getLog(), new Parameters(), getCell()));
 		filtersSelectOnGlobalAttribute.add(new TraceVariantFastestGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
 		filtersSelectOnAttribute.add(new TraceVariantFastestAttributeFilter(getLog(), new Parameters(), getCell()));
+
+		filtersSelectOnClassifier.add(new TraceVariantSlowestClassifierFilter(getLog(), new Parameters(), getCell()));
+		filtersSelectOnGlobalAttribute.add(new TraceVariantSlowestGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
+		filtersSelectOnAttribute.add(new TraceVariantSlowestAttributeFilter(getLog(), new Parameters(), getCell()));
 
 		List<Filter> suitableSelectOnClassifierFilters = new ArrayList<Filter>();
 		for (Filter filter : filtersSelectOnClassifier) {
