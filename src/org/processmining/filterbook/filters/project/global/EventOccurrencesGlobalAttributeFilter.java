@@ -196,7 +196,7 @@ public class EventOccurrencesGlobalAttributeFilter extends Filter {
 		setWidget(widget);
 	}
 
-	protected JComponent getChartWidget() {
+	public JComponent getChartWidget() {
 		return EventChart.getChart(occurrences, getParameters());
 	}
 
@@ -247,7 +247,7 @@ public class EventOccurrencesGlobalAttributeFilter extends Filter {
 		getCell().updated();
 	}
 
-	void setAttributes(boolean doReset) {
+	public void setAttributes(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListAttribute() != null) {
 			return;
 		}
@@ -266,7 +266,7 @@ public class EventOccurrencesGlobalAttributeFilter extends Filter {
 				this, selectedAttribute, attributes, true));
 	}
 
-	void setAttributeValues(boolean doReset) {
+	public void setAttributeValues(boolean doReset) {
 		if (!doReset && getParameters().getMultipleFromListAttributeValueA() != null) {
 			return;
 		}
@@ -281,7 +281,7 @@ public class EventOccurrencesGlobalAttributeFilter extends Filter {
 				"Select values", this, selectedValues, unsortedValues, true));
 	}
 
-	void setSelectionType(boolean doReset) {
+	public void setSelectionType(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListSelection() != null) {
 			return;
 		}

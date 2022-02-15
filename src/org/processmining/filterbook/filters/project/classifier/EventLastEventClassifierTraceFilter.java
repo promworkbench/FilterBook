@@ -19,7 +19,7 @@ public class EventLastEventClassifierTraceFilter extends EventLastEventClassifie
 		super(name, log, parameters, cell);
 	}
 	
-	protected boolean isLast(XTrace trace, XEvent event, XEventClassifier classifier) {
+	public boolean isLast(XTrace trace, XEvent event, XEventClassifier classifier) {
 		int i = trace.indexOf(event);
 		if (i == trace.size() - 1) {
 			return true;

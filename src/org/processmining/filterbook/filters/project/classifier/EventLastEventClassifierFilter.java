@@ -100,7 +100,7 @@ public class EventLastEventClassifierFilter extends EventClassifierFilter {
 		return filteredLog;
 	}
 	
-	protected boolean isLast(XTrace trace, XEvent event, XEventClassifier classifier) {
+	public boolean isLast(XTrace trace, XEvent event, XEventClassifier classifier) {
 		int i = trace.indexOf(event);
 		if (i == trace.size() - 1) {
 			return true;
@@ -108,7 +108,7 @@ public class EventLastEventClassifierFilter extends EventClassifierFilter {
 		return !classifier.getClassIdentity(event).equals(classifier.getClassIdentity(trace.get(i + 1)));
 	}
 	
-	protected JComponent getChartWidget() {
+	public JComponent getChartWidget() {
 		return DirectlyFollowsChart.getChart(getLog(), getDummyClassifier(), getParameters());
 	}
 

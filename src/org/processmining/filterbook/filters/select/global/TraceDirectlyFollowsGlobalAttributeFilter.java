@@ -152,7 +152,7 @@ public class TraceDirectlyFollowsGlobalAttributeFilter extends Filter {
 		return filteredLog;
 	}
 
-	protected boolean checkTrace(XTrace trace, XAttribute attribute, Set<AttributeValueType> selectedValuesA,
+	public boolean checkTrace(XTrace trace, XAttribute attribute, Set<AttributeValueType> selectedValuesA,
 			Set<AttributeValueType> selectedValuesB) {
 		for (int i = 0; i < trace.size() - 2; i++) {
 			XAttribute attributeA = trace.get(i).getAttributes().get(attribute.getKey());
@@ -184,7 +184,7 @@ public class TraceDirectlyFollowsGlobalAttributeFilter extends Filter {
 		setWidget(widget);
 	}
 
-	protected JComponent getChartWidget() {
+	public JComponent getChartWidget() {
 		return DirectlyFollowsChart.getChart(getLog(), getParameters());
 	}
 
@@ -246,7 +246,7 @@ public class TraceDirectlyFollowsGlobalAttributeFilter extends Filter {
 	/*
 	 * Make sure the classifier parameter is initialized.
 	 */
-	void setAttributes(boolean doReset) {
+	public void setAttributes(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListAttribute() != null) {
 			return;
 		}
@@ -268,7 +268,7 @@ public class TraceDirectlyFollowsGlobalAttributeFilter extends Filter {
 	/*
 	 * Make sure the attribute values parameter is initialized.
 	 */
-	void setAttributeValuesA(boolean doReset) {
+	public void setAttributeValuesA(boolean doReset) {
 		if (!doReset && getParameters().getMultipleFromListAttributeValueA() != null) {
 			return;
 		}
@@ -300,7 +300,7 @@ public class TraceDirectlyFollowsGlobalAttributeFilter extends Filter {
 	/*
 	 * Make sure the attribute values parameter is initialized.
 	 */
-	void setAttributeValuesB(boolean doReset) {
+	public void setAttributeValuesB(boolean doReset) {
 		if (!doReset && getParameters().getMultipleFromListAttributeValueB() != null) {
 			return;
 		}
@@ -332,7 +332,7 @@ public class TraceDirectlyFollowsGlobalAttributeFilter extends Filter {
 	/*
 	 * Make sure the selection type parameter is initialized.
 	 */
-	void setSelectionType(boolean doReset) {
+	public void setSelectionType(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListSelection() != null) {
 			return;
 		}

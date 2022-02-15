@@ -105,7 +105,7 @@ public abstract class TraceVariantAbstractGlobalAttributeFilter extends Filter {
 		}
 	}
 
-	protected abstract void select();
+	public abstract void select();
 	
 	public XLog filter() {
 		/*
@@ -174,7 +174,7 @@ public abstract class TraceVariantAbstractGlobalAttributeFilter extends Filter {
 		setWidget(widget);
 	}
 
-	protected JComponent getChartWidget() {
+	public JComponent getChartWidget() {
 		Map<List<String>, Integer> occurrences = new HashMap<List<String>, Integer>();
 		setTraces();
 		for (List<String> traceClass : traces.keySet()) {
@@ -224,7 +224,7 @@ public abstract class TraceVariantAbstractGlobalAttributeFilter extends Filter {
 		getCell().updated();
 	}
 
-	void setAttributes(boolean doReset) {
+	public void setAttributes(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListAttribute() != null) {
 			return;
 		}
@@ -242,7 +242,7 @@ public abstract class TraceVariantAbstractGlobalAttributeFilter extends Filter {
 				selectedAttribute, attributes, true));
 	}
 
-	void setSelectionType(boolean doReset) {
+	public void setSelectionType(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListSelection() != null) {
 			return;
 		}

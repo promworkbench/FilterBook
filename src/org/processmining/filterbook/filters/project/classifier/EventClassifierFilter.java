@@ -160,7 +160,7 @@ public class EventClassifierFilter extends Filter {
 		setWidget(widget);
 	}
 
-	protected JComponent getChartWidget() {
+	public JComponent getChartWidget() {
 		return EventChart.getChart(getLog(), getDummyClassifier(), getParameters());
 	}
 
@@ -222,7 +222,7 @@ public class EventClassifierFilter extends Filter {
 	/*
 	 * Make sure the classifier parameter is initialized.
 	 */
-	void setClassifiers(boolean doReset) {
+	public void setClassifiers(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListClassifier() != null) {
 			return;
 		}
@@ -244,7 +244,7 @@ public class EventClassifierFilter extends Filter {
 	/*
 	 * Make sure the attribute values parameter is initialized.
 	 */
-	void setAttributeValues(boolean doReset) {
+	public void setAttributeValues(boolean doReset) {
 		if (!doReset && getParameters().getMultipleFromListStringA() != null) {
 			return;
 		}
@@ -273,7 +273,7 @@ public class EventClassifierFilter extends Filter {
 	/*
 	 * Make sure the selection type parameter is initialized.
 	 */
-	void setSelectionType(boolean doReset) {
+	public void setSelectionType(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListSelection() != null) {
 			return;
 		}

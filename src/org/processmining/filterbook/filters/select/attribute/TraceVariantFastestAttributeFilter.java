@@ -26,7 +26,7 @@ public class TraceVariantFastestAttributeFilter extends TraceVariantTimeAbstract
 		super(name, log, parameters, cell);
 	}
 
-	protected void select() {
+	public void select() {
 		// TODO Auto-generated method stub
 		if (selectedTraces == null) {
 			selectedTraces = new HashMap<List<String>, List<XTrace>>();

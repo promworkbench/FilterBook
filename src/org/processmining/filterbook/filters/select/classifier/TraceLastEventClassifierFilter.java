@@ -114,14 +114,14 @@ public class TraceLastEventClassifierFilter extends EventClassifierFilter {
 		return filteredLog;
 	}
 	
-	protected JComponent getChartWidget() {
+	public JComponent getChartWidget() {
 		return LastChart.getChart(getLog(), getDummyClassifier(), getParameters());
 	}
 
 	/*
 	 * Make sure the attribute values parameter is initialized.
 	 */
-	void setAttributeValues(boolean doReset) {
+	public void setAttributeValues(boolean doReset) {
 		if (!doReset && getParameters().getMultipleFromListStringA() != null) {
 			return;
 		}

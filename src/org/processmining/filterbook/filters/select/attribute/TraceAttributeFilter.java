@@ -37,7 +37,7 @@ public class TraceAttributeFilter extends TraceGlobalAttributeFilter {
 		return hasTraces() && hasTraceAttributes();
 	}
 
-	void setAttributes(boolean doReset) {
+	public void setAttributes(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListAttribute() != null) {
 			return;
 		}

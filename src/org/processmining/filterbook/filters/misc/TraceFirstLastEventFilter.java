@@ -136,7 +136,7 @@ public class TraceFirstLastEventFilter extends Filter {
 		setWidget(widget);
 	}
 
-	protected JComponent getChartWidget() {
+	public JComponent getChartWidget() {
 		return FirstLastChart.getChart(getLog());
 	}
 

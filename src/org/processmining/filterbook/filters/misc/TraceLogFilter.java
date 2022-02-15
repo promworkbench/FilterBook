@@ -142,7 +142,7 @@ public class TraceLogFilter extends Filter {
 		getCell().updated();
 	}
 
-	void setSelectionType(boolean doReset) {
+	public void setSelectionType(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListSelection() != null) {
 			return;
 		}

@@ -114,7 +114,7 @@ public class TraceFirstEventClassifierFilter extends EventClassifierFilter {
 		return filteredLog;
 	}
 
-	protected JComponent getChartWidget() {
+	public JComponent getChartWidget() {
 		return FirstChart.getChart(getLog(), getDummyClassifier(), getParameters());
 	}
 
@@ -122,7 +122,7 @@ public class TraceFirstEventClassifierFilter extends EventClassifierFilter {
 	/*
 	 * Make sure the attribute values parameter is initialized.
 	 */
-	void setAttributeValues(boolean doReset) {
+	public void setAttributeValues(boolean doReset) {
 		if (!doReset && getParameters().getMultipleFromListStringA() != null) {
 			return;
 		}

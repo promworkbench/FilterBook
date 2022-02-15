@@ -27,7 +27,7 @@ public class TraceVariantRandomClassifierFilter extends TraceVariantAbstractClas
 		// TODO Auto-generated constructor stub
 	}
 
-	protected void select() {
+	public void select() {
 		// TODO Auto-generated method stub
 		Random random = new Random();
 		if (selectedTraces == null) {

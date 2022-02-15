@@ -197,7 +197,7 @@ public class TraceOccurrencesGlobalAttributeFilter extends Filter {
 		setWidget(widget);
 	}
 	
-	protected JComponent getChartWidget() {
+	public JComponent getChartWidget() {
 		return EventsChart.getChart(occurrences, getParameters());
 	}
 
@@ -248,7 +248,7 @@ public class TraceOccurrencesGlobalAttributeFilter extends Filter {
 		getCell().updated();
 	}
 
-	void setAttributes(boolean doReset) {
+	public void setAttributes(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListAttribute() != null) {
 			return;
 		}
@@ -266,7 +266,7 @@ public class TraceOccurrencesGlobalAttributeFilter extends Filter {
 				selectedAttribute, attributes, true));
 	}
 
-	void setAttributeValues(boolean doReset) {
+	public void setAttributeValues(boolean doReset) {
 		if (!doReset && getParameters().getMultipleFromListAttributeValueA() != null) {
 			return;
 		}
@@ -281,7 +281,7 @@ public class TraceOccurrencesGlobalAttributeFilter extends Filter {
 				new MultipleFromListParameter<AttributeValueType>("Select values", this, selectedValues, unsortedValues, true));
 	}
 
-	void setSelectionType(boolean doReset) {
+	public void setSelectionType(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListSelection() != null) {
 			return;
 		}

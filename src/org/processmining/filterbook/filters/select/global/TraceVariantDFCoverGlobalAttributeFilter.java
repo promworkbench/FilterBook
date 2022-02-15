@@ -38,7 +38,7 @@ public class TraceVariantDFCoverGlobalAttributeFilter extends TraceVariantAbstra
 		// TODO Auto-generated constructor stub
 	}
 
-	protected void select() {
+	public void select() {
 		// TODO Auto-generated method stub
 		if (selectedTraces == null) {
 			Map<Pair<String, String>, Set<XTrace>> dfTraceMap = new HashMap<Pair<String, String>, Set<XTrace>>();
@@ -106,7 +106,7 @@ public class TraceVariantDFCoverGlobalAttributeFilter extends TraceVariantAbstra
 		}
 	}
 
-	protected JComponent getChartWidget() {
+	public JComponent getChartWidget() {
 		return DirectlyFollowsChart.getChart(getLog(), getParameters());
 	}
 }

@@ -104,7 +104,7 @@ public class TraceSampleFilter extends Filter {
 		return hasTraces();
 	}
 
-	void setSampleSize(boolean doReset) {
+	public void setSampleSize(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListSelection() != null) {
 			return;
 		}
@@ -115,7 +115,7 @@ public class TraceSampleFilter extends Filter {
 		getParameters().setNumberA(new NumberParameter("Select a sample size", this, number, 0, getLog().size()));
 	}
 
-	void setUseCache(boolean doReset) {
+	public void setUseCache(boolean doReset) {
 		if (!doReset && getParameters().getYesNoA() != null) {
 			return;
 		}

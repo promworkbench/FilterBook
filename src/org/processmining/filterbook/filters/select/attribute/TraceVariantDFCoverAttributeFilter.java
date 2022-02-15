@@ -35,7 +35,7 @@ public class TraceVariantDFCoverAttributeFilter extends TraceVariantAbstractAttr
 		// TODO Auto-generated constructor stub
 	}
 
-	protected void select() {
+	public void select() {
 		// TODO Auto-generated method stub
 		if (selectedTraces == null) {
 			Map<Pair<String, String>, Set<XTrace>> dfTraceMap = new HashMap<Pair<String, String>, Set<XTrace>>();

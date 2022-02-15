@@ -100,7 +100,7 @@ public class EventFirstEventClassifierFilter extends EventClassifierFilter {
 		return filteredLog;
 	}
 	
-	protected boolean isFirst(XTrace trace, XEvent event, XEventClassifier classifier) {
+	public boolean isFirst(XTrace trace, XEvent event, XEventClassifier classifier) {
 		int i = trace.indexOf(event);
 		if (i == 0) {
 			return true;
@@ -108,7 +108,7 @@ public class EventFirstEventClassifierFilter extends EventClassifierFilter {
 		return !classifier.getClassIdentity(event).equals(classifier.getClassIdentity(trace.get(i - 1)));
 	}
 	
-	protected JComponent getChartWidget() {
+	public JComponent getChartWidget() {
 		return DirectlyFollowsChart.getChart(getLog(), getDummyClassifier(), getParameters());
 	}
 

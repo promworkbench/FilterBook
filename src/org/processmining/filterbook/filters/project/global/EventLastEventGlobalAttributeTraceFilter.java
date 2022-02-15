@@ -19,7 +19,7 @@ public class EventLastEventGlobalAttributeTraceFilter extends EventLastEventGlob
 		super(name, log, parameters, cell);
 	}
 
-	protected boolean isLast(XTrace trace, XEvent event, XAttribute attribute) {
+	public boolean isLast(XTrace trace, XEvent event, XAttribute attribute) {
 		int i = trace.indexOf(event);
 		if (i == trace.size() - 1) {
 			return true;

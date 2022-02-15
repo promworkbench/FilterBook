@@ -26,7 +26,7 @@ public class TraceVariantFirstClassifierFilter extends TraceVariantAbstractClass
 		// TODO Auto-generated constructor stub
 	}
 
-	protected void select() {
+	public void select() {
 		// TODO Auto-generated method stub
 		if (selectedTraces == null) {
 			selectedTraces = new HashMap<List<String>, List<XTrace>>();

@@ -19,7 +19,7 @@ public class EventFirstLastEventClassifierTraceFilter extends EventFirstLastEven
 		super(name, log, parameters, cell);
 	}
 	
-	protected boolean isFirst(XTrace trace, XEvent event, XEventClassifier classifier) {
+	public boolean isFirst(XTrace trace, XEvent event, XEventClassifier classifier) {
 		int i = trace.indexOf(event);
 		if (i == 0) {
 			return true;
@@ -32,7 +32,7 @@ public class EventFirstLastEventClassifierTraceFilter extends EventFirstLastEven
 		return true;
 	}
 
-	protected boolean isLast(XTrace trace, XEvent event, XEventClassifier classifier) {
+	public boolean isLast(XTrace trace, XEvent event, XEventClassifier classifier) {
 		int i = trace.indexOf(event);
 		if (i == trace.size() - 1) {
 			return true;

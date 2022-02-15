@@ -156,7 +156,7 @@ public class EventDateFilter extends Filter {
 		setWidget(widget);
 	}
 
-	protected JComponent getChartWidget() {
+	public JComponent getChartWidget() {
 		return DateChart.getChart(getLog(), firstLogDate, lastLogDate);
 	}
 
@@ -193,7 +193,7 @@ public class EventDateFilter extends Filter {
 		getParameters().setDateB(new DateParameter("Select a last date", this, date));
 	}
 	
-	void setSelectionType(boolean doReset) {
+	public void setSelectionType(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListSelection() != null) {
 			return;
 		}

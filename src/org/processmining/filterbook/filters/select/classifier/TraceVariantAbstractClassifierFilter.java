@@ -123,7 +123,7 @@ public abstract class TraceVariantAbstractClassifierFilter extends Filter {
 		}
 	}
 
-	protected abstract void select();
+	public abstract void select();
 	
 	/**
 	 * Filter the set log on the events using the set parameters.
@@ -210,7 +210,7 @@ public abstract class TraceVariantAbstractClassifierFilter extends Filter {
 		setWidget(widget);
 	}
 
-	protected JComponent getChartWidget() {
+	public JComponent getChartWidget() {
 		Map<List<String>, Integer> occurrences = new HashMap<List<String>, Integer>();
 		setTraces();
 		for (List<String> traceClass : traces.keySet()) {
@@ -271,7 +271,7 @@ public abstract class TraceVariantAbstractClassifierFilter extends Filter {
 	/*
 	 * Make sure the classifier parameter is initialized.
 	 */
-	void setClassifiers(boolean doReset) {
+	public void setClassifiers(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListClassifier() != null) {
 			return;
 		}
@@ -293,7 +293,7 @@ public abstract class TraceVariantAbstractClassifierFilter extends Filter {
 	/*
 	 * Make sure the selection type parameter is initialized.
 	 */
-	void setSelectionType(boolean doReset) {
+	public void setSelectionType(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListSelection() != null) {
 			return;
 		}

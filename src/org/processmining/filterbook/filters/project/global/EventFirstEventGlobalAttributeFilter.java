@@ -102,7 +102,7 @@ public class EventFirstEventGlobalAttributeFilter extends EventGlobalAttributeFi
 		return filteredLog;
 	}
 	
-	protected boolean isFirst(XTrace trace, XEvent event, XAttribute attribute) {
+	public boolean isFirst(XTrace trace, XEvent event, XAttribute attribute) {
 		int i = trace.indexOf(event);
 		if (i == 0) {
 			return true;
@@ -110,7 +110,7 @@ public class EventFirstEventGlobalAttributeFilter extends EventGlobalAttributeFi
 		return !attribute.equals(trace.get(i - 1).getAttributes().get(attribute.getKey()));
 	}
 	
-	protected JComponent getChartWidget() {
+	public JComponent getChartWidget() {
 		return DirectlyFollowsChart.getChart(getLog(), getParameters());
 	}
 

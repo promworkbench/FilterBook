@@ -162,7 +162,7 @@ public class TraceGlobalAttributeFilter extends Filter {
 		setWidget(widget);
 	}
 
-	protected JComponent getChartWidget() {
+	public JComponent getChartWidget() {
 		return TraceChart.getChart(getLog(),  getParameters());
 	}
 
@@ -219,7 +219,7 @@ public class TraceGlobalAttributeFilter extends Filter {
 	/*
 	 * Make sure the classifier parameter is initialized.
 	 */
-	void setAttributes(boolean doReset) {
+	public void setAttributes(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListAttribute() != null) {
 			return;
 		}
@@ -240,7 +240,7 @@ public class TraceGlobalAttributeFilter extends Filter {
 	/*
 	 * Make sure the attribute values parameter is initialized.
 	 */
-	void setAttributeValues(boolean doReset) {
+	public void setAttributeValues(boolean doReset) {
 		if (!doReset && getParameters().getMultipleFromListAttributeValueA() != null) {
 			return;
 		}
@@ -267,7 +267,7 @@ public class TraceGlobalAttributeFilter extends Filter {
 	/*
 	 * Make sure the selection type parameter is initialized.
 	 */
-	void setSelectionType(boolean doReset) {
+	public void setSelectionType(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListSelection() != null) {
 			return;
 		}

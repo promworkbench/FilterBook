@@ -117,14 +117,14 @@ public class TraceFirstEventGlobalAttributeFilter extends EventGlobalAttributeFi
 		return filteredLog;
 	}
 
-	protected JComponent getChartWidget() {
+	public JComponent getChartWidget() {
 		return FirstChart.getChart(getLog(), getParameters());
 	}
 
 	/*
 	 * Make sure the attribute values parameter is initialized.
 	 */
-	void setAttributeValues(boolean doReset) {
+	public void setAttributeValues(boolean doReset) {
 		if (!doReset && getParameters().getMultipleFromListAttributeValueA() != null) {
 			return;
 		}

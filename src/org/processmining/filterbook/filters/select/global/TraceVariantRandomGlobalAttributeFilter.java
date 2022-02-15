@@ -25,7 +25,7 @@ public class TraceVariantRandomGlobalAttributeFilter extends TraceVariantAbstrac
 		super(name, log, parameters, cell);
 	}
 
-	protected void select() {
+	public void select() {
 		// TODO Auto-generated method stub
 		Random random = new Random();
 		if (selectedTraces == null) {

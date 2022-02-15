@@ -142,7 +142,7 @@ public class TraceDirectlyFollowsClassifierFilter extends Filter {
 		return filteredLog;
 	}
 
-	protected boolean checkTrace(XTrace trace, XEventClassifier classifier, Set<String> selectedValuesA,
+	public boolean checkTrace(XTrace trace, XEventClassifier classifier, Set<String> selectedValuesA,
 			Set<String> selectedValuesB) {
 		for (int i = 0; i < trace.size() - 2; i++) {
 			if (selectedValuesA.contains(classifier.getClassIdentity(trace.get(i)))
@@ -172,7 +172,7 @@ public class TraceDirectlyFollowsClassifierFilter extends Filter {
 		setWidget(widget);
 	}
 
-	protected JComponent getChartWidget() {
+	public JComponent getChartWidget() {
 		return DirectlyFollowsChart.getChart(getLog(), getDummyClassifier(), getParameters());
 	}
 
@@ -239,7 +239,7 @@ public class TraceDirectlyFollowsClassifierFilter extends Filter {
 	/*
 	 * Make sure the classifier parameter is initialized.
 	 */
-	void setClassifiers(boolean doReset) {
+	public void setClassifiers(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListClassifier() != null) {
 			return;
 		}
@@ -261,7 +261,7 @@ public class TraceDirectlyFollowsClassifierFilter extends Filter {
 	/*
 	 * Make sure the attribute values parameter is initialized.
 	 */
-	void setAttributeValuesA(boolean doReset) {
+	public void setAttributeValuesA(boolean doReset) {
 		if (!doReset && getParameters().getMultipleFromListStringA() != null) {
 			return;
 		}
@@ -290,7 +290,7 @@ public class TraceDirectlyFollowsClassifierFilter extends Filter {
 	/*
 	 * Make sure the attribute values parameter is initialized.
 	 */
-	void setAttributeValuesB(boolean doReset) {
+	public void setAttributeValuesB(boolean doReset) {
 		if (!doReset && getParameters().getMultipleFromListStringB() != null) {
 			return;
 		}
@@ -319,7 +319,7 @@ public class TraceDirectlyFollowsClassifierFilter extends Filter {
 	/*
 	 * Make sure the selection type parameter is initialized.
 	 */
-	void setSelectionType(boolean doReset) {
+	public void setSelectionType(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListSelection() != null) {
 			return;
 		}
