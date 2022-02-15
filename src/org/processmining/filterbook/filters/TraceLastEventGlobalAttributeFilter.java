@@ -25,7 +25,7 @@ public class TraceLastEventGlobalAttributeFilter extends EventGlobalAttributeFil
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select on last global attribute value";
+	public static final String NAME = "Select traces based on last event";
 
 	private XLog cachedLog;
 	private XAttribute cachedAttribute;

@@ -17,7 +17,7 @@ import org.processmining.filterbook.types.SelectionType;
 
 public class EventFirstLastEventGlobalAttributeFilter extends EventGlobalAttributeFilter {
 
-	public static final String NAME = "Project on first and last global attribute value";
+	public static final String NAME = "Project series on first and last event";
 
 	private XLog cachedLog;
 	private XAttribute cachedAttribute;

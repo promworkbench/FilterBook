@@ -15,7 +15,7 @@ import org.processmining.filterbook.parameters.Parameters;
 import org.processmining.filterbook.types.SelectionType;
 
 public class EventFirstEventClassifierFilter extends EventClassifierFilter {
-	public static final String NAME = "Project on first classifier value";
+	public static final String NAME = "Project series on first event";
 
 	private XLog cachedLog;
 	private XEventClassifier cachedClassifier;

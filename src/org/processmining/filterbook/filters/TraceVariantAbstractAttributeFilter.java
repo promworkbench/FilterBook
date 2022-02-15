@@ -20,7 +20,7 @@ public abstract class TraceVariantAbstractAttributeFilter extends TraceVariantAb
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select one variant using attribute value";
+	public static final String NAME = "Select one trace for every variant";
 
 	public TraceVariantAbstractAttributeFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);

@@ -34,7 +34,7 @@ public abstract class TraceVariantAbstractGlobalAttributeFilter extends Filter{
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select one variant using global attribute value";
+	public static final String NAME = "Select one trace for every variant";
 
 	private JComponent chartWidget;
 

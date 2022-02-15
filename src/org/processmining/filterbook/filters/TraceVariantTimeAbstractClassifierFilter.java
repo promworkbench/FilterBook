@@ -12,7 +12,7 @@ public abstract class TraceVariantTimeAbstractClassifierFilter extends TraceVari
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select one time variant using classifier value";
+	public static final String NAME = "Select one (using time) trace for every variant";
 
 	public TraceVariantTimeAbstractClassifierFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);

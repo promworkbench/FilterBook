@@ -11,7 +11,7 @@ public abstract class TraceVariantTimeAbstractAttributeFilter extends TraceVaria
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select one time variant using attribute value";
+	public static final String NAME = "Select (using time) one trace for every variant";
 
 	public TraceVariantTimeAbstractAttributeFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);

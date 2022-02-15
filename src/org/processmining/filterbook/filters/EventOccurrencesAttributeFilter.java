@@ -20,7 +20,7 @@ public class EventOccurrencesAttributeFilter extends EventOccurrencesGlobalAttri
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Project on number of occurrences using attribute value";
+	public static final String NAME = "Project on number of occurrences in log";
 
 	public EventOccurrencesAttributeFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);

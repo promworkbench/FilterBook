@@ -25,7 +25,7 @@ public class TraceFirstEventGlobalAttributeFilter extends EventGlobalAttributeFi
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select on first global attribute value";
+	public static final String NAME = "Select traces based on first event";
 
 	private XLog cachedLog;
 	private XAttribute cachedAttribute;

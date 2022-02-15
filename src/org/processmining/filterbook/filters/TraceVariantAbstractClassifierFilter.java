@@ -34,7 +34,7 @@ public abstract class TraceVariantAbstractClassifierFilter extends Filter {
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select one variant using classifier value";
+	public static final String NAME = "Select one trace for every variant";
 
 	/**
 	 * Handle to the widget for chart, as this may change if the

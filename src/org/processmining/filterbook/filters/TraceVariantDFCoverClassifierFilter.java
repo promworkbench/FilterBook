@@ -26,7 +26,7 @@ public class TraceVariantDFCoverClassifierFilter extends TraceVariantAbstractCla
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select minimal DF cover using classifier value";
+	public static final String NAME = "Select minimal set of traces that contain all direclty-follow relations";
 
 	public TraceVariantDFCoverClassifierFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);

@@ -21,7 +21,7 @@ import info.clearthought.layout.TableLayoutConstants;
 
 public class TraceFirstLastEventFilter extends Filter {
 
-	public static final String NAME = "Add artificial first and/or last";
+	public static final String NAME = "Provide every trace with artificial first and/or last event";
 
 	private JComponent chartWidget;
 

@@ -9,7 +9,7 @@ import org.processmining.filterbook.parameters.Parameters;
 
 public class EventFirstEventAttributeTraceFilter extends EventFirstEventAttributeFilter {
 
-	public static final String NAME = "Project on first attribute value in trace";
+	public static final String NAME = "Project recurring on first event";
 
 	public EventFirstEventAttributeTraceFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);

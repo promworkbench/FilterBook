@@ -16,7 +16,7 @@ import org.processmining.filterbook.types.AttributeType;
 
 public class TraceAttributeFilter extends TraceGlobalAttributeFilter {
 
-	public static final String NAME = "Select on attribute value";
+	public static final String NAME = "Select traces";
 
 	public TraceAttributeFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);

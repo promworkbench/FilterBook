@@ -9,7 +9,7 @@ import org.processmining.filterbook.parameters.Parameters;
 
 public class EventFirstEventClassifierTraceFilter extends EventFirstEventClassifierFilter {
 
-	public static final String NAME = "Project on first classifier value in trace";
+	public static final String NAME = "Project recurring on first event";
 
 	public EventFirstEventClassifierTraceFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);

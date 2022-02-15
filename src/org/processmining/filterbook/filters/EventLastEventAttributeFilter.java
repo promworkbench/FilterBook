@@ -17,7 +17,7 @@ import org.processmining.filterbook.types.SelectionType;
 
 public class EventLastEventAttributeFilter extends EventAttributeFilter {
 
-	public static final String NAME = "Project on last attribute value";
+	public static final String NAME = "Project series on last event";
 
 	private XLog cachedLog;
 	private XAttribute cachedAttribute;

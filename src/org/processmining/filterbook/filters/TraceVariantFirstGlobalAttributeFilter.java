@@ -14,7 +14,7 @@ public class TraceVariantFirstGlobalAttributeFilter extends TraceVariantAbstract
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select first variant using global attribute value";
+	public static final String NAME = "Select first trace for every variant";
 
 	public TraceVariantFirstGlobalAttributeFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);

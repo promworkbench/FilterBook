@@ -35,7 +35,7 @@ public class TraceGlobalAttributeFilter extends Filter {
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select on global attribute value";
+	public static final String NAME = "Select traces";
 
 	/**
 	 * Handle to the widget for attribute values, as this may change if the

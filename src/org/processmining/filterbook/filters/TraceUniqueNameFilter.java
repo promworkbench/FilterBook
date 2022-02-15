@@ -22,7 +22,7 @@ import info.clearthought.layout.TableLayoutConstants;
 
 public class TraceUniqueNameFilter extends Filter {
 
-	public static final String NAME = "Ensure unique case names";
+	public static final String NAME = "Provide every trace with a unique name";
 
 	private XLog cachedLog;
 	private XLog cachedFilteredLog;

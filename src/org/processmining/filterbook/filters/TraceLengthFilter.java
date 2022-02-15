@@ -32,7 +32,7 @@ public class TraceLengthFilter extends Filter {
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select on length";
+	public static final String NAME = "Select traces based on length";
 
 	private JComponent traceLengthWidget;
 	private JComponent roundUpWidget;

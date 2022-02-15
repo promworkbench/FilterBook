@@ -14,7 +14,7 @@ public class TraceVariantFirstClassifierFilter extends TraceVariantAbstractClass
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select first variant using classifier value";
+	public static final String NAME = "Select first trace for every variant";
 
 	public TraceVariantFirstClassifierFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);

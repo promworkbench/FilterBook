@@ -37,7 +37,7 @@ public class TraceOccurrencesClassifierFilter extends Filter {
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select on number of occurrences using classifier value";
+	public static final String NAME = "Select traces based on variant size";
 
 	/**
 	 * Handle to the widget for attribute values, as this may change if the

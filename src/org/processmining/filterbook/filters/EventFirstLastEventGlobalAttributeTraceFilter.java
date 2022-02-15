@@ -10,7 +10,7 @@ import org.processmining.filterbook.parameters.Parameters;
 
 public class EventFirstLastEventGlobalAttributeTraceFilter extends EventFirstLastEventGlobalAttributeFilter {
 
-	public static final String NAME = "Project on first and last global attribute value in trace";
+	public static final String NAME = "Project recurring on first and last event";
 
 	public EventFirstLastEventGlobalAttributeTraceFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);

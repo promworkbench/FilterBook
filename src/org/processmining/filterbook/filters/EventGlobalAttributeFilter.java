@@ -37,7 +37,7 @@ public class EventGlobalAttributeFilter extends Filter {
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Project on global attribute value";
+	public static final String NAME = "Project events";
 
 	/**
 	 * Handle to the widget for attribute values, as this may change if the

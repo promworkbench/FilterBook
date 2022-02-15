@@ -16,7 +16,7 @@ public class TraceVariantFastestAttributeFilter extends TraceVariantTimeAbstract
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select fastest variant using attribute value";
+	public static final String NAME = "Select fastest trace for every variant";
 
 	public TraceVariantFastestAttributeFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);

@@ -12,7 +12,7 @@ import org.processmining.filterbook.parameters.Parameters;
 import org.processmining.filterbook.types.SelectionType;
 
 public class EventHeadClassifierFilter extends EventClassifierFilter {
-	public static final String NAME = "Project head on classifier value";
+	public static final String NAME = "Project on minimal suffix";
 
 	private XLog cachedLog;
 	private XEventClassifier cachedClassifier;

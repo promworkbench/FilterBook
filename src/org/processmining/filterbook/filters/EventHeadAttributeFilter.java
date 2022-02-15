@@ -14,7 +14,7 @@ import org.processmining.filterbook.types.SelectionType;
 
 public class EventHeadAttributeFilter extends EventAttributeFilter {
 
-	public static final String NAME = "Project head on attribute value";
+	public static final String NAME = "Project on minimal suffix";
 
 	private XLog cachedLog;
 	private XAttribute cachedAttribute;

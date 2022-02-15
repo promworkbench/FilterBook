@@ -26,7 +26,7 @@ public class TraceVariantDFCoverGlobalAttributeFilter extends TraceVariantAbstra
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select minimal DF cover using global attribute value";
+	public static final String NAME = "Select minimal set of traces that contain all direclty-follow relations";
 
 	public TraceVariantDFCoverGlobalAttributeFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);

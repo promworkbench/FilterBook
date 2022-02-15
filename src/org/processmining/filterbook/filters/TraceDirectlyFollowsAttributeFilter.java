@@ -20,7 +20,7 @@ public class TraceDirectlyFollowsAttributeFilter extends TraceDirectlyFollowsGlo
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select on two directly-following attribute values";
+	public static final String NAME = "Select traces based on two directly-following events";
 
 	public TraceDirectlyFollowsAttributeFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);

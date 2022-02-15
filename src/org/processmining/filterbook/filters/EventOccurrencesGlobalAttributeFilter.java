@@ -37,7 +37,7 @@ public class EventOccurrencesGlobalAttributeFilter extends Filter {
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Project on number of occurrences using global attribute value";
+	public static final String NAME = "Project on number of occurrences in log";
 
 	private JComponent attributeValueWidget;
 	private JComponent chartWidget;

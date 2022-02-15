@@ -14,7 +14,7 @@ import org.processmining.filterbook.types.SelectionType;
 
 public class EventTailAttributeFilter extends EventAttributeFilter {
 
-	public static final String NAME = "Project tail on attribute value";
+	public static final String NAME = "Project on minimal prefix";
 
 	private XLog cachedLog;
 	private XAttribute cachedAttribute;

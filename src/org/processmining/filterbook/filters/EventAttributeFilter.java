@@ -20,7 +20,7 @@ public class EventAttributeFilter extends EventGlobalAttributeFilter {
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Project on attribute value";
+	public static final String NAME = "Project events";
 
 	public EventAttributeFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);

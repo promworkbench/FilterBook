@@ -12,7 +12,7 @@ import org.processmining.filterbook.parameters.Parameters;
 import org.processmining.filterbook.types.SelectionType;
 
 public class EventTailClassifierFilter extends EventClassifierFilter {
-	public static final String NAME = "Project tail on classifier value";
+	public static final String NAME = "Project on minimal prefix";
 
 	private XLog cachedLog;
 	private XEventClassifier cachedClassifier;

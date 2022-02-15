@@ -18,7 +18,7 @@ import info.clearthought.layout.TableLayoutConstants;
 
 public class TraceSampleFilter extends Filter {
 
-	public static final String NAME = "Select sample";
+	public static final String NAME = "Select sample of traces";
 
 	private XLog cachedLog;
 	private boolean cachedYesNoA;

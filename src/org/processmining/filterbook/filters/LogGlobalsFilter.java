@@ -24,7 +24,7 @@ public class LogGlobalsFilter extends Filter {
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Add global attributes";
+	public static final String NAME = "Provide log with global attributes";
 
 	private XLog cachedLog;
 	private boolean cachedYesNoA;
