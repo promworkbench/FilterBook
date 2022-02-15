@@ -53,7 +53,7 @@ public abstract class Filter implements Comparable<Filter> {
 	private static XAttribute dummyAttribute = null;
 	private static XEventClassifier dummyClassifier = null;
 	
-	Filter(String name, Parameters parameters, ComputationCell cell) {
+	public Filter(String name, Parameters parameters, ComputationCell cell) {
 		this.name = name;
 		this.parameters = parameters;
 		this.cell = cell;
