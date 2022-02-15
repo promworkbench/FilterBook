@@ -172,10 +172,10 @@ public class NewFilter extends Filter {
 		filtersProjectOnGlobalAttribute.add(new EventFirstLastEventGlobalAttributeTraceFilter(getLog(), new Parameters(), getCell()));
 		filtersProjectOnClassifier.add(new EventFirstLastEventClassifierTraceFilter(getLog(), new Parameters(), getCell()));
 
-		filtersProjectMisc.add(new TraceLogFilter(getLog(), new Parameters(), getCell()));
+		filtersMeta.add(new TraceLogFilter(getLog(), new Parameters(), getCell()));
 		filtersMeta.add(new TraceUniqueNameFilter(getLog(), new Parameters(), getCell()));
 
-		filtersProjectMisc.add(new TraceFirstLastEventFilter(getLog(), new Parameters(), getCell()));
+		filtersMeta.add(new TraceFirstLastEventFilter(getLog(), new Parameters(), getCell()));
 
 		filtersSelectMisc.add(new TraceSampleFilter(getLog(), new Parameters(), getCell()));
 
