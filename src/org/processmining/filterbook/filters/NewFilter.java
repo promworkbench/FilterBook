@@ -12,6 +12,7 @@ import org.deckfour.xes.model.XLog;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.filters.misc.LogGlobalsFilter;
 import org.processmining.filterbook.filters.misc.TraceFirstLastEventFilter;
+import org.processmining.filterbook.filters.misc.TraceLastAttributeFilter;
 import org.processmining.filterbook.filters.misc.TraceLogFilter;
 import org.processmining.filterbook.filters.misc.TraceUniqueNameFilter;
 import org.processmining.filterbook.filters.project.attribute.EventAttributeFilter;
@@ -176,7 +177,8 @@ public class NewFilter extends Filter {
 		filtersMeta.add(new TraceUniqueNameFilter(getLog(), new Parameters(), getCell()));
 
 		filtersMeta.add(new TraceFirstLastEventFilter(getLog(), new Parameters(), getCell()));
-
+		filtersMeta.add(new TraceLastAttributeFilter(getLog(), new Parameters(), getCell()));
+		
 		filtersSelectMisc.add(new TraceSampleFilter(getLog(), new Parameters(), getCell()));
 
 		filtersSelectOnGlobalAttribute.add(new TraceDateFilter(getLog(), new Parameters(), getCell()));

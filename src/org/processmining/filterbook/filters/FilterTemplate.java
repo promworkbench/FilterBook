@@ -5,6 +5,7 @@ import org.deckfour.xes.model.XLog;
 import org.processmining.filterbook.cells.ComputationCell;
 import org.processmining.filterbook.filters.misc.LogGlobalsFilter;
 import org.processmining.filterbook.filters.misc.TraceFirstLastEventFilter;
+import org.processmining.filterbook.filters.misc.TraceLastAttributeFilter;
 import org.processmining.filterbook.filters.misc.TraceLogFilter;
 import org.processmining.filterbook.filters.misc.TraceUniqueNameFilter;
 import org.processmining.filterbook.filters.project.attribute.EventAttributeFilter;
@@ -457,6 +458,12 @@ public class FilterTemplate implements HTMLToString {
 		}
 		if (name.equals(TraceVariantSlowestAttributeFilter.class.getName())) {
 			TraceVariantSlowestAttributeFilter filter = new TraceVariantSlowestAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		
+		if (name.equals(TraceLastAttributeFilter.class.getName())) {
+			TraceLastAttributeFilter filter = new TraceLastAttributeFilter(log, new Parameters(), cell);
 			filter.setTemplate(parameters);
 			return filter;
 		}
