@@ -25,6 +25,9 @@ import org.processmining.filterbook.types.AttributeValueType;
 import org.processmining.framework.util.Pair;
 import org.processmining.framework.util.collection.ComparablePair;
 
+import com.fluxicon.slickerbox.colors.SlickerColors;
+import com.fluxicon.slickerbox.components.SlickerTabbedPane;
+
 public class DirectlyFollowsChart {
 
 	/**
@@ -79,12 +82,18 @@ public class DirectlyFollowsChart {
 		}
 		
 		/*
-		 * Create the chart and return a panel containing it.
+		 * Create the charts and return a tab pane containing them.
 		 * Note that by using TableOrder.BY_ROW we select to have a pie chart for every first element in the pair.
 		 */
-		JFreeChart chart = ChartFactory.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW, true, true,
+		JFreeChart dfChart = ChartFactory.createMultiplePieChart("Overview - Directly Follows", dataset, TableOrder.BY_ROW, true, true,
 				false);
-		return new ChartPanel(chart);
+		JFreeChart dpChart = ChartFactory.createMultiplePieChart("Overview - Directly Precedes", dataset, TableOrder.BY_COLUMN, true, true,
+				false);
+		
+		SlickerTabbedPane tabbedPane = new SlickerTabbedPane("", SlickerColors.COLOR_FG,  SlickerColors.COLOR_BG_4,  SlickerColors.COLOR_FG);
+		tabbedPane.addTab("Directly Follows", new ChartPanel(dfChart));
+		tabbedPane.addTab("Directly Precedes", new ChartPanel(dpChart));
+		return tabbedPane; //new ChartPanel(chart);
 	}
 	
 	/**
@@ -149,11 +158,18 @@ public class DirectlyFollowsChart {
 		}
 		
 		/*
-		 * Create the chart and return a panel containing it.
+		 * Create the charts and return a tab pane containing them.
+		 * Note that by using TableOrder.BY_ROW we select to have a pie chart for every first element in the pair.
 		 */
-		JFreeChart chart = ChartFactory.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW, true, true,
+		JFreeChart dfChart = ChartFactory.createMultiplePieChart("Overview - Directly Follows", dataset, TableOrder.BY_ROW, true, true,
 				false);
-		return new ChartPanel(chart);
+		JFreeChart dpChart = ChartFactory.createMultiplePieChart("Overview - Directly Precedes", dataset, TableOrder.BY_COLUMN, true, true,
+				false);
+		
+		SlickerTabbedPane tabbedPane = new SlickerTabbedPane("", SlickerColors.COLOR_FG,  SlickerColors.COLOR_BG_4,  SlickerColors.COLOR_FG);
+		tabbedPane.addTab("Directly Follows", new ChartPanel(dfChart));
+		tabbedPane.addTab("Directly Precedes", new ChartPanel(dpChart));
+		return tabbedPane; //new ChartPanel(chart);
 	}
 
 }
