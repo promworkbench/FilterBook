@@ -192,12 +192,20 @@ public class EventOccurrencesClassifierFilter extends Filter {
 				switch (selectionType) {
 					case FILTERIN : {
 						if (match) {
+							/*
+							 * The number of occurrences for this event has been selected.
+							 * Add it.
+							 */
 							filteredTrace.add(event);
 						}
 						break;
 					}
 					case FILTEROUT : {
 						if (!match) {
+							/*
+							 * The number of occurrences for this event has not been selected.
+							 * Add it.
+							 */
 							filteredTrace.add(event);
 						}
 						break;

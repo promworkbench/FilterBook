@@ -32,7 +32,7 @@ public class EventFirstEventClassifierFilter extends EventClassifierFilter {
 		super(name, log, parameters, cell);
 		cachedLog = null;
 	}
-	
+
 	public XLog filter() {
 		/*
 		 * Get the relevant parameters.
@@ -43,12 +43,11 @@ public class EventFirstEventClassifierFilter extends EventClassifierFilter {
 		Set<String> selectedValues = new TreeSet<String>(getParameters().getMultipleFromListStringA().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
-		 * Check whether the cache is  valid.
+		 * Check whether the cache is valid.
 		 */
 		if (cachedLog == getLog()) {
-			if (cachedClassifier.equals(classifier) &&
-					cachedSelectedValues.equals(selectedValues) &&
-					cachedSelectionType == selectionType) {
+			if (cachedClassifier.equals(classifier) && cachedSelectedValues.equals(selectedValues)
+					&& cachedSelectionType == selectionType) {
 				/*
 				 * Yes, it is. Return the cached filtered log.
 				 */
@@ -99,15 +98,25 @@ public class EventFirstEventClassifierFilter extends EventClassifierFilter {
 		cachedFilteredLog = filteredLog;
 		return filteredLog;
 	}
-	
+
+	/*
+	 * Returns whether the given event is the first of a series of events with
+	 * the same value for the given classifier in the given trace.
+	 */
 	public boolean isFirst(XTrace trace, XEvent event, XEventClassifier classifier) {
 		int i = trace.indexOf(event);
 		if (i == 0) {
+			/*
+			 * First event. Hence first of a series.
+			 */
 			return true;
 		}
+		/*
+		 * Return whether the previous event has a different value.
+		 */
 		return !classifier.getClassIdentity(event).equals(classifier.getClassIdentity(trace.get(i - 1)));
 	}
-	
+
 	public JComponent getChartWidget() {
 		return DirectlyFollowsChart.getChart(getLog(), getDummyClassifier(), getParameters());
 	}

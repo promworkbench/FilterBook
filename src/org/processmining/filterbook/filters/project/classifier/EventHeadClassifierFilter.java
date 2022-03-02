@@ -29,7 +29,7 @@ public class EventHeadClassifierFilter extends EventClassifierFilter {
 		super(name, log, parameters, cell);
 		cachedLog = null;
 	}
-	
+
 	public XLog filter() {
 		/*
 		 * Get the relevant parameters.
@@ -40,12 +40,11 @@ public class EventHeadClassifierFilter extends EventClassifierFilter {
 		Set<String> selectedValues = new TreeSet<String>(getParameters().getMultipleFromListStringA().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
-		 * Check whether the cache is  valid.
+		 * Check whether the cache is valid.
 		 */
 		if (cachedLog == getLog()) {
-			if (cachedClassifier.equals(classifier) &&
-					cachedSelectedValues.equals(selectedValues) &&
-					cachedSelectionType == selectionType) {
+			if (cachedClassifier.equals(classifier) && cachedSelectedValues.equals(selectedValues)
+					&& cachedSelectionType == selectionType) {
 				/*
 				 * Yes, it is. Return the cached filtered log.
 				 */
@@ -59,23 +58,44 @@ public class EventHeadClassifierFilter extends EventClassifierFilter {
 		System.out.println("[" + NAME + "]: Returning newly filtered log.");
 		XLog filteredLog = initializeLog(getLog());
 		for (XTrace trace : getLog()) {
+			/*
+			 * filteredInTrace will contain all events as from (and including)
+			 * the first event that matches.
+			 */
 			XTrace filteredInTrace = getFactory().createTrace(trace.getAttributes());
+			/*
+			 * filteredOutTrace will contain all event up to (and excluding) the
+			 * first event that matches.
+			 */
 			XTrace filteredOutTrace = getFactory().createTrace(trace.getAttributes());
 			for (XEvent event : trace) {
 				String value = classifier.getClassIdentity(event);
 				boolean match = selectedValues.contains(value);
 				if (match || !filteredInTrace.isEmpty()) {
+					/*
+					 * Either this is the first match, or a previous event matched.
+					 * Add to filterdInTrace.
+					 */
 					filteredInTrace.add(event);
 				} else {
+					/*
+					 * This is not a match, and previous events also did not match.
+					 */
 					filteredOutTrace.add(event);
 				}
 			}
 			switch (selectionType) {
 				case FILTERIN : {
+					/*
+					 * Return the tail of the trace that starts with the first match. 
+					 */
 					filteredLog.add(filteredInTrace);
 					break;
 				}
 				case FILTEROUT : {
+					/*
+					 * Return the head of the trace that ends just before the first match.
+					 */
 					filteredLog.add(filteredOutTrace);
 					break;
 				}

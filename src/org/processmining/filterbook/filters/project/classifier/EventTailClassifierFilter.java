@@ -59,16 +59,30 @@ public class EventTailClassifierFilter extends EventClassifierFilter {
 		System.out.println("[" + NAME + "]: Returning newly filtered log.");
 		XLog filteredLog = initializeLog(getLog());
 		for (XTrace trace : getLog()) {
+			/*
+			 * filteredInTrace will contain all events up to (and including)
+			 * the last event that matches.
+			 */
 			XTrace filteredInTrace = getFactory().createTrace(trace.getAttributes());
+			/*
+			 * filteredOutTrace will contain all event as from (and excluding) the
+			 * last event that matches.
+			 */
 			XTrace filteredOutTrace = getFactory().createTrace(trace.getAttributes());
 			for (XEvent event : trace) {
 				String value = classifier.getClassIdentity(event);
 				boolean match = selectedValues.contains(value);
 				if (match) {
+					/*
+					 * Found a new match. All events seen so far should be in filteredInTrace
+					 */
 					filteredInTrace.addAll(filteredOutTrace);
 					filteredOutTrace.clear();
 					filteredInTrace.add(event);
 				} else {
+					/*
+					 * No match. 
+					 */
 					filteredOutTrace.add(event);
 				}
 			}
