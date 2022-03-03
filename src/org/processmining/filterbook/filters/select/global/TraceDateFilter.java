@@ -31,7 +31,7 @@ public class TraceDateFilter extends Filter {
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select traces based on date";
+	public static final String NAME = "Select traces on date";
 	
 	private JComponent chartWidget;
 

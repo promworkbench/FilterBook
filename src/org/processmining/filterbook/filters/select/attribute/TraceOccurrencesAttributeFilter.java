@@ -21,7 +21,7 @@ public class TraceOccurrencesAttributeFilter extends TraceOccurrencesGlobalAttri
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select traces based on variant size";
+	public static final String NAME = "Select traces on variant size";
 
 	public TraceOccurrencesAttributeFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);

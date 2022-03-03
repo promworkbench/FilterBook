@@ -23,7 +23,7 @@ public class TraceLastEventClassifierFilter extends EventClassifierFilter {
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select traces based on last event";
+	public static final String NAME = "Select traces on last event";
 
 	private XLog cachedLog;
 	private XEventClassifier cachedClassifier;

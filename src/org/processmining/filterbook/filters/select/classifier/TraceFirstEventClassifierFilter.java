@@ -23,7 +23,7 @@ public class TraceFirstEventClassifierFilter extends EventClassifierFilter {
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select traces based on first event";
+	public static final String NAME = "Select traces on first event";
 
 	private XLog cachedLog;
 	private XEventClassifier cachedClassifier;

@@ -15,7 +15,7 @@ public class TraceVariantRandomAttributeFilter extends TraceVariantAbstractAttri
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select first trace for every variant";
+	public static final String NAME = "Select random trace for every variant";
 
 	public TraceVariantRandomAttributeFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		super(NAME, log, parameters, cell);

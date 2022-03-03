@@ -39,7 +39,7 @@ public class TraceOccurrencesGlobalAttributeFilter extends Filter {
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select traces based on variant size";
+	public static final String NAME = "Select traces on variant size";
 
 	private JComponent attributeValueWidget;
 	private JComponent chartWidget;

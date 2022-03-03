@@ -39,7 +39,7 @@ public class TraceDirectlyFollowsGlobalAttributeFilter extends Filter {
 	/**
 	 * The name of this filter.
 	 */
-	public static final String NAME = "Select traces based on two directly-following events";
+	public static final String NAME = "Select traces on two directly-following events";
 
 	/**
 	 * Handle to the widget for attribute values, as this may change if the
