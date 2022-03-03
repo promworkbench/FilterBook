@@ -288,7 +288,7 @@ public class NewFilter extends Filter {
 		filterProjectOnGlobalAttributeList = new OneFromListParameter<Filter>("Select a project-on-global-atttribute filter", this, null, suitableProjectOnGlobalAttributeFilters, true);
 		filterProjectOnAttributeList = new OneFromListParameter<Filter>("Select a project-on-attribute filter", this, null, suitableProjectOnAttributeFilters, true);
 		filterProjectMiscList = new OneFromListParameter<Filter>("Select a project-on-other filter", this, null, suitableProjectMiscFilters, true);
-		filterMetaList = new OneFromListParameter<Filter>("Select a meta filter", this, null, suitableMetaFilters, true);
+		filterMetaList = new OneFromListParameter<Filter>("Select another filter", this, null, suitableMetaFilters, true);
 		
 		widget.add(filterSelectOnClassifierList.getWidget(), "0, 0");
 		widget.add(filterSelectOnGlobalAttributeList.getWidget(), "0, 1");
