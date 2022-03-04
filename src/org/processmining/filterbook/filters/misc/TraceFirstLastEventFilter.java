@@ -56,7 +56,7 @@ public class TraceFirstLastEventFilter extends Filter {
 		 * Get the relevant parameters.
 		 */
 		boolean yesNoA = getParameters().getYesNoA().getSelected();
-		boolean yesNoB = getParameters().getYesNoA().getSelected();
+		boolean yesNoB = getParameters().getYesNoB().getSelected();
 		/*
 		 * Check whether the cache is  valid.
 		 */
