@@ -1,6 +1,6 @@
 package org.processmining.filterbook.filters.project.global;
 
-import org.deckfour.xes.classification.XEventClassifier;
+import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
@@ -19,13 +19,13 @@ public class EventFirstEventGlobalAttributeTraceFilter extends EventFirstEventGl
 		super(name, log, parameters, cell);
 	}
 	
-	public boolean isFirst(XTrace trace, XEvent event, XEventClassifier classifier) {
+	public boolean isFirst(XTrace trace, XEvent event, XAttribute attribute) {
 		int i = trace.indexOf(event);
 		if (i == 0) {
 			return true;
 		}
 		for (int k = 0; k < i; k++) {
-			if (classifier.getClassIdentity(event).equals(classifier.getClassIdentity(trace.get(k)))) {
+			if (attribute.equals(trace.get(k).getAttributes().get(attribute.getKey()))) {
 				return false;
 			}
 		}
