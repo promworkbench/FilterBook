@@ -7,9 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JComponent;
+
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.processmining.filterbook.cells.ComputationCell;
+import org.processmining.filterbook.charts.DirectlyFollowsChart;
 import org.processmining.filterbook.parameters.Parameters;
 import org.processmining.framework.util.Pair;
 import org.processmining.lpengines.factories.LPEngineFactory;
@@ -101,5 +104,9 @@ public class TraceVariantDFCoverAttributeFilter extends TraceVariantAbstractAttr
 				selectedTraces.put(traceClass, traceList);
 			}
 		}
+	}
+
+	public JComponent getChartWidget() {
+		return DirectlyFollowsChart.getChart(getLog(), getParameters());
 	}
 }
