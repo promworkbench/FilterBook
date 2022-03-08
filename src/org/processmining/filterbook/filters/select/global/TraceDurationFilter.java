@@ -207,7 +207,11 @@ public class TraceDurationFilter extends Filter {
 		if (!doReset && getParameters().getNumberA() != null) {
 			return;
 		}
-		getParameters().setNumberA(new NumberParameter("Select a precision:", this, DurationType.MINUTE_PRECISION,
+		int precision = DurationType.DAY_PRECISION;
+		if (getParameters().getNumberA() != null) {
+			precision = getParameters().getNumberA().getNumber();
+		}
+		getParameters().setNumberA(new NumberParameter("Select a precision:", this, precision,
 				DurationType.YEAR_PRECISION, DurationType.MILLIS_PRECISION));
 	}
 
@@ -261,6 +265,7 @@ public class TraceDurationFilter extends Filter {
 		FilterTemplate filterTemplate = new FilterTemplate();
 		filterTemplate.setName(getClass().getName());
 		filterTemplate.setParameters(new ParametersTemplate());
+		filterTemplate.getParameters().setNumberA(getParameters().getNumberA().getNumber());
 		filterTemplate.getParameters().setValuesA(new TreeSet<String>());
 		for (DurationType selected : getParameters().getMultipleFromListDuration().getSelected()) {
 			filterTemplate.getParameters().getValuesA().add(selected.toString());
@@ -270,6 +275,17 @@ public class TraceDurationFilter extends Filter {
 	}
 
 	public void setTemplate(ParametersTemplate parameters) {
+		setPrecision(true);
+		if (parameters.getNumberA() != null) {
+			int precision = parameters.getNumberA();
+			if (precision > DurationType.MILLIS_PRECISION) {
+				precision = DurationType.MILLIS_PRECISION;
+			}
+			if (precision < DurationType.YEAR_PRECISION) {
+				precision = DurationType.YEAR_PRECISION;
+			}
+			getParameters().getNumberA().setNumber(precision);
+		}
 		setTraceDurations(true);
 		if (parameters.getValuesA() != null) {
 			List<DurationType> values = new ArrayList<DurationType>();
