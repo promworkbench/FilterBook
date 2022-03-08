@@ -23,6 +23,7 @@ import org.processmining.filterbook.parameters.OneFromListParameter;
 import org.processmining.filterbook.parameters.Parameter;
 import org.processmining.filterbook.parameters.Parameters;
 import org.processmining.filterbook.parameters.ParametersTemplate;
+import org.processmining.filterbook.types.DurationType;
 import org.processmining.filterbook.types.SelectionType;
 
 import info.clearthought.layout.TableLayout;
@@ -38,7 +39,7 @@ public class TraceDurationFilter extends Filter {
 	private JComponent traceDurationWidget;
 
 	private XLog cachedLog;
-	private Set<Duration> cachedSelectedDurations;
+	private Set<DurationType> cachedSelectedDurations;
 	private SelectionType cachedSelectionType;
 	private XLog cachedFilteredLog;
 
@@ -71,7 +72,7 @@ public class TraceDurationFilter extends Filter {
 		/*
 		 * Get the relevant parameters.
 		 */
-		Set<Duration> selectedDurations = new HashSet<Duration>(
+		Set<DurationType> selectedDurations = new HashSet<DurationType>(
 				getParameters().getMultipleFromListDuration().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
@@ -92,8 +93,9 @@ public class TraceDurationFilter extends Filter {
 		System.out.println("[" + NAME + "]: Returning newly filtered log.");
 		XLog filteredLog = initializeLog(getLog());
 		for (XTrace trace : getLog()) {
-			Duration duration = Duration.between(XTimeExtension.instance().extractTimestamp(trace.get(0)).toInstant(),
-					XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)).toInstant());
+			DurationType duration = new DurationType(
+					Duration.between(XTimeExtension.instance().extractTimestamp(trace.get(0)).toInstant(),
+							XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)).toInstant()));
 			boolean match = selectedDurations.contains(duration);
 			switch (selectionType) {
 				case FILTERIN : {
@@ -131,16 +133,16 @@ public class TraceDurationFilter extends Filter {
 		traceDurationWidget = getParameters().getMultipleFromListDuration().getWidget();
 		widget.add(traceDurationWidget, "0, 0");
 		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 1");
-		
+
 		widget.add(getChartWidget(), "1, 0, 1, 1");
 
 		setWidget(widget);
 	}
 
 	private JComponent getChartWidget() {
-	    return DurationChart.getChart(getLog());
+		return DurationChart.getChart(getLog());
 	}
-	
+
 	/**
 	 * Handle if a parameter values was changed.
 	 */
@@ -152,19 +154,20 @@ public class TraceDurationFilter extends Filter {
 		if (!doReset && getParameters().getMultipleFromListDuration() != null) {
 			return;
 		}
-		Set<Duration> traceDurations = new HashSet<Duration>();
+		Set<DurationType> traceDurations = new HashSet<DurationType>();
 		for (XTrace trace : getLog()) {
-			Duration duration = Duration.between(XTimeExtension.instance().extractTimestamp(trace.get(0)).toInstant(),
-					XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)).toInstant());
+			DurationType duration = new DurationType(
+					Duration.between(XTimeExtension.instance().extractTimestamp(trace.get(0)).toInstant(),
+							XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)).toInstant()));
 			traceDurations.add(duration);
 		}
-		List<Duration> unsortedDurations = new ArrayList<Duration>(traceDurations);
-		List<Duration> selectedDurations = new ArrayList<Duration>(traceDurations);
+		List<DurationType> unsortedDurations = new ArrayList<DurationType>(traceDurations);
+		List<DurationType> selectedDurations = new ArrayList<DurationType>(traceDurations);
 		if (getParameters().getMultipleFromListDuration() != null) {
 			selectedDurations.retainAll(getParameters().getMultipleFromListDuration().getSelected());
 		}
-		getParameters().setMultipleFromListDuration(new MultipleFromListParameter<Duration>("Select trace durations", this,
-				selectedDurations, unsortedDurations, true));
+		getParameters().setMultipleFromListDuration(new MultipleFromListParameter<DurationType>(
+				"Select trace durations", this, selectedDurations, unsortedDurations, true));
 	}
 
 	/*
@@ -189,13 +192,13 @@ public class TraceDurationFilter extends Filter {
 		setTraceDurations(true);
 		setSelectionType(true);
 	}
-	
+
 	public FilterTemplate getTemplate() {
 		FilterTemplate filterTemplate = new FilterTemplate();
 		filterTemplate.setName(getClass().getName());
 		filterTemplate.setParameters(new ParametersTemplate());
 		filterTemplate.getParameters().setValuesA(new TreeSet<String>());
-		for (Duration selected : getParameters().getMultipleFromListDuration().getSelected()) {
+		for (DurationType selected : getParameters().getMultipleFromListDuration().getSelected()) {
 			filterTemplate.getParameters().getValuesA().add(selected.toString());
 		}
 		filterTemplate.getParameters().setSelection(getParameters().getOneFromListSelection().getSelected().name());
@@ -205,8 +208,8 @@ public class TraceDurationFilter extends Filter {
 	public void setTemplate(ParametersTemplate parameters) {
 		setTraceDurations(true);
 		if (parameters.getValuesA() != null) {
-			List<Duration> values = new ArrayList<Duration>();
-			for (Duration value : getParameters().getMultipleFromListDuration().getOptions()) {
+			List<DurationType> values = new ArrayList<DurationType>();
+			for (DurationType value : getParameters().getMultipleFromListDuration().getOptions()) {
 				if (value != null && parameters.getValuesA().contains(value.toString())) {
 					values.add(value);
 				}
