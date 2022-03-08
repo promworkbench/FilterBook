@@ -71,8 +71,8 @@ public class TraceLogFilter extends Filter {
 			return false;
 		}
 		return hasConceptExtension(getLog()) && hasConceptExtension(getCell().getInputLog().getLog())
-				&& hasGlobalConceptName(getLog().getGlobalEventAttributes())
-				&& hasGlobalConceptName(getCell().getInputLog().getLog().getGlobalEventAttributes())
+				&& hasGlobalConceptName(getLog().getGlobalTraceAttributes())
+				&& hasGlobalConceptName(getCell().getInputLog().getLog().getGlobalTraceAttributes())
 				&& hasMatchingUniqueConceptNames() && hasTraces();
 	}
 

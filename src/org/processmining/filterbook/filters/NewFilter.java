@@ -67,6 +67,7 @@ import org.processmining.filterbook.filters.select.classifier.TraceVariantRandom
 import org.processmining.filterbook.filters.select.classifier.TraceVariantSlowestClassifierFilter;
 import org.processmining.filterbook.filters.select.global.TraceDateFilter;
 import org.processmining.filterbook.filters.select.global.TraceDirectlyFollowsGlobalAttributeFilter;
+import org.processmining.filterbook.filters.select.global.TraceDurationFilter;
 import org.processmining.filterbook.filters.select.global.TraceFirstEventGlobalAttributeFilter;
 import org.processmining.filterbook.filters.select.global.TraceGlobalAttributeFilter;
 import org.processmining.filterbook.filters.select.global.TraceLastEventGlobalAttributeFilter;
@@ -216,6 +217,8 @@ public class NewFilter extends Filter {
 		filtersSelectOnClassifier.add(new TraceVariantSlowestClassifierFilter(getLog(), new Parameters(), getCell()));
 		filtersSelectOnGlobalAttribute.add(new TraceVariantSlowestGlobalAttributeFilter(getLog(), new Parameters(), getCell()));
 		filtersSelectOnAttribute.add(new TraceVariantSlowestAttributeFilter(getLog(), new Parameters(), getCell()));
+
+		filtersSelectOnGlobalAttribute.add(new TraceDurationFilter(getLog(), new Parameters(), getCell()));
 
 		List<Filter> suitableSelectOnClassifierFilters = new ArrayList<Filter>();
 		for (Filter filter : filtersSelectOnClassifier) {

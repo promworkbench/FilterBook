@@ -60,6 +60,7 @@ import org.processmining.filterbook.filters.select.classifier.TraceVariantRandom
 import org.processmining.filterbook.filters.select.classifier.TraceVariantSlowestClassifierFilter;
 import org.processmining.filterbook.filters.select.global.TraceDateFilter;
 import org.processmining.filterbook.filters.select.global.TraceDirectlyFollowsGlobalAttributeFilter;
+import org.processmining.filterbook.filters.select.global.TraceDurationFilter;
 import org.processmining.filterbook.filters.select.global.TraceFirstEventGlobalAttributeFilter;
 import org.processmining.filterbook.filters.select.global.TraceGlobalAttributeFilter;
 import org.processmining.filterbook.filters.select.global.TraceLastEventGlobalAttributeFilter;
@@ -464,6 +465,12 @@ public class FilterTemplate implements HTMLToString {
 		
 		if (name.equals(TraceLastAttributeFilter.class.getName())) {
 			TraceLastAttributeFilter filter = new TraceLastAttributeFilter(log, new Parameters(), cell);
+			filter.setTemplate(parameters);
+			return filter;
+		}
+		
+		if (name.equals(TraceDurationFilter.class.getName())) {
+			TraceDurationFilter filter = new TraceDurationFilter(log, new Parameters(), cell);
 			filter.setTemplate(parameters);
 			return filter;
 		}

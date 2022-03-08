@@ -1,5 +1,7 @@
 package org.processmining.filterbook.parameters;
 
+import java.time.Duration;
+
 import org.processmining.filterbook.types.AttributeType;
 import org.processmining.filterbook.types.AttributeValueType;
 import org.processmining.filterbook.types.ClassifierType;
@@ -60,6 +62,10 @@ public class Parameters {
 	 * First number option
 	 */
 	private NumberParameter numberA;
+	/*
+	 * Selected Integer values, like trace lengths.
+	 */
+	private MultipleFromListParameter<Duration> multipleFromListDuration;
 	
 	/*
 	 * Getters and setters for all parameters.
@@ -169,6 +175,14 @@ public class Parameters {
 
 	public void setNumberA(NumberParameter numberA) {
 		this.numberA = numberA;
+	}
+
+	public MultipleFromListParameter<Duration> getMultipleFromListDuration() {
+		return multipleFromListDuration;
+	}
+
+	public void setMultipleFromListDuration(MultipleFromListParameter<Duration> multipleFromListDuration) {
+		this.multipleFromListDuration = multipleFromListDuration;
 	}
 
 }
