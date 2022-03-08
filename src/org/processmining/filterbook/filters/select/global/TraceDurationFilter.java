@@ -9,7 +9,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingWorker;
 
 import org.deckfour.xes.extension.std.XTimeExtension;
 import org.deckfour.xes.model.XLog;
@@ -19,6 +21,7 @@ import org.processmining.filterbook.charts.DurationChart;
 import org.processmining.filterbook.filters.Filter;
 import org.processmining.filterbook.filters.FilterTemplate;
 import org.processmining.filterbook.parameters.MultipleFromListParameter;
+import org.processmining.filterbook.parameters.NumberParameter;
 import org.processmining.filterbook.parameters.OneFromListParameter;
 import org.processmining.filterbook.parameters.Parameter;
 import org.processmining.filterbook.parameters.Parameters;
@@ -37,10 +40,12 @@ public class TraceDurationFilter extends Filter {
 	public static final String NAME = "Select traces on duration";
 
 	private JComponent traceDurationWidget;
+	private JComponent traceDurationChart;
 
 	private XLog cachedLog;
 	private Set<DurationType> cachedSelectedDurations;
 	private SelectionType cachedSelectionType;
+	private int cachedPrecision;
 	private XLog cachedFilteredLog;
 
 	public TraceDurationFilter(XLog log, Parameters parameters, ComputationCell cell) {
@@ -75,11 +80,13 @@ public class TraceDurationFilter extends Filter {
 		Set<DurationType> selectedDurations = new HashSet<DurationType>(
 				getParameters().getMultipleFromListDuration().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
+		int precision = getParameters().getNumberA().getNumber();
 		/*
 		 * Check whether the cache is valid.
 		 */
 		if (cachedLog == getLog()) {
-			if (cachedSelectedDurations.equals(selectedDurations) && cachedSelectionType == selectionType) {
+			if (cachedSelectedDurations.equals(selectedDurations) && cachedPrecision == precision
+					&& cachedSelectionType == selectionType) {
 				/*
 				 * Yes, it is. Return the cached filtered log.
 				 */
@@ -95,7 +102,8 @@ public class TraceDurationFilter extends Filter {
 		for (XTrace trace : getLog()) {
 			DurationType duration = new DurationType(
 					Duration.between(XTimeExtension.instance().extractTimestamp(trace.get(0)).toInstant(),
-							XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)).toInstant()));
+							XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)).toInstant()),
+					precision);
 			boolean match = selectedDurations.contains(duration);
 			switch (selectionType) {
 				case FILTERIN : {
@@ -118,6 +126,7 @@ public class TraceDurationFilter extends Filter {
 		cachedLog = getLog();
 		cachedSelectedDurations = selectedDurations;
 		cachedSelectionType = selectionType;
+		cachedPrecision = precision;
 		cachedFilteredLog = filteredLog;
 		return filteredLog;
 	}
@@ -128,37 +137,91 @@ public class TraceDurationFilter extends Filter {
 	public void constructWidget() {
 		JComponent widget = new JPanel();
 		double size[][] = { { TableLayoutConstants.FILL, TableLayoutConstants.FILL },
-				{ TableLayoutConstants.FILL, 80 } };
+				{ 80, TableLayoutConstants.FILL, 80 } };
 		widget.setLayout(new TableLayout(size));
 		traceDurationWidget = getParameters().getMultipleFromListDuration().getWidget();
-		widget.add(traceDurationWidget, "0, 0");
-		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 1");
-
-		widget.add(getChartWidget(), "1, 0, 1, 1");
+		widget.add(getParameters().getNumberA().getWidget(), "0, 0");
+		widget.add(traceDurationWidget, "0, 1");
+		traceDurationChart = getChartWidget();
+		widget.add(traceDurationChart, "1, 0, 1, 2");
+		widget.add(getParameters().getOneFromListSelection().getWidget(), "0, 2");
 
 		setWidget(widget);
 	}
 
 	private JComponent getChartWidget() {
-		return DurationChart.getChart(getLog());
+		return DurationChart.getChart(getLog(), getParameters().getNumberA().getNumber());
+	}
+
+	private void updatedDoInBackground() {
+		/*
+		 * Reset the trace lengths parameter.
+		 */
+		setTraceDurations(true);
+	}
+
+	private void updatedDone() {
+		/*
+		 * Get the new widget for the trace lengths parameter, and replace the
+		 * old one with it.
+		 */
+		getWidget().remove(traceDurationWidget);
+		traceDurationWidget = getParameters().getMultipleFromListDuration().getWidget();
+		getWidget().add(traceDurationWidget, "0, 1");
+		getWidget().remove(traceDurationChart);
+		traceDurationChart = getChartWidget();
+		getWidget().add(traceDurationChart, "1, 0, 1, 2");
+		getWidget().revalidate();
+		getWidget().repaint();
+		getCell().updated();
 	}
 
 	/**
 	 * Handle if a parameter values was changed.
 	 */
 	public void updated(Parameter parameter) {
+		if (parameter == getParameters().getNumberA()) {
+			getWidget().remove(traceDurationWidget);
+			JLabel label = new JLabel("<html><h3>Scanning log, please be patient...</h3></html>");
+			label.setHorizontalAlignment(JLabel.CENTER);
+			traceDurationWidget = label;
+			getWidget().add(traceDurationWidget, "0, 1");
+			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+				public Void doInBackground() {
+					updatedDoInBackground();
+					return null;
+				}
+
+				public void done() {
+					updatedDone();
+				}
+			};
+			worker.execute();
+			getWidget().revalidate();
+			getWidget().repaint();
+		}
 		getCell().updated();
+	}
+
+	private void setPrecision(boolean doReset) {
+		if (!doReset && getParameters().getNumberA() != null) {
+			return;
+		}
+		getParameters().setNumberA(new NumberParameter("Select a precision:", this, DurationType.MINUTE_PRECISION,
+				DurationType.YEAR_PRECISION, DurationType.MILLIS_PRECISION));
 	}
 
 	private void setTraceDurations(boolean doReset) {
 		if (!doReset && getParameters().getMultipleFromListDuration() != null) {
 			return;
 		}
+		int precision = getParameters().getNumberA().getNumber();
 		Set<DurationType> traceDurations = new HashSet<DurationType>();
 		for (XTrace trace : getLog()) {
 			DurationType duration = new DurationType(
 					Duration.between(XTimeExtension.instance().extractTimestamp(trace.get(0)).toInstant(),
-							XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)).toInstant()));
+							XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)).toInstant()),
+					precision);
 			traceDurations.add(duration);
 		}
 		List<DurationType> unsortedDurations = new ArrayList<DurationType>(traceDurations);
@@ -189,6 +252,7 @@ public class TraceDurationFilter extends Filter {
 	 * Update the filter parameters.
 	 */
 	public void updateParameters() {
+		setPrecision(true);
 		setTraceDurations(true);
 		setSelectionType(true);
 	}

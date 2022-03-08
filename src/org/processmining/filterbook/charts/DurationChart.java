@@ -28,14 +28,15 @@ public class DurationChart {
 	 *            The log.
 	 * @return The panel containing the chart.
 	 */
-	public static JComponent getChart(XLog log) {
+	public static JComponent getChart(XLog log, int precision) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 		Set<DurationType> values = new TreeSet<DurationType>();
 		Map<DurationType, Integer> counts = new TreeMap<DurationType, Integer>();
 		for (XTrace trace : log) {
 			DurationType value = new DurationType(
 					Duration.between(XTimeExtension.instance().extractTimestamp(trace.get(0)).toInstant(),
-							XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)).toInstant()));
+							XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)).toInstant()),
+					precision);
 			values.add(value);
 			if (counts.containsKey(value)) {
 				counts.put(value, counts.get(value) + 1);
