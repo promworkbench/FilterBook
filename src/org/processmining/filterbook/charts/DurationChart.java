@@ -1,5 +1,6 @@
 package org.processmining.filterbook.charts;
 
+import java.awt.Color;
 import java.time.Duration;
 import java.util.Map;
 import java.util.Set;
@@ -49,6 +50,8 @@ public class DurationChart {
 		}
 		JFreeChart chart = ChartFactory.createBarChart("Overview", "Duration", "Number of traces", dataset,
 				PlotOrientation.HORIZONTAL, false, true, false);
+		// Make the background transparent.
+		chart.setBackgroundPaint(new Color(0, 0, 0, 0));
 		return new ChartPanel(chart);
 	}
 }

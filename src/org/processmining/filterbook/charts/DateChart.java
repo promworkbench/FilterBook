@@ -1,5 +1,6 @@
 package org.processmining.filterbook.charts;
 
+import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -122,6 +123,8 @@ public class DateChart {
 				dataset, PlotOrientation.VERTICAL, true, true, false);
 //		JFreeChart chart = ChartFactory.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW, true, true,
 //		false);
+		// Make the background transparent.
+		chart.setBackgroundPaint(new Color(0, 0, 0, 0));
 		return new ChartPanel(chart);
 	}
 

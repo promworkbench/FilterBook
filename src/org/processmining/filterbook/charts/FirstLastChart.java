@@ -1,5 +1,6 @@
 package org.processmining.filterbook.charts;
 
+import java.awt.Color;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -63,6 +64,8 @@ public class FirstLastChart {
 				false);
 //		JFreeChart chart = ChartFactory.createBarChart("Overview", classifier.name(), "Number of traces",
 //				dataset, PlotOrientation.VERTICAL, false, true, false);
+		// Make the background transparent.
+		chart.setBackgroundPaint(new Color(0, 0, 0, 0));
 		return new ChartPanel(chart);
 	}
 

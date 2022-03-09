@@ -1,5 +1,6 @@
 package org.processmining.filterbook.charts;
 
+import java.awt.Color;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -87,8 +88,12 @@ public class DirectlyFollowsChart {
 		 */
 		JFreeChart dfChart = ChartFactory.createMultiplePieChart("Overview - Directly Follows", dataset, TableOrder.BY_ROW, true, true,
 				false);
+		// Make the background transparent.
+		dfChart.setBackgroundPaint(new Color(0, 0, 0, 0));
 		JFreeChart dpChart = ChartFactory.createMultiplePieChart("Overview - Directly Precedes", dataset, TableOrder.BY_COLUMN, true, true,
 				false);
+		// Make the background transparent.
+		dpChart.setBackgroundPaint(new Color(0, 0, 0, 0));
 		
 		SlickerTabbedPane tabbedPane = new SlickerTabbedPane("", SlickerColors.COLOR_FG,  SlickerColors.COLOR_BG_4,  SlickerColors.COLOR_FG);
 		tabbedPane.addTab("Directly Follows", new ChartPanel(dfChart));

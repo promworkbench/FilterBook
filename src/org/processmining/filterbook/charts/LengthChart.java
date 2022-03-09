@@ -1,5 +1,7 @@
 package org.processmining.filterbook.charts;
 
+import java.awt.Color;
+
 import javax.swing.JComponent;
 
 import org.deckfour.xes.model.XLog;
@@ -43,6 +45,8 @@ public class LengthChart {
 	             dataset,          
 	             PlotOrientation.HORIZONTAL,           
 	             false, true, false);
+		// Make the background transparent.
+		chart.setBackgroundPaint(new Color(0, 0, 0, 0));
 	    return new ChartPanel(chart);
 	}
 }
