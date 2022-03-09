@@ -36,15 +36,15 @@ public class DurationType implements Comparable<DurationType> {
 	public DurationType(Duration duration, int precision) {
 		this.duration = duration;
 		long totalMillis = duration.toMillis();
-		int seconds = (int) (totalMillis / 1000);
+		long seconds = totalMillis / 1000;
 
-		int mYear = (int) Math.floor(seconds / 31536000);
-		int mMonth = (int) Math.floor((seconds % 31536000) / 2628000);
-		int mDay = (int) Math.floor(((seconds % 31536000) % 2628000) / 86400);
-		int hr = (int) Math.floor(((seconds % 31536000) % 86400) / 3600);
-		int min = (int) Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
-		int sec = (((seconds % 31536000) % 86400) % 3600) % 60;
-		int millis = (int) (totalMillis - seconds * 1000);
+		long mYear = (long) Math.floor(seconds / 31536000);
+		long mMonth = (long) Math.floor((seconds % 31536000) / 2628000);
+		long mDay = (long) Math.floor(((seconds % 31536000) % 2628000) / 86400);
+		long hr = (long) Math.floor(((seconds % 31536000) % 86400) / 3600);
+		long min = (long) Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
+		long sec = (((seconds % 31536000) % 86400) % 3600) % 60;
+		long millis = totalMillis - seconds * 1000;
 
 		durationString = "";
 		String unit = "year";
@@ -101,14 +101,14 @@ public class DurationType implements Comparable<DurationType> {
 		return durationString;
 	}
 
-	private String addToDuration(int time, String type) {
+	private String addToDuration(long time, String type) {
 
 		if (time == 0) {
 			return "";
 		} else if (time == 1) {
 			return "1 " + type + " ";
 		} else {
-			return Integer.toString(time) + " " + type + "s ";
+			return Long.toString(time) + " " + type + "s ";
 		}
 
 	}
