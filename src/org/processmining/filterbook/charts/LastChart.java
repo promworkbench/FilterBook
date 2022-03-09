@@ -17,6 +17,7 @@ import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.MultiplePiePlot;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.util.TableOrder;
 import org.processmining.filterbook.parameters.Parameters;
@@ -106,6 +107,9 @@ public class LastChart {
 		}
 		JFreeChart chart = ChartFactory.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW, true, true,
 				false);
+		MultiplePiePlot plot = (MultiplePiePlot) chart.getPlot();
+		plot.setBackgroundPaint(new Color(0, 0, 0, 0));
+		plot.getPieChart().setBackgroundPaint(new Color(0, 0, 0, 0));
 //		JFreeChart chart = ChartFactory.createBarChart("Overview", attribute.getAttribute().getKey(), "Number of traces",
 //				dataset, PlotOrientation.VERTICAL, false, true, false);
 		// Make the background transparent.

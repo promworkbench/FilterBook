@@ -18,6 +18,7 @@ import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.MultiplePiePlot;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.util.TableOrder;
 import org.processmining.filterbook.parameters.Parameters;
@@ -90,10 +91,16 @@ public class DirectlyFollowsChart {
 				false);
 		// Make the background transparent.
 		dfChart.setBackgroundPaint(new Color(0, 0, 0, 0));
+		MultiplePiePlot dfPlot = (MultiplePiePlot) dfChart.getPlot();
+		dfPlot.setBackgroundPaint(new Color(0, 0, 0, 0));
+		dfPlot.getPieChart().setBackgroundPaint(new Color(0, 0, 0, 0));
 		JFreeChart dpChart = ChartFactory.createMultiplePieChart("Overview - Directly Precedes", dataset, TableOrder.BY_COLUMN, true, true,
 				false);
 		// Make the background transparent.
 		dpChart.setBackgroundPaint(new Color(0, 0, 0, 0));
+		MultiplePiePlot dpPlot = (MultiplePiePlot) dpChart.getPlot();
+		dpPlot.setBackgroundPaint(new Color(0, 0, 0, 0));
+		dpPlot.getPieChart().setBackgroundPaint(new Color(0, 0, 0, 0));
 		
 		SlickerTabbedPane tabbedPane = new SlickerTabbedPane("", SlickerColors.COLOR_FG,  SlickerColors.COLOR_BG_4,  SlickerColors.COLOR_FG);
 		tabbedPane.addTab("Directly Follows", new ChartPanel(dfChart));

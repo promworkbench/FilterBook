@@ -17,6 +17,7 @@ import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.MultiplePiePlot;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.util.TableOrder;
 import org.processmining.filterbook.parameters.Parameters;
@@ -110,6 +111,9 @@ public class FirstChart {
 //				dataset, PlotOrientation.VERTICAL, false, true, false);
 		// Make the background transparent.
 		chart.setBackgroundPaint(new Color(0, 0, 0, 0));
+		MultiplePiePlot plot = (MultiplePiePlot) chart.getPlot();
+		plot.setBackgroundPaint(new Color(0, 0, 0, 0));
+		plot.getPieChart().setBackgroundPaint(new Color(0, 0, 0, 0));
 		return new ChartPanel(chart);
 	}
 
