@@ -100,23 +100,25 @@ public class TraceDurationFilter extends Filter {
 		System.out.println("[" + NAME + "]: Returning newly filtered log.");
 		XLog filteredLog = initializeLog(getLog());
 		for (XTrace trace : getLog()) {
-			DurationType duration = new DurationType(
-					Duration.between(XTimeExtension.instance().extractTimestamp(trace.get(0)).toInstant(),
-							XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)).toInstant()),
-					precision);
-			boolean match = selectedDurations.contains(duration);
-			switch (selectionType) {
-				case FILTERIN : {
-					if (match) {
-						filteredLog.add(trace);
+			if (!trace.isEmpty()) {
+				DurationType duration = new DurationType(
+						Duration.between(XTimeExtension.instance().extractTimestamp(trace.get(0)).toInstant(),
+								XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)).toInstant()),
+						precision);
+				boolean match = selectedDurations.contains(duration);
+				switch (selectionType) {
+					case FILTERIN : {
+						if (match) {
+							filteredLog.add(trace);
+						}
+						break;
 					}
-					break;
-				}
-				case FILTEROUT : {
-					if (!match) {
-						filteredLog.add(trace);
+					case FILTEROUT : {
+						if (!match) {
+							filteredLog.add(trace);
+						}
+						break;
 					}
-					break;
 				}
 			}
 		}
@@ -222,11 +224,13 @@ public class TraceDurationFilter extends Filter {
 		int precision = getParameters().getNumberA().getNumber();
 		Set<DurationType> traceDurations = new HashSet<DurationType>();
 		for (XTrace trace : getLog()) {
-			DurationType duration = new DurationType(
-					Duration.between(XTimeExtension.instance().extractTimestamp(trace.get(0)).toInstant(),
-							XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)).toInstant()),
-					precision);
-			traceDurations.add(duration);
+			if (!trace.isEmpty()) {
+				DurationType duration = new DurationType(
+						Duration.between(XTimeExtension.instance().extractTimestamp(trace.get(0)).toInstant(),
+								XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)).toInstant()),
+						precision);
+				traceDurations.add(duration);
+			}
 		}
 		List<DurationType> unsortedDurations = new ArrayList<DurationType>(traceDurations);
 		List<DurationType> selectedDurations = new ArrayList<DurationType>(traceDurations);

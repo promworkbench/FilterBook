@@ -31,22 +31,24 @@ public class DurationChart {
 		Set<DurationType> values = new TreeSet<DurationType>();
 		Map<DurationType, Integer> counts = new TreeMap<DurationType, Integer>();
 		for (XTrace trace : log) {
-			DurationType value = new DurationType(
-					Duration.between(XTimeExtension.instance().extractTimestamp(trace.get(0)).toInstant(),
-							XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)).toInstant()),
-					precision);
-			values.add(value);
-			if (counts.containsKey(value)) {
-				counts.put(value, counts.get(value) + 1);
-			} else {
-				counts.put(value, 1);
+			if (!trace.isEmpty()) {
+				DurationType value = new DurationType(
+						Duration.between(XTimeExtension.instance().extractTimestamp(trace.get(0)).toInstant(),
+								XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)).toInstant()),
+						precision);
+				values.add(value);
+				if (counts.containsKey(value)) {
+					counts.put(value, counts.get(value) + 1);
+				} else {
+					counts.put(value, 1);
+				}
 			}
 		}
 		for (DurationType value : values) {
 			dataset.addValue(counts.get(value), "Duration", value.toString());
 		}
 		JFreeChart chart = ChartUtils.createBarChart("Overview", "Duration", "Number of traces", dataset);
-		
+
 		return new ChartPanel(chart);
 	}
 }
