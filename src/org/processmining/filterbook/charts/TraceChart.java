@@ -1,6 +1,5 @@
 package org.processmining.filterbook.charts;
 
-import java.awt.Color;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -13,10 +12,8 @@ import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
-import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.processmining.filterbook.parameters.Parameters;
 import org.processmining.filterbook.types.AttributeType;
@@ -64,10 +61,9 @@ public class TraceChart {
 						AttributeValueType.NOATTRIBUTEVALUE);
 			}
 		}
-		JFreeChart chart = ChartFactory.createBarChart("Overview", attribute.getAttribute().getKey(),
-				"Number of traces", dataset, PlotOrientation.HORIZONTAL, false, true, false);
-		// Make the background transparent.
-		chart.setBackgroundPaint(new Color(0, 0, 0, 0));
+		JFreeChart chart = ChartUtils.createBarChart("Overview", attribute.getAttribute().getKey(),
+				"Number of traces", dataset);
+
 		return new ChartPanel(chart);
 	}
 

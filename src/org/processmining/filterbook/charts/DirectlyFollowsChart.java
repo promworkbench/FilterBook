@@ -1,6 +1,5 @@
 package org.processmining.filterbook.charts;
 
-import java.awt.Color;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -15,10 +14,8 @@ import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
-import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.MultiplePiePlot;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.util.TableOrder;
 import org.processmining.filterbook.parameters.Parameters;
@@ -87,20 +84,8 @@ public class DirectlyFollowsChart {
 		 * Create the charts and return a tab pane containing them.
 		 * Note that by using TableOrder.BY_ROW we select to have a pie chart for every first element in the pair.
 		 */
-		JFreeChart dfChart = ChartFactory.createMultiplePieChart("Overview - Directly Follows", dataset, TableOrder.BY_ROW, true, true,
-				false);
-		// Make the background transparent.
-		dfChart.setBackgroundPaint(new Color(0, 0, 0, 0));
-		MultiplePiePlot dfPlot = (MultiplePiePlot) dfChart.getPlot();
-		dfPlot.setBackgroundPaint(new Color(0, 0, 0, 0));
-		dfPlot.getPieChart().setBackgroundPaint(new Color(0, 0, 0, 0));
-		JFreeChart dpChart = ChartFactory.createMultiplePieChart("Overview - Directly Precedes", dataset, TableOrder.BY_COLUMN, true, true,
-				false);
-		// Make the background transparent.
-		dpChart.setBackgroundPaint(new Color(0, 0, 0, 0));
-		MultiplePiePlot dpPlot = (MultiplePiePlot) dpChart.getPlot();
-		dpPlot.setBackgroundPaint(new Color(0, 0, 0, 0));
-		dpPlot.getPieChart().setBackgroundPaint(new Color(0, 0, 0, 0));
+		JFreeChart dfChart = ChartUtils.createMultiplePieChart("Overview - Directly Follows", dataset, TableOrder.BY_ROW);
+		JFreeChart dpChart = ChartUtils.createMultiplePieChart("Overview - Directly Precedes", dataset, TableOrder.BY_COLUMN);
 		
 		SlickerTabbedPane tabbedPane = new SlickerTabbedPane("", SlickerColors.COLOR_FG,  SlickerColors.COLOR_BG_4,  SlickerColors.COLOR_FG);
 		tabbedPane.addTab("Directly Follows", new ChartPanel(dfChart));
@@ -173,10 +158,8 @@ public class DirectlyFollowsChart {
 		 * Create the charts and return a tab pane containing them.
 		 * Note that by using TableOrder.BY_ROW we select to have a pie chart for every first element in the pair.
 		 */
-		JFreeChart dfChart = ChartFactory.createMultiplePieChart("Overview - Directly Follows", dataset, TableOrder.BY_ROW, true, true,
-				false);
-		JFreeChart dpChart = ChartFactory.createMultiplePieChart("Overview - Directly Precedes", dataset, TableOrder.BY_COLUMN, true, true,
-				false);
+		JFreeChart dfChart = ChartUtils.createMultiplePieChart("Overview - Directly Follows", dataset, TableOrder.BY_ROW);
+		JFreeChart dpChart = ChartUtils.createMultiplePieChart("Overview - Directly Precedes", dataset, TableOrder.BY_COLUMN);
 		
 		SlickerTabbedPane tabbedPane = new SlickerTabbedPane("", SlickerColors.COLOR_FG,  SlickerColors.COLOR_BG_4,  SlickerColors.COLOR_FG);
 		tabbedPane.addTab("Directly Follows", new ChartPanel(dfChart));

@@ -1,6 +1,5 @@
 package org.processmining.filterbook.charts;
 
-import java.awt.Color;
 import java.time.Duration;
 import java.util.Map;
 import java.util.Set;
@@ -12,10 +11,8 @@ import javax.swing.JComponent;
 import org.deckfour.xes.extension.std.XTimeExtension;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
-import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.processmining.filterbook.types.DurationType;
 
@@ -48,10 +45,8 @@ public class DurationChart {
 		for (DurationType value : values) {
 			dataset.addValue(counts.get(value), "Duration", value.toString());
 		}
-		JFreeChart chart = ChartFactory.createBarChart("Overview", "Duration", "Number of traces", dataset,
-				PlotOrientation.HORIZONTAL, false, true, false);
-		// Make the background transparent.
-		chart.setBackgroundPaint(new Color(0, 0, 0, 0));
+		JFreeChart chart = ChartUtils.createBarChart("Overview", "Duration", "Number of traces", dataset);
+		
 		return new ChartPanel(chart);
 	}
 }

@@ -1,6 +1,5 @@
 package org.processmining.filterbook.charts;
 
-import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -13,24 +12,25 @@ import javax.swing.JComponent;
 import org.deckfour.xes.extension.std.XTimeExtension;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
-import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 public class DateChart {
 
 	/**
-	 * Returns a bar chart showing for every abstract date in the log:
-	 *   1. how many first events have that abstract date and
-	 *   2. how many last events have that abstract date.
-	 * Based on the time span of the log, the abstraction and the time unit (days, hours, ...) 
-	 * is selected automatically.
+	 * Returns a bar chart showing for every abstract date in the log: 1. how
+	 * many first events have that abstract date and 2. how many last events
+	 * have that abstract date. Based on the time span of the log, the
+	 * abstraction and the time unit (days, hours, ...) is selected
+	 * automatically.
 	 * 
-	 * @param log The log.
-	 * @param firstLogDate The earliest first date in the log.
-	 * @param lastLogDate The latest last date in the log.
+	 * @param log
+	 *            The log.
+	 * @param firstLogDate
+	 *            The earliest first date in the log.
+	 * @param lastLogDate
+	 *            The latest last date in the log.
 	 * @return The panel containing the bar chart.
 	 */
 	public static JComponent getChart(XLog log, Date firstLogDate, Date lastLogDate) {
@@ -41,15 +41,16 @@ public class DateChart {
 		 */
 		Set<String> firstValues = new TreeSet<String>();
 		Set<String> lastValues = new TreeSet<String>();
-		
+
 		/*
 		 * Counts for this and last abstract dates.
 		 */
 		Map<String, Integer> firstCounts = new TreeMap<String, Integer>();
 		Map<String, Integer> lastCounts = new TreeMap<String, Integer>();
-		
+
 		/*
-		 * Determine the abstraction and time unit to use based on the time span of the log.
+		 * Determine the abstraction and time unit to use based on the time span
+		 * of the log.
 		 */
 		long duration = lastLogDate.getTime() - firstLogDate.getTime();
 		SimpleDateFormat dateFormat; // Used as an abstraction for the time unit.
@@ -83,29 +84,31 @@ public class DateChart {
 			dateFormat = new SimpleDateFormat("yyyy");
 			units = "Years";
 		}
-		
+
 		/*
-		 * Now the abstraction is known, count the first and last abstract dates.
+		 * Now the abstraction is known, count the first and last abstract
+		 * dates.
 		 */
 		for (XTrace trace : log) {
 			if (!trace.isEmpty()) {
 				String firstValue = dateFormat.format(XTimeExtension.instance().extractTimestamp(trace.get(0)));
 				firstValues.add(firstValue);
 				if (firstCounts.containsKey(firstValue)) {
-					firstCounts.put(firstValue,  firstCounts.get(firstValue) + 1);
+					firstCounts.put(firstValue, firstCounts.get(firstValue) + 1);
 				} else {
 					firstCounts.put(firstValue, 1);
 				}
-				String lastValue = dateFormat.format(XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)));
+				String lastValue = dateFormat
+						.format(XTimeExtension.instance().extractTimestamp(trace.get(trace.size() - 1)));
 				lastValues.add(lastValue);
 				if (lastCounts.containsKey(lastValue)) {
-					lastCounts.put(lastValue,  lastCounts.get(lastValue) + 1);
+					lastCounts.put(lastValue, lastCounts.get(lastValue) + 1);
 				} else {
 					lastCounts.put(lastValue, 1);
 				}
 			}
 		}
-		
+
 		/*
 		 * Add the counts as series to the data set.
 		 */
@@ -115,16 +118,12 @@ public class DateChart {
 		for (String value : lastValues) {
 			dataset.addValue(lastCounts.get(value), "Last date", value);
 		}
-		
+
 		/*
 		 * Create the chart, and return a panel containing it.
 		 */
-		JFreeChart chart = ChartFactory.createBarChart("Overview", units, "Number of events",
-				dataset, PlotOrientation.VERTICAL, true, true, false);
-//		JFreeChart chart = ChartFactory.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW, true, true,
-//		false);
-		// Make the background transparent.
-		chart.setBackgroundPaint(new Color(0, 0, 0, 0));
+		JFreeChart chart = ChartUtils.createBarChart("Overview", units, "Number of events", dataset);
+
 		return new ChartPanel(chart);
 	}
 

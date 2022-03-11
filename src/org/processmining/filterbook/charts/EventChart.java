@@ -1,6 +1,5 @@
 package org.processmining.filterbook.charts;
 
-import java.awt.Color;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -15,10 +14,8 @@ import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
-import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.processmining.filterbook.parameters.Parameters;
 import org.processmining.filterbook.types.AttributeType;
@@ -27,13 +24,15 @@ import org.processmining.filterbook.types.AttributeValueType;
 public class EventChart {
 
 	/**
-	 * Returns a bar chart showing for every event class:
-	 *   1. how many events have that event class.
-	 * The chart is sorted on event class.
+	 * Returns a bar chart showing for every event class: 1. how many events
+	 * have that event class. The chart is sorted on event class.
 	 * 
-	 * @param log The log.
-	 * @param dummyClassifer The dummy classifier.
-	 * @param parameters The parameters.
+	 * @param log
+	 *            The log.
+	 * @param dummyClassifer
+	 *            The dummy classifier.
+	 * @param parameters
+	 *            The parameters.
 	 * @return The panel containing the bar chart.
 	 */
 	public static JComponent getChart(XLog log, XEventClassifier dummyClassifer, Parameters parameters) {
@@ -50,7 +49,7 @@ public class EventChart {
 				String value = classifier.getClassIdentity(event);
 				values.add(value);
 				if (counts.containsKey(value)) {
-					counts.put(value,  counts.get(value) + 1);
+					counts.put(value, counts.get(value) + 1);
 				} else {
 					counts.put(value, 1);
 				}
@@ -59,20 +58,19 @@ public class EventChart {
 		for (String value : values) {
 			dataset.addValue(counts.get(value), classifier.name(), value);
 		}
-		JFreeChart chart = ChartFactory.createBarChart("Overview", classifier.name(), "Number of events",
-				dataset, PlotOrientation.HORIZONTAL, false, true, false);
-		// Make the background transparent.
-		chart.setBackgroundPaint(new Color(0, 0, 0, 0));
+		JFreeChart chart = ChartUtils.createBarChart("Overview", classifier.name(), "Number of events", dataset);
+
 		return new ChartPanel(chart);
 	}
-	
+
 	/**
-	 * Returns a bar chart showing for every attribute value:
-	 *   1. how many events have that attribute value.
-	 * The chart is sorted on attribute value.
+	 * Returns a bar chart showing for every attribute value: 1. how many events
+	 * have that attribute value. The chart is sorted on attribute value.
 	 * 
-	 * @param log The log.
-	 * @param parameters The parameters.
+	 * @param log
+	 *            The log.
+	 * @param parameters
+	 *            The parameters.
 	 * @return The panel containing the bar chart.
 	 */
 	public static JComponent getChart(XLog log, Parameters parameters) {
@@ -90,10 +88,11 @@ public class EventChart {
 		Map<AttributeValueType, Integer> counts = new TreeMap<AttributeValueType, Integer>();
 		for (XTrace trace : log) {
 			for (XEvent event : trace) {
-				AttributeValueType value = new AttributeValueType(event.getAttributes().get(attribute.getAttribute().getKey()));
+				AttributeValueType value = new AttributeValueType(
+						event.getAttributes().get(attribute.getAttribute().getKey()));
 				values.add(value);
 				if (counts.containsKey(value)) {
-					counts.put(value,  counts.get(value) + 1);
+					counts.put(value, counts.get(value) + 1);
 				} else {
 					counts.put(value, 1);
 				}
@@ -104,27 +103,30 @@ public class EventChart {
 			if (a != null) {
 				dataset.addValue(counts.get(value), attribute.getAttribute().getKey(), a.toString());
 			} else {
-				dataset.addValue(counts.get(value), attribute.getAttribute().getKey(), AttributeValueType.NOATTRIBUTEVALUE);
+				dataset.addValue(counts.get(value), attribute.getAttribute().getKey(),
+						AttributeValueType.NOATTRIBUTEVALUE);
 			}
 		}
-		JFreeChart chart = ChartFactory.createBarChart("Overview", attribute.getAttribute().getKey(), "Number of events",
-				dataset, PlotOrientation.HORIZONTAL, false, true, false);
-		// Make the background transparent.
-		chart.setBackgroundPaint(new Color(0, 0, 0, 0));
+		JFreeChart chart = ChartUtils.createBarChart("Overview", attribute.getAttribute().getKey(), "Number of events",
+				dataset);
+
 		return new ChartPanel(chart);
 	}
 
 	/**
-	 * Returns a bar chart showing for every event class:
-	 *   1. how many events have that event class.
-	 * The chart is sorted on non-decreasing bar height.
+	 * Returns a bar chart showing for every event class: 1. how many events
+	 * have that event class. The chart is sorted on non-decreasing bar height.
 	 * 
-	 * @param occurrences How many times an event class occurs in the log.
-	 * @param dummyClassifier The dummy classifier.
-	 * @param parameters The parameters.
+	 * @param occurrences
+	 *            How many times an event class occurs in the log.
+	 * @param dummyClassifier
+	 *            The dummy classifier.
+	 * @param parameters
+	 *            The parameters.
 	 * @return The panel containing the chart.
 	 */
-	public static JComponent getChart(Map<String, Integer> occurrences, XEventClassifier dummyClassifier, Parameters parameters) {
+	public static JComponent getChart(Map<String, Integer> occurrences, XEventClassifier dummyClassifier,
+			Parameters parameters) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
 		XEventClassifier classifier = (parameters.getOneFromListClassifier().getSelected() != null
@@ -139,20 +141,21 @@ public class EventChart {
 				}
 			}
 		}
-		JFreeChart chart = ChartFactory.createBarChart("Overview", classifier.name(), "Number of events",
-				dataset, PlotOrientation.HORIZONTAL, false, true, false);
-		// Make the background transparent.
-		chart.setBackgroundPaint(new Color(0, 0, 0, 0));
+		JFreeChart chart = ChartUtils.createBarChart("Overview", classifier.name(), "Number of events", dataset);
+
 		return new ChartPanel(chart);
 	}
 
 	/**
-	 * Returns a bar chart showing for every attribute value:
-	 *   1. how many events have that attribute value.
-	 * The chart is sorted on non-decreasing bar height.
+	 * Returns a bar chart showing for every attribute value: 1. how many events
+	 * have that attribute value. The chart is sorted on non-decreasing bar
+	 * height.
 	 * 
-	 * @param occurrences How many times an attribute value (as String) occurs in the log.
-	 * @param parameters The parameters.
+	 * @param occurrences
+	 *            How many times an attribute value (as String) occurs in the
+	 *            log.
+	 * @param parameters
+	 *            The parameters.
 	 * @return The panel containing the chart.
 	 */
 	public static JComponent getChart(Map<String, Integer> occurrences, Parameters parameters) {
@@ -174,10 +177,9 @@ public class EventChart {
 				}
 			}
 		}
-		JFreeChart chart = ChartFactory.createBarChart("Overview", attribute.getAttribute().getKey(), "Number of events",
-				dataset, PlotOrientation.HORIZONTAL, false, true, false);
-		// Make the background transparent.
-		chart.setBackgroundPaint(new Color(0, 0, 0, 0));
+		JFreeChart chart = ChartUtils.createBarChart("Overview", attribute.getAttribute().getKey(), "Number of events",
+				dataset);
+
 		return new ChartPanel(chart);
 	}
 

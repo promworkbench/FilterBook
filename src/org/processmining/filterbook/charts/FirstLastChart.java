@@ -1,6 +1,5 @@
 package org.processmining.filterbook.charts;
 
-import java.awt.Color;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -11,10 +10,8 @@ import javax.swing.JComponent;
 import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
-import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.MultiplePiePlot;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.util.TableOrder;
 
@@ -61,15 +58,8 @@ public class FirstLastChart {
 		for (String value : lastValues) {
 			dataset.addValue(lastCounts.get(value), "Last", value);
 		}
-		JFreeChart chart = ChartFactory.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW, true, true,
-				false);
-//		JFreeChart chart = ChartFactory.createBarChart("Overview", classifier.name(), "Number of traces",
-//				dataset, PlotOrientation.VERTICAL, false, true, false);
-		// Make the background transparent.
-		chart.setBackgroundPaint(new Color(0, 0, 0, 0));
-		MultiplePiePlot plot = (MultiplePiePlot) chart.getPlot();
-		plot.setBackgroundPaint(new Color(0, 0, 0, 0));
-		plot.getPieChart().setBackgroundPaint(new Color(0, 0, 0, 0));
+		JFreeChart chart = ChartUtils.createMultiplePieChart("Overview", dataset, TableOrder.BY_ROW);
+
 		return new ChartPanel(chart);
 	}
 
