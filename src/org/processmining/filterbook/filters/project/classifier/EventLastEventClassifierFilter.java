@@ -69,7 +69,7 @@ public class EventLastEventClassifierFilter extends EventClassifierFilter {
 				switch (selectionType) {
 					case FILTERIN : {
 						if (match) {
-							if (isLast(trace, event, classifier)) {
+							if (isLast(trace, event, classifier, selectedValues)) {
 								filteredTrace.add(event);
 							}
 						} else {
@@ -79,7 +79,7 @@ public class EventLastEventClassifierFilter extends EventClassifierFilter {
 					}
 					case FILTEROUT : {
 						if (match) {
-							if (!isLast(trace, event, classifier)) {
+							if (!isLast(trace, event, classifier, selectedValues)) {
 								filteredTrace.add(event);
 							}
 						}
@@ -100,14 +100,14 @@ public class EventLastEventClassifierFilter extends EventClassifierFilter {
 		return filteredLog;
 	}
 	
-	public boolean isLast(XTrace trace, XEvent event, XEventClassifier classifier) {
+	public boolean isLast(XTrace trace, XEvent event, XEventClassifier classifier, Set<String> selectedValues) {
 		int i = trace.indexOf(event);
 		if (i == trace.size() - 1) {
 			return true;
 		}
-		return !classifier.getClassIdentity(event).equals(classifier.getClassIdentity(trace.get(i + 1)));
+		return !selectedValues.contains(classifier.getClassIdentity(trace.get(i + 1)));
 	}
-	
+
 	public JComponent getChartWidget() {
 		return DirectlyFollowsChart.getChart(getLog(), getDummyClassifier(), getParameters());
 	}

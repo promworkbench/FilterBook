@@ -68,7 +68,7 @@ public class EventFirstEventClassifierFilter extends EventClassifierFilter {
 				switch (selectionType) {
 					case FILTERIN : {
 						if (match) {
-							if (isFirst(trace, event, classifier)) {
+							if (isFirst(trace, event, classifier, selectedValues)) {
 								filteredTrace.add(event);
 							}
 						} else {
@@ -78,7 +78,7 @@ public class EventFirstEventClassifierFilter extends EventClassifierFilter {
 					}
 					case FILTEROUT : {
 						if (match) {
-							if (!isFirst(trace, event, classifier)) {
+							if (!isFirst(trace, event, classifier, selectedValues)) {
 								filteredTrace.add(event);
 							}
 						}
@@ -103,7 +103,7 @@ public class EventFirstEventClassifierFilter extends EventClassifierFilter {
 	 * Returns whether the given event is the first of a series of events with
 	 * the same value for the given classifier in the given trace.
 	 */
-	public boolean isFirst(XTrace trace, XEvent event, XEventClassifier classifier) {
+	public boolean isFirst(XTrace trace, XEvent event, XEventClassifier classifier, Set<String> selectedValues) {
 		int i = trace.indexOf(event);
 		if (i == 0) {
 			/*
@@ -114,7 +114,7 @@ public class EventFirstEventClassifierFilter extends EventClassifierFilter {
 		/*
 		 * Return whether the previous event has a different value.
 		 */
-		return !classifier.getClassIdentity(event).equals(classifier.getClassIdentity(trace.get(i - 1)));
+		return !selectedValues.contains(classifier.getClassIdentity(trace.get(i - 1)));
 	}
 
 	public JComponent getChartWidget() {

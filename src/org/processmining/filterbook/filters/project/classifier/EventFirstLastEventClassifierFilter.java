@@ -32,7 +32,7 @@ public class EventFirstLastEventClassifierFilter extends EventClassifierFilter {
 		super(name, log, parameters, cell);
 		cachedLog = null;
 	}
-	
+
 	public XLog filter() {
 		/*
 		 * Get the relevant parameters.
@@ -43,12 +43,11 @@ public class EventFirstLastEventClassifierFilter extends EventClassifierFilter {
 		Set<String> selectedValues = new TreeSet<String>(getParameters().getMultipleFromListStringA().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
-		 * Check whether the cache is  valid.
+		 * Check whether the cache is valid.
 		 */
 		if (cachedLog == getLog()) {
-			if (cachedClassifier.equals(classifier) &&
-					cachedSelectedValues.equals(selectedValues) &&
-					cachedSelectionType == selectionType) {
+			if (cachedClassifier.equals(classifier) && cachedSelectedValues.equals(selectedValues)
+					&& cachedSelectionType == selectionType) {
 				/*
 				 * Yes, it is. Return the cached filtered log.
 				 */
@@ -69,7 +68,8 @@ public class EventFirstLastEventClassifierFilter extends EventClassifierFilter {
 				switch (selectionType) {
 					case FILTERIN : {
 						if (match) {
-							if (isFirst(trace, event, classifier) || isLast(trace, event, classifier)) {
+							if (isFirst(trace, event, classifier, selectedValues)
+									|| isLast(trace, event, classifier, selectedValues)) {
 								filteredTrace.add(event);
 							}
 						} else {
@@ -79,7 +79,8 @@ public class EventFirstLastEventClassifierFilter extends EventClassifierFilter {
 					}
 					case FILTEROUT : {
 						if (match) {
-							if (!isFirst(trace, event, classifier) && !isLast(trace, event, classifier)) {
+							if (!isFirst(trace, event, classifier, selectedValues)
+									&& !isLast(trace, event, classifier, selectedValues)) {
 								filteredTrace.add(event);
 							}
 						}
@@ -99,26 +100,25 @@ public class EventFirstLastEventClassifierFilter extends EventClassifierFilter {
 		cachedFilteredLog = filteredLog;
 		return filteredLog;
 	}
-	
-	public boolean isFirst(XTrace trace, XEvent event, XEventClassifier classifier) {
+
+	public boolean isFirst(XTrace trace, XEvent event, XEventClassifier classifier, Set<String> selectedValues) {
 		int i = trace.indexOf(event);
 		if (i == 0) {
 			return true;
 		}
-		return !classifier.getClassIdentity(event).equals(classifier.getClassIdentity(trace.get(i - 1)));
+		return !selectedValues.contains(classifier.getClassIdentity(trace.get(i - 1)));
 	}
 
-	public boolean isLast(XTrace trace, XEvent event, XEventClassifier classifier) {
+	public boolean isLast(XTrace trace, XEvent event, XEventClassifier classifier, Set<String> selectedValues) {
 		int i = trace.indexOf(event);
 		if (i == trace.size() - 1) {
 			return true;
 		}
-		return !classifier.getClassIdentity(event).equals(classifier.getClassIdentity(trace.get(i + 1)));
+		return !selectedValues.contains(classifier.getClassIdentity(trace.get(i + 1)));
 	}
-	
+
 	public JComponent getChartWidget() {
 		return DirectlyFollowsChart.getChart(getLog(), getDummyClassifier(), getParameters());
 	}
 
 }
-

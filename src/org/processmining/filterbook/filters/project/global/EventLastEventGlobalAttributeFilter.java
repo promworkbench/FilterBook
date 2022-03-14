@@ -72,7 +72,7 @@ public class EventLastEventGlobalAttributeFilter extends EventGlobalAttributeFil
 				switch (selectionType) {
 					case FILTERIN : {
 						if (match) {
-							if (isLast(trace, event, value.getAttribute())) {
+							if (isLast(trace, event, value.getAttribute(), selectedValues)) {
 								filteredTrace.add(event);
 							}
 						} else {
@@ -82,7 +82,7 @@ public class EventLastEventGlobalAttributeFilter extends EventGlobalAttributeFil
 					}
 					case FILTEROUT : {
 						if (match) {
-							if (!isLast(trace, event, value.getAttribute())) {
+							if (!isLast(trace, event, value.getAttribute(), selectedValues)) {
 								filteredTrace.add(event);
 							}
 						}
@@ -103,12 +103,12 @@ public class EventLastEventGlobalAttributeFilter extends EventGlobalAttributeFil
 		return filteredLog;
 	}
 
-	public boolean isLast(XTrace trace, XEvent event, XAttribute attribute) {
+	public boolean isLast(XTrace trace, XEvent event, XAttribute attribute, Set<AttributeValueType> values) {
 		int i = trace.indexOf(event);
 		if (i == trace.size() - 1) {
 			return true;
 		}
-		return !attribute.equals(trace.get(i + 1).getAttributes().get(attribute.getKey()));
+		return !values.contains(new AttributeValueType(trace.get(i + 1).getAttributes().get(attribute.getKey())));
 	}
 	
 	public JComponent getChartWidget() {

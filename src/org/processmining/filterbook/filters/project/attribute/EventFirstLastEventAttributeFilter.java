@@ -34,7 +34,7 @@ public class EventFirstLastEventAttributeFilter extends EventAttributeFilter {
 		super(name, log, parameters, cell);
 		cachedLog = null;
 	}
-	
+
 	public XLog filter() {
 		/*
 		 * Get the relevant parameters.
@@ -42,15 +42,15 @@ public class EventFirstLastEventAttributeFilter extends EventAttributeFilter {
 		XAttribute attribute = (getParameters().getOneFromListAttribute().getSelected() != null
 				? getParameters().getOneFromListAttribute().getSelected().getAttribute()
 				: getDummyAttribute());
-		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(getParameters().getMultipleFromListAttributeValueA().getSelected());
+		Set<AttributeValueType> selectedValues = new TreeSet<AttributeValueType>(
+				getParameters().getMultipleFromListAttributeValueA().getSelected());
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
-		 * Check whether the cache is  valid.
+		 * Check whether the cache is valid.
 		 */
 		if (cachedLog == getLog()) {
-			if (cachedAttribute.equals(attribute) &&
-					cachedSelectedValues.equals(selectedValues) &&
-					cachedSelectionType == selectionType) {
+			if (cachedAttribute.equals(attribute) && cachedSelectedValues.equals(selectedValues)
+					&& cachedSelectionType == selectionType) {
 				/*
 				 * Yes, it is. Return the cached filtered log.
 				 */
@@ -71,7 +71,8 @@ public class EventFirstLastEventAttributeFilter extends EventAttributeFilter {
 				switch (selectionType) {
 					case FILTERIN : {
 						if (match) {
-							if (isFirst(trace, event, value.getAttribute()) || isLast(trace, event, value.getAttribute())) {
+							if (isFirst(trace, event, value.getAttribute(), selectedValues)
+									|| isLast(trace, event, value.getAttribute(), selectedValues)) {
 								filteredTrace.add(event);
 							}
 						} else {
@@ -81,7 +82,8 @@ public class EventFirstLastEventAttributeFilter extends EventAttributeFilter {
 					}
 					case FILTEROUT : {
 						if (match) {
-							if (!isFirst(trace, event, value.getAttribute()) && !isLast(trace, event, value.getAttribute())) {
+							if (!isFirst(trace, event, value.getAttribute(), selectedValues)
+									&& !isLast(trace, event, value.getAttribute(), selectedValues)) {
 								filteredTrace.add(event);
 							}
 						}
@@ -101,23 +103,23 @@ public class EventFirstLastEventAttributeFilter extends EventAttributeFilter {
 		cachedFilteredLog = filteredLog;
 		return filteredLog;
 	}
-	
-	public boolean isFirst(XTrace trace, XEvent event, XAttribute attribute) {
+
+	public boolean isFirst(XTrace trace, XEvent event, XAttribute attribute, Set<AttributeValueType> values) {
 		int i = trace.indexOf(event);
 		if (i == 0) {
 			return true;
 		}
-		return !attribute.equals(trace.get(i - 1).getAttributes().get(attribute.getKey()));
+		return !values.contains(new AttributeValueType(trace.get(i - 1).getAttributes().get(attribute.getKey())));
 	}
 
-	public boolean isLast(XTrace trace, XEvent event, XAttribute attribute) {
+	public boolean isLast(XTrace trace, XEvent event, XAttribute attribute, Set<AttributeValueType> values) {
 		int i = trace.indexOf(event);
 		if (i == trace.size() - 1) {
 			return true;
 		}
-		return !attribute.equals(trace.get(i + 1).getAttributes().get(attribute.getKey()));
+		return !values.contains(new AttributeValueType(trace.get(i + 1).getAttributes().get(attribute.getKey())));
 	}
-	
+
 	public JComponent getChartWidget() {
 		return DirectlyFollowsChart.getChart(getLog(), getParameters());
 	}

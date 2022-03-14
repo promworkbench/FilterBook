@@ -71,7 +71,7 @@ public class EventFirstEventAttributeFilter extends EventAttributeFilter {
 				switch (selectionType) {
 					case FILTERIN : {
 						if (match) {
-							if (isFirst(trace, event, value.getAttribute())) {
+							if (isFirst(trace, event, value.getAttribute(), selectedValues)) {
 								filteredTrace.add(event);
 							}
 						} else {
@@ -81,7 +81,7 @@ public class EventFirstEventAttributeFilter extends EventAttributeFilter {
 					}
 					case FILTEROUT : {
 						if (match) {
-							if (!isFirst(trace, event, value.getAttribute())) {
+							if (!isFirst(trace, event, value.getAttribute(), selectedValues)) {
 								filteredTrace.add(event);
 							}
 						}
@@ -102,14 +102,14 @@ public class EventFirstEventAttributeFilter extends EventAttributeFilter {
 		return filteredLog;
 	}
 
-	public boolean isFirst(XTrace trace, XEvent event, XAttribute attribute) {
+	public boolean isFirst(XTrace trace, XEvent event, XAttribute attribute, Set<AttributeValueType> values) {
 		int i = trace.indexOf(event);
 		if (i == 0) {
 			return true;
 		}
-		return !attribute.equals(trace.get(i - 1).getAttributes().get(attribute.getKey()));
+		return !values.contains(new AttributeValueType(trace.get(i - 1).getAttributes().get(attribute.getKey())));
 	}
-	
+
 	public JComponent getChartWidget() {
 		return DirectlyFollowsChart.getChart(getLog(), getParameters());
 	}

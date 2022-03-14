@@ -1,5 +1,7 @@
 package org.processmining.filterbook.filters.project.classifier;
 
+import java.util.Set;
+
 import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
@@ -23,7 +25,7 @@ public class EventFirstEventClassifierTraceFilter extends EventFirstEventClassif
 	 * Returns whether the given event is the first event with the same value
 	 * for the given classifier in the given trace.
 	 */
-	public boolean isFirst(XTrace trace, XEvent event, XEventClassifier classifier) {
+	public boolean isFirst(XTrace trace, XEvent event, XEventClassifier classifier, Set<String> selectedValues) {
 		int i = trace.indexOf(event);
 		if (i == 0) {
 			/*
@@ -35,7 +37,7 @@ public class EventFirstEventClassifierTraceFilter extends EventFirstEventClassif
 		 * Check whether all previous events have different values.
 		 */
 		for (int k = 0; k < i; k++) {
-			if (classifier.getClassIdentity(event).equals(classifier.getClassIdentity(trace.get(k)))) {
+			if (selectedValues.contains(classifier.getClassIdentity(trace.get(k)))) {
 				/*
 				 * Found previous event with the same value. Hence not first.
 				 */
