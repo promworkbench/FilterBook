@@ -3,7 +3,9 @@ package org.processmining.filterbook.parameters;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
@@ -20,6 +22,7 @@ public class MultipleFromListParameter <T extends Comparable<T>> extends Paramet
 	 * The list of selected items.
 	 */
 	private List<T> selected;
+	private Set<T> selectedSet;
 	/*
 	 * The list of items.
 	 */
@@ -50,6 +53,7 @@ public class MultipleFromListParameter <T extends Comparable<T>> extends Paramet
 			this.sortedOptions = null;
 		}
 		this.selected = new ArrayList<T>(selected);
+		this.selectedSet = new HashSet<T>(selected);
 		this.list = null;
 	}
 
@@ -97,7 +101,7 @@ public class MultipleFromListParameter <T extends Comparable<T>> extends Paramet
 		int selectedIndex = 0; // index for selected options
 		for (T option: options) {
 			listModel.addElement(option);
-			if (this.selected.contains(option)) {
+			if (this.selectedSet.contains(option)) {
 				selectedIndices[selectedIndex++] = optionsIndex;
 			}
 			optionsIndex++;

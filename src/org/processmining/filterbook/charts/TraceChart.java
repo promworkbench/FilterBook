@@ -6,6 +6,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 
 import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.model.XAttribute;
@@ -51,6 +52,9 @@ public class TraceChart {
 			} else {
 				counts.put(value, 1);
 			}
+		}
+		if (values.size() > ChartUtils.TOO_MANY_VALUES) {
+			return new JLabel("The chart contains too many different values to be shown");
 		}
 		for (AttributeValueType value : values) {
 			XAttribute a = value.getAttribute();

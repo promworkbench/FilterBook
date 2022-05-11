@@ -6,6 +6,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 
 import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.extension.std.XConceptExtension;
@@ -50,6 +51,9 @@ public class FirstChart {
 					counts.put(value, 1);
 				}
 			}
+		}
+		if (values.size() > ChartUtils.TOO_MANY_VALUES) {
+			return new JLabel("The chart contains too many different values to be shown");
 		}
 		for (String value : values) {
 			dataset.addValue(counts.get(value), classifier.name(), value);

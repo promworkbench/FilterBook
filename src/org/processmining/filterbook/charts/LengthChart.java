@@ -1,6 +1,7 @@
 package org.processmining.filterbook.charts;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
@@ -32,6 +33,10 @@ public class LengthChart {
 			int length = trace.size();
 			values[length - minValue]++;
 		}
+		if (maxValue - minValue > ChartUtils.TOO_MANY_VALUES) {
+			return new JLabel("The chart contains too many different values to be shown");
+		}
+
 		for (int i = minValue; i <= maxValue; i++) {
 			dataset.addValue(values[i - minValue], "Number of traces", String.valueOf(i));
 		}

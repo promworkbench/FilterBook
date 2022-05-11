@@ -17,6 +17,7 @@ public class ChartUtils {
 
 	private final static Color TRANSPARENT_COLOR = new Color(0, 0, 0, 0);
 	private final static BarPainter BAR_PAINTER = new StandardBarPainter();
+	public final static int TOO_MANY_VALUES = 10000;
 
 	public static JFreeChart createMultiplePieChart(String title, CategoryDataset dataset, TableOrder order) {
 		JFreeChart chart = ChartFactory.createMultiplePieChart(title, dataset, order, true, true, false);

@@ -6,6 +6,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 
 import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.extension.std.XConceptExtension;
@@ -71,6 +72,9 @@ public class DirectlyFollowsChart {
 				}
 				prevValue = value;
 			}
+		}
+		if (values.size() > ChartUtils.TOO_MANY_VALUES) {
+			return new JLabel("The chart contains too many different values to be shown");
 		}
 		
 		/*

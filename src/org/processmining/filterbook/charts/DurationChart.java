@@ -7,6 +7,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 
 import org.deckfour.xes.extension.std.XTimeExtension;
 import org.deckfour.xes.model.XLog;
@@ -43,6 +44,9 @@ public class DurationChart {
 					counts.put(value, 1);
 				}
 			}
+		}
+		if (values.size() > ChartUtils.TOO_MANY_VALUES) {
+			return new JLabel("The chart contains too many different values to be shown");
 		}
 		for (DurationType value : values) {
 			dataset.addValue(counts.get(value), "Duration", value.toString());

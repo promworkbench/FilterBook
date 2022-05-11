@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 
 import org.deckfour.xes.extension.std.XTimeExtension;
 import org.deckfour.xes.model.XLog;
@@ -109,6 +110,9 @@ public class DateChart {
 			}
 		}
 
+		if (firstValues.size() > ChartUtils.TOO_MANY_VALUES || lastValues.size() > ChartUtils.TOO_MANY_VALUES) {
+			return new JLabel("The chart contains too many different values to be shown");
+		}
 		/*
 		 * Add the counts as series to the data set.
 		 */

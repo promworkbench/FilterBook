@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.TreeSet;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 
 import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.extension.std.XConceptExtension;
@@ -34,6 +35,9 @@ public class EventsChart {
 				: dummyClassifier);
 
 		TreeSet<Integer> values = new TreeSet<Integer>(occurrences.values());
+		if (values.size() > ChartUtils.TOO_MANY_VALUES) {
+			return new JLabel("The chart contains too many different values to be shown");
+		}
 		for (Integer v : values) {
 			for (List<String> value : occurrences.keySet()) {
 				if (occurrences.get(value).equals(v)) {
