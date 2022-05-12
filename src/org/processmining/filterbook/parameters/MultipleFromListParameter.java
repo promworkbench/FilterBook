@@ -108,7 +108,7 @@ public class MultipleFromListParameter <T extends Comparable<T>> extends Paramet
 		}
 		list = new ProMList<T>(getLabel(), listModel);
 		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		if (selected.size() == options.size()) {
+		if (selected.size() == selectedIndex) {
 			/*
 			 * Faster way to select all items in the list.
 			 */
