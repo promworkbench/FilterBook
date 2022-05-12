@@ -144,7 +144,7 @@ public class TraceDirectlyFollowsClassifierFilter extends Filter {
 
 	public boolean checkTrace(XTrace trace, XEventClassifier classifier, Set<String> selectedValuesA,
 			Set<String> selectedValuesB) {
-		for (int i = 0; i < trace.size() - 2; i++) {
+		for (int i = 0; i < trace.size() - 1; i++) {
 			if (selectedValuesA.contains(classifier.getClassIdentity(trace.get(i)))
 					&& selectedValuesB.contains(classifier.getClassIdentity(trace.get(i + 1)))) {
 				return true;

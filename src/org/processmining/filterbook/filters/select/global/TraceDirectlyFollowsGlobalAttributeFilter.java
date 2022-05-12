@@ -154,7 +154,7 @@ public class TraceDirectlyFollowsGlobalAttributeFilter extends Filter {
 
 	public boolean checkTrace(XTrace trace, XAttribute attribute, Set<AttributeValueType> selectedValuesA,
 			Set<AttributeValueType> selectedValuesB) {
-		for (int i = 0; i < trace.size() - 2; i++) {
+		for (int i = 0; i < trace.size() - 1; i++) {
 			XAttribute attributeA = trace.get(i).getAttributes().get(attribute.getKey());
 			XAttribute attributeB = trace.get(i + 1).getAttributes().get(attribute.getKey());
 			if (attributeA != null && attributeB != null && selectedValuesA.contains(new AttributeValueType(attributeA))
