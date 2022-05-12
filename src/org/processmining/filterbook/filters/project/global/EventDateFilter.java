@@ -31,7 +31,7 @@ public class EventDateFilter extends Filter {
 	 * The name of this filter.
 	 */
 	public static final String NAME = "Project on date";
-	
+
 	private JComponent chartWidget;
 
 	private Date firstLogDate = null;
@@ -42,7 +42,7 @@ public class EventDateFilter extends Filter {
 	private Date cachedLastDate;
 	private SelectionType cachedSelectionType;
 	private XLog cachedFilteredLog;
-	
+
 	public EventDateFilter(XLog log, Parameters parameters, ComputationCell cell) {
 		this(NAME, log, parameters, cell);
 	}
@@ -50,21 +50,40 @@ public class EventDateFilter extends Filter {
 	public EventDateFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
 		super(name, parameters, cell);
 		setLog(log);
-		for (XTrace trace : getLog()) {
-			for (XEvent event : trace) {
-				Date date = XTimeExtension.instance().extractTimestamp(event);
-				if (date == null) {
-					continue;
-				}
-				if (firstLogDate == null || firstLogDate.after(date)) {
-					firstLogDate = date;
-				}
-				if (lastLogDate == null || lastLogDate.before(date)) {
-					lastLogDate = date;
+//		for (XTrace trace : getLog()) {
+//			for (XEvent event : trace) {
+//				Date date = XTimeExtension.instance().extractTimestamp(event);
+//				if (date == null) {
+//					continue;
+//				}
+//				if (firstLogDate == null || firstLogDate.after(date)) {
+//					firstLogDate = date;
+//				}
+//				if (lastLogDate == null || lastLogDate.before(date)) {
+//					lastLogDate = date;
+//				}
+//			}
+//		}
+		cachedLog = null;
+	}
+
+	private void initDates() {
+		if (firstLogDate == null || lastLogDate == null) {
+			for (XTrace trace : getLog()) {
+				for (XEvent event : trace) {
+					Date date = XTimeExtension.instance().extractTimestamp(event);
+					if (date == null) {
+						continue;
+					}
+					if (firstLogDate == null || firstLogDate.after(date)) {
+						firstLogDate = date;
+					}
+					if (lastLogDate == null || lastLogDate.before(date)) {
+						lastLogDate = date;
+					}
 				}
 			}
 		}
-		cachedLog = null;
 	}
 
 	public XLog filter() {
@@ -75,12 +94,11 @@ public class EventDateFilter extends Filter {
 		Date lastDate = getParameters().getDateB().getDate();
 		SelectionType selectionType = getParameters().getOneFromListSelection().getSelected();
 		/*
-		 * Check whether the cache is  valid.
+		 * Check whether the cache is valid.
 		 */
 		if (cachedLog == getLog()) {
-			if (cachedFirstDate.equals(firstDate) &&
-					cachedLastDate.equals(lastDate) &&
-					cachedSelectionType == selectionType) {
+			if (cachedFirstDate.equals(firstDate) && cachedLastDate.equals(lastDate)
+					&& cachedSelectionType == selectionType) {
 				/*
 				 * Yes, it is. Return the cached filtered log.
 				 */
@@ -157,6 +175,7 @@ public class EventDateFilter extends Filter {
 	}
 
 	public JComponent getChartWidget() {
+		initDates();
 		return DateChart.getChart(getLog(), firstLogDate, lastLogDate);
 	}
 
@@ -175,24 +194,26 @@ public class EventDateFilter extends Filter {
 		if (!doReset && getParameters().getDateA() != null) {
 			return;
 		}
+		initDates();
 		Date date = firstLogDate;
 		if (getParameters().getDateA() != null) {
 			date = getParameters().getDateA().getDate();
 		}
 		getParameters().setDateA(new DateParameter("Select a first date", this, date));
 	}
-	
+
 	private void setLastDate(boolean doReset) {
 		if (!doReset && getParameters().getDateB() != null) {
 			return;
 		}
+		initDates();
 		Date date = lastLogDate;
 		if (getParameters().getDateB() != null) {
 			date = getParameters().getDateB().getDate();
 		}
 		getParameters().setDateB(new DateParameter("Select a last date", this, date));
 	}
-	
+
 	public void setSelectionType(boolean doReset) {
 		if (!doReset && getParameters().getOneFromListSelection() != null) {
 			return;
@@ -204,7 +225,7 @@ public class EventDateFilter extends Filter {
 		getParameters().setOneFromListSelection(new OneFromListParameter<SelectionType>("Select a selection type", this,
 				selected, Arrays.asList(SelectionType.values()), false));
 	}
-	
+
 	public void updateParameters() {
 		setFirstDate(true);
 		setLastDate(true);

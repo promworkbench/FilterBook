@@ -53,6 +53,24 @@ public class TraceDateFilter extends Filter {
 	public TraceDateFilter(String name, XLog log, Parameters parameters, ComputationCell cell) {
 		super(name, parameters, cell);
 		setLog(log);
+//		for (XTrace trace : getLog()) {
+//			for (XEvent event : trace) {
+//				Date date = XTimeExtension.instance().extractTimestamp(event);
+//				if (date == null) {
+//					continue;
+//				}
+//				if (firstLogDate == null || firstLogDate.after(date)) {
+//					firstLogDate = date;
+//				}
+//				if (lastLogDate == null || lastLogDate.before(date)) {
+//					lastLogDate = date;
+//				}
+//			}
+//		}
+		cachedLog = null;
+	}
+
+	private void initDates() {
 		for (XTrace trace : getLog()) {
 			for (XEvent event : trace) {
 				Date date = XTimeExtension.instance().extractTimestamp(event);
@@ -67,9 +85,8 @@ public class TraceDateFilter extends Filter {
 				}
 			}
 		}
-		cachedLog = null;
 	}
-
+	
 	public XLog filter() {
 		/*
 		 * Get the relevant parameters.
@@ -183,6 +200,7 @@ public class TraceDateFilter extends Filter {
 	}
 
 	public JComponent getChartWidget() {
+		initDates();
 		return DateChart.getChart(getLog(), firstLogDate, lastLogDate);
 	}
 
@@ -223,6 +241,7 @@ public class TraceDateFilter extends Filter {
 		if (!doReset && getParameters().getDateA() != null) {
 			return;
 		}
+		initDates();
 		Date date = firstLogDate;
 		if (getParameters().getDateA() != null) {
 			date = getParameters().getDateA().getDate();
@@ -234,6 +253,7 @@ public class TraceDateFilter extends Filter {
 		if (!doReset && getParameters().getDateB() != null) {
 			return;
 		}
+		initDates();
 		Date date = lastLogDate;
 		if (getParameters().getDateB() != null) {
 			date = getParameters().getDateB().getDate();
