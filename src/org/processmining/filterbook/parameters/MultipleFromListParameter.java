@@ -108,7 +108,17 @@ public class MultipleFromListParameter <T extends Comparable<T>> extends Paramet
 		}
 		list = new ProMList<T>(getLabel(), listModel);
 		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		list.setSelectedIndices(selectedIndices); 
+		if (selected.size() == options.size()) {
+			/*
+			 * Faster way to select all items in the list.
+			 */
+			list.getList().setSelectionInterval(0, options.size() - 1);
+		} else {
+			/*
+			 * Slower way to select some items in the list.
+			 */
+			list.setSelectedIndices(selectedIndices);
+		}
 		list.addListSelectionListener(this);
 		list.setPreferredSize(new Dimension(100, 100));
 		return list;

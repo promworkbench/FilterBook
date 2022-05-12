@@ -254,7 +254,6 @@ public class TraceGlobalAttributeFilter extends Filter {
 		}
 		Set<AttributeValueType> values = new TreeSet<AttributeValueType>();
 		for (XTrace trace : getLog()) {
-			System.out.println("TraceGlobalAttributeFilter] Setting attribute value for trace " + XConceptExtension.instance().extractName(trace));
 			values.add(new AttributeValueType(trace.getAttributes().get(attribute.getAttribute().getKey())));
 		}
 		List<AttributeValueType> unsortedValues = new ArrayList<AttributeValueType>(values);
