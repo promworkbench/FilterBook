@@ -38,12 +38,17 @@ public class DurationType implements Comparable<DurationType> {
 		long totalMillis = duration.toMillis();
 		long seconds = totalMillis / 1000;
 
-		long mYear = (long) Math.floor(seconds / 31536000);
-		long mMonth = (long) Math.floor((seconds % 31536000) / 2628000);
-		long mDay = (long) Math.floor(((seconds % 31536000) % 2628000) / 86400);
-		long hr = (long) Math.floor(((seconds % 31536000) % 86400) / 3600);
-		long min = (long) Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
-		long sec = (((seconds % 31536000) % 86400) % 3600) % 60;
+		long mYear = (long) Math.floor(seconds / 31536000); // 365 days
+		seconds -= mYear * 31536000;
+		long mMonth = (long) Math.floor(seconds / 2628000); // 30 days and 10 hours.
+		seconds -= mMonth * 2628000;
+		long mDay = (long) Math.floor(seconds / 86400);
+		seconds -= mDay * 86400;
+		long hr = (long) Math.floor(seconds / 3600);
+		seconds -= hr * 3600;
+		long min = (long) Math.floor(seconds / 60);
+		seconds -= min * 60;
+		long sec = seconds;
 		long millis = totalMillis - seconds * 1000;
 
 		durationString = "";
